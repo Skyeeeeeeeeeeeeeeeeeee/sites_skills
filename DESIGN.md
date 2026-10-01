@@ -17,6 +17,18 @@ colors:
   error-soft: "#fdebec"
   ok: "#346538"
   ok-soft: "#edf3ec"
+  dark-paper: "#121315"
+  dark-surface: "#18191c"
+  dark-surface-2: "#1f2024"
+  dark-line: "#2a2b30"
+  dark-line-strong: "#3a3b41"
+  dark-ink: "#eeeeec"
+  dark-ink-2: "#d6d6d3"
+  dark-muted: "#a3a29d"
+  dark-placeholder: "#8d8c87"
+  dark-cobalt: "#8ea2ff"
+  dark-cobalt-ink: "#0e1330"
+  dark-cobalt-soft: "#1d2340"
 typography:
   display:
     fontFamily: "Old Standard, Times New Roman, serif"
@@ -49,6 +61,7 @@ typography:
     fontSize: "0.8rem"
     fontWeight: 400
 rounded:
+  inner: "4px"
   control: "6px"
   card: "8px"
   pill: "999px"
@@ -140,7 +153,7 @@ Flat by default: hairline borders separate. Only two things lift: the slip (it s
 
 ## Shapes
 
-Controls 6px, cards and slip 8px, chips and tags full pill, round icon buttons for the car-card arrow and socials. The slip carries half-circle punch holes at each perforation line.
+Controls 6px (4px for the thumb inside a segmented control), cards and slip 8px, chips and tags full pill, round icon buttons for the car-card arrow and socials. The slip carries half-circle punch holes at each perforation line.
 
 ## Components
 
