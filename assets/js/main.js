@@ -154,7 +154,7 @@
 
   /* Garage doors: reveal boxes as they scroll into view */
   function initDoors(root) {
-    var doors = $$(".door:not(.is-open)", root);
+    var doors = $$(".gbox--toggle:not(.is-open)", root);
     if (!doors.length) return;
     if (reduceMotion || !("IntersectionObserver" in window)) { doors.forEach(function (d) { d.classList.add("is-open"); }); return; }
     var io = new IntersectionObserver(function (entries) {
@@ -175,440 +175,225 @@
     io.observe(text);
   }
 
-  /* ---------- Mobile bar ---------- */
-  /* Tuck the bar away while the page's own primary action is on screen: one primary CTA per viewport. */
-  function initBarTuck() {
-    var bar = $(".bar");
-    var primaries = $$("[data-primary]");
-    if (!bar || !primaries.length || !("IntersectionObserver" in window)) return;
-    var visible = new Set();
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) { if (en.isIntersecting) visible.add(en.target); else visible.delete(en.target); });
-      bar.classList.toggle("is-tucked", visible.size > 0);
-    });
-    primaries.forEach(function (p) { io.observe(p); });
+  /* ---------- Garage box markup ---------- */
+  function boxNo(car) { return K.fleet.indexOf(car) + 1; }
+  function gboxHTML(c, opts) {
+    opts = opts || {};
+    var tag = opts.tag || "a";
+    var href = tag === "a" ? ' href="car.html?id=' + c.id + '"' : "";
+    return "<" + tag + ' class="gbox ' + (opts.cls || "") + '"' + href + ' style="--tint:' + c.tint + '" data-car="' + c.id + '"' + (opts.label ? ' aria-label="' + opts.label + '"' : "") + ">" +
+      '<span class="gbox__bay"><img src="assets/cars/' + c.photo + '" alt="' + (opts.alt ? c.name : "") + '" loading="' + (opts.eager ? "eager" : "lazy") + '" decoding="async" width="1920" height="1200" style="object-position:' + c.pos + '"></span>' +
+      '<span class="gbox__shade"></span>' +
+      '<span class="gbox__body">' +
+        '<span class="gbox__label">Бокс ' + boxNo(c) + "</span>" +
+        '<span class="gbox__name">' + c.name + "</span>" +
+        '<span class="gbox__price">' + fromPrice(c) + "</span>" +
+        '<span class="gbox__light">' + cap(c.tintName) + "</span>" +
+        (c.selfDriveOnly ? '<span class="gbox__flag">Только без водителя</span>' : "") +
+      "</span>" +
+      '<span class="gbox__door" aria-hidden="true"><span class="gbox__no">' + boxNo(c) + '</span><span class="gbox__handle"></span></span>' +
+      "</" + tag + ">";
   }
 
-  function setBar(what, total, href) {
-    var bar = $(".bar");
-    if (!bar) return;
-    setText($(".bar__what", bar), what);
-    setText($(".bar__total", bar), total);
-    var go = $("[data-bar-go]", bar);
-    if (go && href) go.href = href;
-  }
-
-  /* ---------- Garage row (horizontal boxes) ---------- */
-  function renderRow(row, cars) {
-    row.innerHTML = cars.map(function (c) {
-      return '<a class="box door" href="car.html?id=' + c.id + '" style="--tint:' + c.tint + ";--i:" + (cars.indexOf(c) % 4) + '">' +
-        '<img src="assets/cars/' + c.photo + '" alt="" loading="lazy" decoding="async" width="1920" height="1200" style="object-position:' + c.pos + '">' +
-        '<span class="door__panel" aria-hidden="true"></span>' +
-        '<span class="box__body"><span class="box__name">' + c.name + '</span>' +
-        '<span class="box__price">' + fromPrice(c) + "</span>" +
-        '<span class="box__light">' + cap(c.tintName) + "</span>" +
-        (c.selfDriveOnly ? '<span class="box__flag">Только без водителя</span>' : "") +
-        "</span></a>";
-    }).join("");
-  }
-  function initRowArrows() {
-    $$("[data-row-prev], [data-row-next]").forEach(function (b) {
-      b.addEventListener("click", function () {
-        var row = document.getElementById(b.getAttribute("aria-controls"));
-        var box = $(".box", row);
-        var dx = box ? box.getBoundingClientRect().width + 2 : 320;
-        row.scrollBy({ left: b.hasAttribute("data-row-prev") ? -dx : dx, behavior: reduceMotion ? "auto" : "smooth" });
-      });
-    });
-  }
-
-  /* ---------- Home: the scene ---------- */
-  function initScene() {
-    var scene = $("#scene");
-    if (!scene) return;
+  /* ---------- Dock: picks up the car in front of you ---------- */
+  var dock = null;
+  function initDock(startCar) {
+    var el = $("#dock");
+    if (!el || !$("#dock-day")) return null;
     var sel = loadSel();
-    var media = $(".scene__media", scene);
-    var dial = $("#timedial");
-    var digits = $$(".timedial__digit", dial);
-    var note = $("#pickup-note");
-    var dateInput = $("#pickup-date");
-    var nameEl = $("#carpick-name");
-    var priceEl = $("#carpick-price");
-    var cta = $("#scene-cta");
-    var modeDriver = $('input[name="scene-mode"][value="driver"]');
-    var modeSelf = $('input[name="scene-mode"][value="self"]');
+    if (startCar) { sel.car = startCar.id; if (startCar.selfDriveOnly) sel.mode = "self"; }
+    var daySel = $("#dock-day"), timeOut = $("#dock-time");
+    var driver = $('input[name="dock-mode"][value="driver"]', el), self = $('input[name="dock-mode"][value="self"]', el);
 
-    // Image stack: one img per car, created on demand
-    var imgs = {};
-    var lastDir = 0;
-    function showCar(car, first) {
-      if (!imgs[car.id]) {
-        var img = document.createElement("img");
-        img.src = "assets/cars/" + car.photo;
-        img.alt = car.name + " ночью у подъезда";
-        img.width = 1920; img.height = 1200;
-        img.decoding = "async";
-        if (first) img.setAttribute("fetchpriority", "high");
-        img.style.objectPosition = car.pos;
-        media.appendChild(img);
-        imgs[car.id] = img;
+    function fillDays() {
+      var e = earliest(), opts = [];
+      for (var i = 0; i < 14; i++) {
+        var iso = addDays(e.date, i);
+        var label = humanDate(iso);
+        if (label.indexOf(",") > -1 || label.length > 10) label = parseIso(iso).toLocaleDateString("ru-RU", { weekday: "short", day: "numeric", month: "short" });
+        opts.push('<option value="' + iso + '">' + cap(label) + "</option>");
       }
-      Object.keys(imgs).forEach(function (id) {
-        var img = imgs[id];
-        if (id === car.id && img.classList.contains("is-current")) return;
-        img.classList.remove("from-left", "from-right");
-        if (id === car.id && !first && lastDir) img.classList.add(lastDir > 0 ? "from-right" : "from-left");
-        img.classList.toggle("is-current", id === car.id);
-        if (id === car.id) imgs[id].removeAttribute("aria-hidden"); else imgs[id].setAttribute("aria-hidden", "true");
-      });
-      lastDir = 0;
-      var i = K.fleet.indexOf(car);
-      [K.fleet[(i + 1) % K.fleet.length], K.fleet[(i - 1 + K.fleet.length) % K.fleet.length]].forEach(function (n) {
-        var pre = new Image(); pre.src = "assets/cars/" + n.photo;
-      });
+      daySel.innerHTML = opts.join("");
     }
-
-    var lastTime = null;
-    function renderTime(time) {
-      var chars = time.replace(":", "").split("");
-      var dir = lastTime && toMin(time) < toMin(lastTime) ? "digit-down" : "digit-up";
-      digits.forEach(function (d, i) {
-        var span = d.firstElementChild;
-        if (span.textContent !== chars[i]) {
-          span.textContent = chars[i];
-          if (lastTime && !reduceMotion) { span.classList.remove("digit-up", "digit-down"); void span.offsetWidth; span.classList.add(dir); }
-        }
-      });
-      dial.setAttribute("aria-valuenow", String(toMin(time)));
-      dial.setAttribute("aria-valuetext", time + ", " + humanDate(sel.date));
-      lastTime = time;
-    }
-
-    function renderDays() {
-      var e = earliest();
-      var today = isoDate(new Date());
-      var tomorrow = addDays(today, 1);
-      var rToday = $('input[name="scene-day"][value="today"]');
-      var rTomorrow = $('input[name="scene-day"][value="tomorrow"]');
-      rToday.disabled = e.date !== today;
-      rToday.closest(".day").hidden = e.date !== today;
-      rToday.checked = sel.date === today;
-      rTomorrow.checked = sel.date === tomorrow;
-      dateInput.min = e.date;
-      dateInput.value = sel.date;
-      var custom = sel.date !== today && sel.date !== tomorrow;
-      var btn = $("#pickup-date-btn");
-      btn.classList.toggle("is-active", custom);
-      btn.textContent = custom ? cap(parseIso(sel.date).toLocaleDateString("ru-RU", { weekday: "short", day: "numeric", month: "short" })) : "Другая дата";
-    }
-
-    function timeline() {
-      var t = toMin(sel.time);
-      $$("[data-t]").forEach(function (el) { el.textContent = fromMin(t + +el.getAttribute("data-t")); });
-    }
-
-    function update(first) {
+    function render(changed) {
       var car = carById(sel.car);
       if (car.selfDriveOnly) sel.mode = "self";
-      modeDriver.disabled = !!car.selfDriveOnly;
-      modeDriver.checked = sel.mode === "driver";
-      modeSelf.checked = sel.mode === "self";
-      var e = earliest();
-      var msg = "";
-      if (isTooEarly(sel.date, sel.time)) { sel.time = e.time; sel.date = e.date; msg = "Ближайшая подача " + humanDate(e.date) + " в " + e.time + "."; }
+      if (isTooEarly(sel.date, sel.time)) { var e = earliest(); sel.date = e.date; sel.time = e.time; }
+      driver.disabled = !!car.selfDriveOnly;
+      driver.checked = sel.mode === "driver"; self.checked = sel.mode === "self";
+      daySel.value = sel.date;
+      setText(timeOut, sel.time);
       var q = quote(car, sel.mode, null, sel.time);
-      if (!msg && q.night) msg = "Ночной тариф с 00:00 до 06:00: +20% к часу.";
-      if (!msg && car.selfDriveOnly) msg = "Эта машина выдаётся только без водителя.";
-      note.textContent = msg;
-
-      renderTime(sel.time);
-      renderDays();
-      showCar(car, first);
-      nameEl.innerHTML = '<a href="car.html?id=' + car.id + '">' + car.name + "</a>";
+      setText($("#dock-name"), car.short);
+      $("#dock-label").textContent = "Бокс " + boxNo(car) + ", перед вами";
+      setText($("#dock-total"), rub(q.total));
+      $("#dock-unit").textContent = (sel.mode === "self" ? "за сутки" : "за " + q.unit) + (q.night ? ", ночной тариф" : "");
+      $("#dock-go").href = bookingHref(sel);
       setTint(car.tint);
-      $("#carpick-light").textContent = cap(car.tintName);
-      priceEl.innerHTML = rub(q.total) + " <small>" + (sel.mode === "self" ? "за сутки" : "за " + q.unit) + "</small>";
-      if (!first) flash(priceEl);
-      cta.href = bookingHref(sel);
-      timeline();
-      setBar(car.short + ", " + humanDate(sel.date) + " в " + sel.time, rub(q.total), bookingHref(sel));
+      $$("[data-t]").forEach(function (t) { t.textContent = fromMin(toMin(sel.time) + +t.getAttribute("data-t")); });
       saveSel(sel);
+      if (changed && !reduceMotion) flash($("#dock-total"));
     }
-
-    function shiftTime(delta) {
-      var m = toMin(sel.time) + delta;
+    function shift(d) {
+      var m = toMin(sel.time) + d;
       if (m >= 1440) { m -= 1440; sel.date = addDays(sel.date, 1); }
-      if (m < 0) {
-        var prev = addDays(sel.date, -1);
-        if (prev >= earliest().date) { m += 1440; sel.date = prev; } else { m = toMin(earliest().time); }
-      }
+      if (m < 0) { var prev = addDays(sel.date, -1); if (prev >= earliest().date) { m += 1440; sel.date = prev; } else m = toMin(earliest().time); }
       sel.time = fromMin(m);
-      if (isTooEarly(sel.date, sel.time)) sel.time = earliest().time;
-      update();
+      render(true);
     }
-
-    $("#time-minus").addEventListener("click", function () { shiftTime(-STEP); });
-    $("#time-plus").addEventListener("click", function () { shiftTime(STEP); });
-    dial.addEventListener("keydown", function (e) {
-      var map = { ArrowUp: STEP, ArrowRight: STEP, ArrowDown: -STEP, ArrowLeft: -STEP, PageUp: 60, PageDown: -60 };
-      if (map[e.key]) { e.preventDefault(); shiftTime(map[e.key]); }
-    });
-
-    // Vertical drag on the numerals (mouse and pen; touch keeps page scroll and uses the buttons)
-    var dragY = null, acc = 0;
-    dial.addEventListener("pointerdown", function (e) {
-      if (e.pointerType === "touch") return;
-      dragY = e.clientY; acc = 0;
-      dial.setPointerCapture(e.pointerId);
-    });
-    dial.addEventListener("pointermove", function (e) {
-      if (dragY === null) return;
-      acc += dragY - e.clientY; dragY = e.clientY;
-      while (Math.abs(acc) >= 22) { shiftTime(acc > 0 ? STEP : -STEP); acc += acc > 0 ? -22 : 22; }
-    });
-    function endDrag() { dragY = null; }
-    dial.addEventListener("pointerup", endDrag);
-    dial.addEventListener("pointercancel", endDrag);
-    dial.addEventListener("lostpointercapture", endDrag);
-
-    $$('input[name="scene-day"]').forEach(function (r) {
-      r.addEventListener("change", function () {
-        var today = isoDate(new Date());
-        sel.date = r.value === "today" ? today : addDays(today, 1);
-        update();
-      });
-    });
-    dateInput.addEventListener("change", function () {
-      if (dateInput.value) { sel.date = dateInput.value < dateInput.min ? dateInput.min : dateInput.value; update(); }
-    });
-    $("#pickup-date-btn").addEventListener("click", function () {
-      try { if (dateInput.showPicker) { dateInput.showPicker(); return; } } catch (e) { /* fall through */ }
-      dateInput.removeAttribute("tabindex"); dateInput.focus();
-    });
-
-    function stepCar(d) {
-      var prevCar = carById(sel.car);
-      var i = K.fleet.indexOf(prevCar);
-      var next = K.fleet[(i + d + K.fleet.length) % K.fleet.length];
-      sel.car = next.id;
-      lastDir = d;
-      if (!next.selfDriveOnly && prevCar.selfDriveOnly) sel.mode = "driver";
-      update();
-    }
-    $("#car-prev").addEventListener("click", function () { stepCar(-1); });
-    $("#car-next").addEventListener("click", function () { stepCar(1); });
-    [modeDriver, modeSelf].forEach(function (r) {
-      r.addEventListener("change", function () { sel.mode = r.value; update(); });
-    });
-
-    update(true);
-    placeBeams(carById(sel.car));
-    spinDial(sel.time);
-
-    /* Put the intro headlamps where this car's lamps will appear (object-fit: cover maths) */
-    function placeBeams(car) {
-      var intro = $(".intro", scene);
-      if (!intro || !car.lamps) return;
-      var sr = scene.getBoundingClientRect(), mr = media.getBoundingClientRect();
-      var scale = Math.max(mr.width / 1920, mr.height / 1200);
-      var dw = 1920 * scale, dh = 1200 * scale;
-      var pos = car.pos.split(" ").map(function (v) { return parseFloat(v) / 100; });
-      var ox = (mr.width - dw) * pos[0], oy = (mr.height - dh) * pos[1];
-      car.lamps.forEach(function (l, i) {
-        var x = mr.left - sr.left + ox + l[0] * dw;
-        var y = mr.top - sr.top + oy + l[1] * dh;
-        intro.style.setProperty("--lx" + (i + 1), x.toFixed(0) + "px");
-        intro.style.setProperty("--ly" + (i + 1), y.toFixed(0) + "px");
-      });
-    }
-    initTrails(scene);
-    initDepth(scene);
-    if (document.documentElement.classList.contains("is-intro")) {
-      setTimeout(function () { document.documentElement.classList.remove("is-intro"); }, 3200);
-    }
-
-    /* The clock winds to the chosen time like a mechanical dial */
-    function spinDial(target) {
-      if (reduceMotion) return;
-      var startDelay = document.documentElement.classList.contains("is-intro") ? 1700 : 250;
-      var chars = target.replace(":", "").split("");
-      var spans = digits.map(function (d) { return d.firstElementChild; });
-      spans.forEach(function (s) { s.textContent = "0"; });
-      dial.classList.add("is-waiting");
-      setTimeout(function () {
-        dial.classList.remove("is-waiting");
-        spans.forEach(function (s, i) {
-          var n = 0, stop = 8 + i * 4;
-          var t = setInterval(function () {
-            n++;
-            var v = n >= stop ? chars[i] : String((+s.textContent + 1) % (i === 0 ? 3 : i === 2 ? 6 : 10));
-            s.textContent = v;
-            s.classList.remove("digit-up"); void s.offsetWidth; s.classList.add("digit-up");
-            if (n >= stop) clearInterval(t);
-          }, 70);
-        });
-      }, startDelay);
-    }
-
-    var row = $("#garage-row");
-    if (row) { renderRow(row, K.fleet); initRowArrows(); initDoors(row); }
-    initEvening();
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(function (en) { scene.classList.toggle("is-offscreen", !en[0].isIntersecting); }).observe(scene);
-    }
+    $("#dock-minus").addEventListener("click", function () { shift(-STEP); });
+    $("#dock-plus").addEventListener("click", function () { shift(STEP); });
+    daySel.addEventListener("change", function () { sel.date = daySel.value; render(true); });
+    [driver, self].forEach(function (r) { r.addEventListener("change", function () { sel.mode = r.value; render(true); }); });
+    fillDays();
+    render(false);
+    return {
+      setCar: function (car) {
+        if (sel.car === car.id) return;
+        var prev = carById(sel.car);
+        sel.car = car.id;
+        if (!car.selfDriveOnly && prev && prev.selfDriveOnly) sel.mode = "driver";
+        render(true);
+      }
+    };
   }
 
-  /* Long-exposure light trails over the night scene (canvas, paused off screen) */
-  function initTrails(scene) {
-    var canvas = $(".scene__trails", scene);
-    if (!canvas || reduceMotion || !canvas.getContext) return;
-    var ctx = canvas.getContext("2d");
-    var w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var trails = [], running = false, raf = 0, last = 0;
-    var small = window.matchMedia("(max-width: 980px)").matches;
-    var COUNT = small ? 8 : 14;
+  /* One primary action per viewport: tuck the dock while the form's own submit is visible */
+  function initDockTuck() {
+    var d = $("#dock"), own = $(".form-actions .btn");
+    if (!d || !own || !("IntersectionObserver" in window)) return;
+    new IntersectionObserver(function (en) { d.classList.toggle("is-tucked", en[0].isIntersecting); }).observe(own);
+  }
 
-    function tint() { return getComputedStyle(document.documentElement).getPropertyValue("--tint").trim() || "#f2a541"; }
-    function spawn(t, initial) {
-      var depth = Math.random();                       // 0 far, 1 near
-      var dir = Math.random() < 0.55 ? 1 : -1;         // right: headlights, left: tail lights
-      var r = Math.random();
-      var color = dir > 0 ? (r < 0.2 ? tint() : r < 0.45 ? "#f2a541" : "#fff1d6") : (r < 0.25 ? tint() : "#ff4d4d");
-      t.depth = depth; t.dir = dir; t.color = color;
-      t.y = h * (0.58 + depth * 0.16) + (Math.random() - 0.5) * h * 0.02;
-      t.len = (90 + depth * 340) * (small ? 0.6 : 1);
-      t.speed = (90 + depth * 520) * (small ? 0.7 : 1);
-      t.width = 0.6 + depth * 2.2;
-      t.alpha = 0.18 + depth * 0.35;
-      t.x = initial ? Math.random() * w : (dir > 0 ? -t.len - Math.random() * w * 0.5 : w + t.len + Math.random() * w * 0.5);
-      return t;
+  /* ---------- Home: the street ---------- */
+  function initStreet() {
+    var street = $("#street");
+    if (!street) return;
+    var track = $("#street-track");
+    var end = $(".street__end", track);
+    var html = "";
+    K.fleet.forEach(function (c, i) {
+      html += '<span class="street__lamp" aria-hidden="true"></span>' + gboxHTML(c, { eager: i < 2 });
+    });
+    end.insertAdjacentHTML("beforebegin", html + '<span class="street__lamp" aria-hidden="true"></span>');
+    var boxes = $$(".gbox", track);
+    dock = initDock();
+    initEvening();
+
+    var stack = reduceMotion || window.matchMedia("(max-width: 900px)").matches;
+    if (stack) {
+      street.classList.add("street--stack");
+      boxes.forEach(function (b) { b.classList.add("gbox--toggle"); });
+      if (reduceMotion) boxes.forEach(function (b) { b.classList.add("is-open"); });
+      else initDoors(track);
+      // the box nearest the middle of the screen is the one the dock picks up
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) { if (en.isIntersecting && dock) dock.setCar(carById(en.target.getAttribute("data-car"))); });
+        }, { rootMargin: "-45% 0px -45% 0px" });
+        boxes.forEach(function (b) { io.observe(b); });
+      }
+      return;
     }
-    function resize() {
-      var r = canvas.getBoundingClientRect();
-      w = r.width; h = r.height;
-      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      trails = []; for (var i = 0; i < COUNT; i++) trails.push(spawn({}, true));
+
+    // Desktop: vertical scroll walks the street sideways. The page height gives the walk its length.
+    var sticky = $(".street__sticky", street);
+    var bar = $(".street__progress span", street);
+    var distance = 0, raf = 0, running = false, current = null, firstOpen = 0;
+    function measure() {
+      distance = Math.max(0, track.scrollWidth - window.innerWidth);
+      street.style.height = (window.innerHeight + distance) + "px";
     }
     function frame(now) {
-      var dt = Math.min(0.05, (now - (last || now)) / 1000); last = now;
-      ctx.clearRect(0, 0, w, h);
-      ctx.globalCompositeOperation = "lighter";
-      ctx.lineCap = "round";
-      trails.forEach(function (t) {
-        t.x += t.dir * t.speed * dt;
-        var tail = t.x - t.dir * t.len;
-        var g = ctx.createLinearGradient(tail, 0, t.x, 0);
-        g.addColorStop(0, "rgba(0,0,0,0)");
-        g.addColorStop(1, t.color);
-        ctx.globalAlpha = t.alpha;
-        ctx.strokeStyle = g;
-        ctx.lineWidth = t.width;
-        ctx.beginPath(); ctx.moveTo(tail, t.y); ctx.lineTo(t.x, t.y); ctx.stroke();
-        if ((t.dir > 0 && tail > w) || (t.dir < 0 && tail < 0)) spawn(t, false);
+      var r = street.getBoundingClientRect();
+      var p = distance ? Math.min(1, Math.max(0, -r.top / distance)) : 0;
+      track.style.transform = "translate3d(" + (-p * distance).toFixed(1) + "px,0,0)";
+      bar.style.setProperty("--p", p.toFixed(4));
+      var vw = window.innerWidth, best = null, bestD = 1e9;
+      boxes.forEach(function (b, i) {
+        var br = b.getBoundingClientRect();
+        var center = br.left + br.width / 2;
+        // a door opens as its box walks in from the right edge towards the middle of the street
+        var open = Math.min(1, Math.max(0, (vw * 0.98 - br.left) / (vw * 0.5)));
+        if (i === 0) open = Math.max(open, firstOpen);
+        b.style.setProperty("--open", open.toFixed(3));
+        var d = Math.abs(center - vw * 0.55);
+        if (open > 0.6 && d < bestD) { bestD = d; best = b; }
       });
-      ctx.globalAlpha = 1;
+      if (best && best !== current) { current = best; if (dock) dock.setCar(carById(best.getAttribute("data-car"))); }
       if (running) raf = requestAnimationFrame(frame);
     }
-    function start() { if (running) return; running = true; last = 0; raf = requestAnimationFrame(frame); }
+    function start() { if (!running) { running = true; raf = requestAnimationFrame(frame); } }
     function stop() { running = false; cancelAnimationFrame(raf); }
-    resize();
-    window.addEventListener("resize", function () { clearTimeout(resize._t); resize._t = setTimeout(resize, 150); });
-    var visible = true;
+    measure();
+    window.addEventListener("resize", function () { clearTimeout(measure._t); measure._t = setTimeout(function () { measure(); }, 120); });
     if ("IntersectionObserver" in window) {
-      new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible && !document.hidden) start(); else stop(); }).observe(scene);
+      new IntersectionObserver(function (en) { if (en[0].isIntersecting) start(); else { frame(0); stop(); } }).observe(street);
+    } else start();
+
+    // First animation: the first box's door rolls up and its light comes on
+    var t0 = null;
+    function openFirst(now) {
+      if (t0 === null) t0 = now;
+      var k = Math.min(1, (now - t0 - 450) / 1600);
+      if (k < 0) k = 0;
+      firstOpen = 1 - Math.pow(1 - k, 3);
+      if (!running) frame(now);
+      if (k < 1) requestAnimationFrame(openFirst);
     }
-    document.addEventListener("visibilitychange", function () { if (document.hidden) stop(); else if (visible) start(); });
-    setTimeout(function () { scene.classList.add("is-live"); start(); }, document.documentElement.classList.contains("is-intro") ? 1800 : 300);
+    requestAnimationFrame(openFirst);
   }
 
-  /* Depth: the photograph and the car's light lean away from the pointer */
-  function initDepth(scene) {
-    if (reduceMotion || !window.matchMedia("(pointer: fine)").matches) return;
-    var pending = false, px = 0, py = 0;
-    scene.addEventListener("pointermove", function (e) {
-      var r = scene.getBoundingClientRect();
-      px = ((e.clientX - r.left) / r.width) * 2 - 1;
-      py = ((e.clientY - r.top) / r.height) * 2 - 1;
-      if (pending) return;
-      pending = true;
-      requestAnimationFrame(function () {
-        scene.style.setProperty("--px", px.toFixed(3));
-        scene.style.setProperty("--py", py.toFixed(3));
-        scene.style.setProperty("--gx", (72 + px * 14).toFixed(1) + "%");
-        pending = false;
-      });
-    });
-    scene.addEventListener("pointerleave", function () {
-      scene.style.setProperty("--px", 0); scene.style.setProperty("--py", 0); scene.style.setProperty("--gx", "72%");
-    });
-  }
-
-  /* ---------- Fleet page ---------- */
-  function initFleet() {
-    var lots = $("#lots");
-    if (!lots) return;
+  /* ---------- Garage page: floor plan ---------- */
+  function initFloor() {
+    var floor = $("#floor");
+    if (!floor) return;
+    floor.innerHTML = K.fleet.map(function (c) { return gboxHTML(c, { cls: "gbox--toggle", label: "Бокс " + boxNo(c) + ": " + c.name + ", " + fromPrice(c) }); }).join("");
+    $$(".gbox", floor).forEach(function (b, i) { b.style.setProperty("--i", i); });
+    initDoors(floor);
     var form = $("#filters");
-    var count = $("#lots-count");
     var preset = new URLSearchParams(location.search).get("class");
     if (preset && $('input[value="' + preset + '"]', form)) $('input[value="' + preset + '"]', form).checked = true;
-
-    function render() {
-      var cls = $('input[name="cls"]:checked', form).value;
-      var list = K.fleet.filter(function (c) { return cls === "all" || c.cls === cls; });
-      count.textContent = list.length + " " + plural(list.length, "автомобиль", "автомобиля", "автомобилей");
-      if (!list.length) {
-        lots.innerHTML = '<div class="empty"><p class="h3">В этом разделе сейчас пусто</p><p class="muted">Позвоните, подберём машину через партнёрские гаражи.</p></div>';
-        return;
-      }
-      lots.innerHTML = list.map(function (c) {
-        return '<a class="lot door" href="car.html?id=' + c.id + '" style="--tint:' + c.tint + ";--i:" + (list.indexOf(c) % 2) + '">' +
-          '<img src="assets/cars/' + c.photo + '" alt="" loading="lazy" decoding="async" width="1920" height="1200" style="object-position:' + c.pos + '">' +
-          '<span class="door__panel" aria-hidden="true"></span>' +
-          '<span class="lot__body"><span><span class="lot__name">' + c.name + '</span><br><span class="lot__class">' + K.classes[c.cls] + ", " + c.seats + " " + plural(c.seats, "место", "места", "мест") + '</span><br><span class="lot__light">' + cap(c.tintName) + "</span></span>" +
-          '<span class="lot__prices">' +
-            (c.selfDriveOnly ? "" : "<span><strong>" + rub(c.perHour) + "</strong> / час с водителем</span>") +
-            "<span><strong>" + rub(c.perDay) + "</strong> / сутки без водителя</span></span>" +
-          (c.selfDriveOnly ? '<span class="box__flag">Только без водителя</span>' : "") +
-          "</span></a>";
-      }).join("");
-      initDoors(lots);
+    function apply() {
+      var cls = $('input[name="cls"]:checked', form).value, n = 0;
+      $$(".gbox", floor).forEach(function (b) {
+        var on = cls === "all" || carById(b.getAttribute("data-car")).cls === cls;
+        b.classList.toggle("is-dim", !on);
+        if (on) { n++; b.removeAttribute("tabindex"); b.removeAttribute("aria-hidden"); } else { b.setAttribute("tabindex", "-1"); b.setAttribute("aria-hidden", "true"); }
+      });
+      $("#floor-count").textContent = "Показано " + n + " " + plural(n, "бокс", "бокса", "боксов");
     }
     form.addEventListener("change", function () {
-      render();
+      apply();
       var cls = $('input[name="cls"]:checked', form).value;
       var u = new URL(location.href);
       if (cls === "all") u.searchParams.delete("class"); else u.searchParams.set("class", cls);
       history.replaceState(null, "", u);
     });
-    render();
-    var sel = loadSel();
-    var car = carById(sel.car);
-    var q = quote(car, sel.mode, sel.amount, sel.time);
-    setBar(car.short + ", " + humanDate(sel.date) + " в " + sel.time, rub(q.total), bookingHref(sel));
+    apply();
   }
 
-  /* ---------- Car page ---------- */
+  /* ---------- Car page: the box opens on arrival ---------- */
   function initCar() {
     var root = $("#car-page");
     if (!root) return;
     var car = carById(new URLSearchParams(location.search).get("id"));
     if (!car) {
-      root.innerHTML = '<div class="container page-head"><h1 class="display">Такой машины нет в гараже</h1><p class="lead">Возможно, ссылка устарела. Весь гараж на одной странице.</p><p><a class="btn" href="fleet.html">Открыть гараж ' + icon("arrow-right") + "</a></p></div>";
+      root.innerHTML = '<div class="container page-head"><h1 class="display">Такого бокса нет</h1><p class="lead">Возможно, ссылка устарела. Все машины на схеме гаража.</p><p><a class="btn" href="fleet.html">Схема гаража ' + icon("arrow-right") + "</a></p></div>";
+      var d = $("#dock"); if (d) d.hidden = true;
       return;
     }
-    document.title = car.name + " | Каретный";
+    document.title = car.name + ", бокс " + boxNo(car) + " | Каретный";
     var desc = $('meta[name="description"]');
     if (desc) desc.content = car.name + ": аренда " + (car.selfDriveOnly ? "без водителя" : "с водителем и без") + " в Москве, " + fromPrice(car) + ".";
-
-    setTint(car.tint);
-    var hero = $("#car-hero-img");
-    hero.src = "assets/cars/" + car.photo;
-    hero.alt = car.name + ", " + car.color;
-    hero.style.objectPosition = car.pos;
+    var box = $("#carbox");
+    box.style.setProperty("--tint", car.tint);
+    var img = $("#car-img");
+    img.src = "assets/cars/" + car.photo; img.alt = car.name + ", " + car.color; img.style.objectPosition = car.pos;
+    $("[data-car-no]").textContent = boxNo(car);
     $("[data-car-name]").textContent = car.name;
-    $("[data-car-crumb]").textContent = car.name;
-    $("[data-car-meta]").innerHTML = "<span>" + K.classes[car.cls] + "</span><span>" + car.year + "</span><span>" + car.color + "</span>";
+    $("[data-car-crumb]").textContent = "Бокс " + boxNo(car);
+    $("[data-car-meta]").innerHTML = "<span>Бокс " + boxNo(car) + "</span><span>" + K.classes[car.cls] + "</span><span>" + car.year + "</span><span>" + car.color + "</span>";
     $("[data-car-summary]").textContent = car.summary;
     $("#car-specs").innerHTML =
       "<div><dt>Мощность</dt><dd>" + car.power + " л.с.<small>" + car.engine + "</small></dd></div>" +
@@ -618,58 +403,16 @@
       "<div><dt>С водителем</dt><dd>" + (car.selfDriveOnly ? "не подаём" : rub(car.perHour) + "<small>в час, от " + hoursWord(car.minHours) + "</small>") + "</dd></div>" +
       "<div><dt>Без водителя</dt><dd>" + rub(car.perDay) + "<small>в сутки, депозит " + rub(car.deposit) + "</small></dd></div>";
     $("#car-features").innerHTML = car.features.concat(["Вода, зарядки и плед в салоне", "Подача и возврат по Москве"]).map(function (f) { return "<li>" + f + "</li>"; }).join("");
-
-    var sel = loadSel();
-    sel.car = car.id;
-    if (car.selfDriveOnly) sel.mode = "self";
-    var panel = $("#car-panel");
-    var driver = $('input[name="cp-mode"][value="driver"]', panel);
-    var self = $('input[name="cp-mode"][value="self"]', panel);
-    var date = $("#cp-date"), time = $("#cp-time"), amount = $("#cp-amount"), amountLabel = $("[data-amount-label]", panel);
-    var err = $("#cp-error");
-    driver.disabled = !!car.selfDriveOnly;
-    driver.checked = sel.mode === "driver";
-    self.checked = sel.mode === "self";
-    date.min = earliest().date;
-    date.value = sel.date;
-    time.value = sel.time;
-    var lastMode = null;
-
-    function fillAmount(mode) {
-      var opts = [];
-      if (mode === "self") for (var d = 1; d <= 14; d++) opts.push([d, daysWord(d)]);
-      else for (var h = car.minHours; h <= 12; h++) opts.push([h, hoursWord(h)]);
-      var prev = amount.value || sel.amount;
-      amount.innerHTML = opts.map(function (o) { return '<option value="' + o[0] + '">' + o[1] + "</option>"; }).join("");
-      if (prev && $('option[value="' + prev + '"]', amount)) amount.value = String(prev);
-      amountLabel.textContent = mode === "self" ? "Срок" : "Продолжительность";
-    }
-    function update() {
-      sel.mode = car.selfDriveOnly || self.checked ? "self" : "driver";
-      if (sel.mode !== lastMode) { fillAmount(sel.mode); lastMode = sel.mode; }
-      sel.date = date.value || sel.date; sel.time = time.value || sel.time; sel.amount = +amount.value;
-      var early = isTooEarly(sel.date, sel.time);
-      err.hidden = !early;
-      if (early) err.textContent = "Ближайшая подача " + humanDate(earliest().date) + " в " + earliest().time + ".";
-      var q = quote(car, sel.mode, sel.amount, sel.time);
-      setText($("[data-line=rate]", panel), q.rate + (q.night ? ", ночью +20%" : ""));
-      setText($("[data-line=amount]", panel), q.unit);
-      setText($("[data-line=deposit]", panel), sel.mode === "self" ? rub(car.deposit) : "не нужен");
-      setText($("[data-total]", panel), rub(q.total));
-      $("#cp-go").href = bookingHref(sel);
-      setBar(car.short + ", " + humanDate(sel.date) + " в " + sel.time, rub(q.total), bookingHref(sel));
-      saveSel(sel);
-    }
-    panel.addEventListener("change", update);
-    panel.addEventListener("input", update);
-    update();
-
-    var row = $("#garage-row");
-    if (row) {
-      renderRow(row, K.fleet.filter(function (c) { return c.id !== car.id; }));
-      initRowArrows();
-      initDoors(row);
-    }
+    var i = K.fleet.indexOf(car);
+    var prev = K.fleet[(i - 1 + K.fleet.length) % K.fleet.length], next = K.fleet[(i + 1) % K.fleet.length];
+    $("#neighbours").innerHTML =
+      '<a class="neighbour" href="car.html?id=' + prev.id + '"><span class="neighbour__dir">' + icon("arrow-left") + " Бокс " + boxNo(prev) + '</span><span class="neighbour__name">' + prev.name + "</span></a>" +
+      '<a class="neighbour" href="car.html?id=' + next.id + '"><span class="neighbour__dir">Бокс ' + boxNo(next) + " " + icon("arrow-right") + '</span><span class="neighbour__name">' + next.name + "</span></a>";
+    dock = initDock(car);
+    // The door rolls up once the photo is ready
+    function open() { requestAnimationFrame(function () { box.classList.add("is-open"); }); }
+    if (reduceMotion) box.classList.add("is-open");
+    else if (img.complete) setTimeout(open, 250); else { img.addEventListener("load", function () { setTimeout(open, 150); }, { once: true }); setTimeout(open, 1500); }
   }
 
   /* ---------- Booking ---------- */
@@ -682,7 +425,7 @@
     var summary = $("#summary");
 
     var carSel = $("#b-car");
-    carSel.innerHTML = K.fleet.map(function (c) { return '<option value="' + c.id + '">' + c.name + "</option>"; }).join("");
+    carSel.innerHTML = K.fleet.map(function (c) { return '<option value="' + c.id + '">Бокс ' + boxNo(c) + ": " + c.name + "</option>"; }).join("");
     var date = $("#b-date"), time = $("#b-time"), amount = $("#b-amount");
     date.min = earliest().date;
 
@@ -724,8 +467,18 @@
       $("[data-self-block]").hidden = m !== "self";
       $("[data-other-block]").hidden = !other();
       fillAmount(c, m);
-      $("#car-preview").innerHTML = '<img src="assets/cars/' + c.photo + '" alt="" style="object-position:' + c.pos + '" width="1920" height="1200">' +
-        '<div><p class="h3">' + c.name + '</p><p class="car-preview__price">' + fromPrice(c) + (c.selfDriveOnly ? ", только без водителя" : "") + "</p></div>";
+      var bbox = $("#booking-box"), bimg = $("#booking-img");
+      if (bbox.getAttribute("data-car") !== c.id) {
+        bbox.setAttribute("data-car", c.id);
+        bbox.style.setProperty("--tint", c.tint);
+        bbox.classList.remove("is-open");
+        bimg.src = "assets/cars/" + c.photo; bimg.alt = c.name; bimg.style.objectPosition = c.pos;
+        $("#booking-no").textContent = "Бокс " + boxNo(c);
+        $("#booking-name").textContent = c.name;
+        $("#booking-door-no").textContent = boxNo(c);
+        if (reduceMotion) bbox.classList.add("is-open");
+        else setTimeout(function () { bbox.classList.add("is-open"); }, 120);
+      }
       setTint(c.tint);
       var q = quote(c, m, +amount.value, time.value);
       setText($("[data-line=car]", summary), c.name);
@@ -736,7 +489,11 @@
       setText($("[data-line=deposit]", summary), m === "self" ? rub(c.deposit) : "не нужен");
       setText($("[data-total]", summary), rub(q.total));
       $("[data-night]", summary).hidden = !q.night;
-      setBar(c.short + (time.value ? ", " + humanDate(date.value) + " в " + time.value : ""), rub(q.total));
+      setText($("#dock-name"), c.short);
+      $("#dock-label").textContent = "Бокс " + boxNo(c) + ", ваша подача";
+      $("#dock-when").textContent = date.value && time.value ? cap(humanDate(date.value)) + " в " + time.value : "";
+      setText($("#dock-total"), rub(q.total));
+      $("#dock-unit").textContent = q.unit;
 
       saveSel({ car: c.id, mode: m, date: date.value, time: time.value, amount: +amount.value });
       store("set", "karetny-draft", {
@@ -855,8 +612,9 @@
         else fallback();
       };
       form.hidden = true;
-      var bar = $(".bar"); if (bar) bar.hidden = true;
-      $("[data-before-submit]").hidden = true;
+      var dk = $("#dock"); if (dk) dk.hidden = true;
+      document.body.classList.remove("has-dock");
+      $$("[data-before-submit]").forEach(function (x) { x.hidden = true; });
       ok.hidden = false;
       ok.focus();
       window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
@@ -903,11 +661,11 @@
   document.addEventListener("DOMContentLoaded", function () {
     fillContacts();
     initHeader();
-    initScene();
-    initFleet();
+    initStreet();
+    initFloor();
     initCar();
     initBooking();
     initTerms();
-    initBarTuck();
+    initDockTuck();
   });
 })();

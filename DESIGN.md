@@ -1,6 +1,6 @@
 ---
 name: Каретный
-description: Night dispatch. The visitor sets the minute the car is at the door; car, price and the evening follow that time.
+description: Night street. Eight garage boxes on Каретный Ряд; scrolling walks past them, each door rolls up, and the dock picks up the car in front of you.
 colors:
   lacquer: "#0d0e10"
   night: "#131518"
@@ -32,12 +32,6 @@ colors:
   tint-911-gt3: "#5fd4c2"
   self-drive: "#6fa8ff"
 typography:
-  timedial:
-    fontFamily: "Unbounded, Arial Black, sans-serif"
-    fontSize: "clamp(5rem, 1.5rem + 11vw, 11.5rem)"
-    fontWeight: 300
-    lineHeight: 0.9
-    letterSpacing: "-0.06em"
   display:
     fontFamily: "Unbounded, Arial Black, sans-serif"
     fontSize: "clamp(2.4rem, 1.2rem + 4.4vw, 5.6rem)"
@@ -129,7 +123,7 @@ components:
 
 ## Overview
 
-Moscow at night, seen from the kerb. The page is lacquer-black asphalt; the only colour is the sodium of a streetlight, and it is spent on one thing: the time. The first viewport is a full-bleed photograph of the chosen car at a door, and over it a giant time, «Экипаж подан к 22:30», that the visitor changes with plus and minus, arrow keys or a vertical drag. Everything else answers to that time: the car switcher and price beside it, the prose timeline further down («В 21:00 вы оставляете заявку… в 22:30 вы садитесь»), the mobile bar.
+Moscow at night, seen from the kerb of one street. The site is built as a row of eight garage boxes on Каретный Ряд, one car per box. On the home page vertical scroll walks the visitor sideways along the street: the nearest box's door rolls up on arrival, its ceiling light comes on and the car comes up out of the dark; every box passed opens the same way. A dock fixed to the bottom of the screen "picks up" whichever car is in front of you and carries its name, day, pickup time, mode, total and «Забронировать». The garage page is the floor plan of the same boxes, the car page is one box opening, and booking shows the chosen car standing in its open box.
 
 The world is dark only, by design: the brief is a night service and every photograph is graded to night. Contrast is held at WCAG AA throughout.
 
@@ -145,7 +139,7 @@ The world is dark only, by design: the brief is a night service and every photog
 - **Error** `#ff9a8a` on a 8% error tint, with a 1px full border.
 
 ### Car lights (secondary, per car)
-Each car carries its own light colour taken from one of its details (`tint` in data.js): Wraith starlight `#8fb4e8`, Dawn mandarin leather `#e8743b`, M760Li laser headlights `#5b8cff`, Panamera light bar `#ff4d4d`, G 63 platinum `#aebbc8`, Range Rover tan leather `#c9915e`, Huracán red rims `#ff3b47`, 911 GT3 `#5fd4c2`. Set as `--tint` (a registered `@property`, so it transitions), it spills as a radial glow into the home scene and the car hero, edges the car's box, lot, order panel, booking preview and mobile bar, and appears as a small dot with its name («Кожа Mandarin»). It never colours text.
+Each car carries its own light colour taken from one of its details (`tint` in data.js): Wraith starlight `#8fb4e8`, Dawn mandarin leather `#e8743b`, M760Li laser headlights `#5b8cff`, Panamera light bar `#ff4d4d`, G 63 platinum `#aebbc8`, Range Rover tan leather `#c9915e`, Huracán red rims `#ff3b47`, 911 GT3 `#5fd4c2`. Set as `--tint` (a registered `@property`, so it transitions), it spills from the ceiling of the car's garage box, edges the order panel and the dock, and appears as a small dot with its name («Кожа Mandarin»). It never colours text.
 
 ### Blue hour
 `#101a2e` to `#16233d` band behind the evening timeline, with its own text ramp (`#b9c2d6`, `#98a3bb`, dim `#56617a` for not-yet-lit times). Self-drive is marked with `#6fa8ff`, driver with sodium.
@@ -157,7 +151,7 @@ Each car carries its own light colour taken from one of its details (`tint` in d
 ## Typography
 
 ### Hierarchy
-- **Time dial** (Unbounded 300, up to 11.5rem, -0.06em): the pickup time in the first viewport only. It is a control, not a headline, which is why it exceeds the 6rem display ceiling.
+- **Dock time** (Unbounded 300, sodium): the pickup time in the dock, the one numeral set in sodium on every page.
 - **Display** (Unbounded 300, up to 5.6rem): page titles («Гараж», «Заявка на подачу», car names).
 - **H2 / H3** (Unbounded 300): section titles, prices on the «two ways» block, panel totals, the evening timeline prose.
 - **Wordmark** (Unbounded 500, uppercase, 0.16em tracking): «КАРЕТНЫЙ» only.
@@ -169,7 +163,13 @@ Each car carries its own light colour taken from one of its details (`tint` in d
 
 ## Layout
 
-12-column container at 1360px, fluid gutter `clamp(16px, 4vw, 56px)`, sections spaced `clamp(96px, 12vw, 176px)`. The home page runs as a night drive: full-bleed scene, a horizontal scroll-snap row of garage boxes (3:4), the evening as one paragraph of large prose, two ways (with driver / self-drive) split by a hairline, a full-bleed garage photograph, questions as a two-column definition list, and a giant phone number as the close. The garage page alternates 7/5 and 5/7 column lots. Below 980px the scene photo stacks above the controls; below 900px the header collapses to a menu and a fixed bottom bar carries the current car, time, total, a call button and «Забронировать». The bar tucks away while the page's own primary action is on screen.
+12-column container at 1360px, fluid gutter `clamp(16px, 4vw, 56px)`, sections spaced `clamp(96px, 12vw, 176px)`.
+
+- **Home (street):** a tall section with a sticky viewport; its track (intro h1 «Восемь боксов на Каретном Ряду», eight boxes, a closing «Нужна другая машина?») translates horizontally from the section's scroll progress. Streetlamps, a kerb line and a progress hairline sit under the boxes. Below the street: the evening as one paragraph of prose, two ways (with driver / self-drive), questions as a definition list and the phone number as the close. At 900px and below, or with reduced motion, the street becomes a vertical stack of boxes (`.street--stack`).
+- **Garage (floor plan):** boxes in a 4 / 2 / 1 column grid, numbered in order, doors opening with a stagger when the floor scrolls in.
+- **Car:** the car's box full width with its door rolling up, then a passport (specs as a hairline list), features and the neighbouring boxes.
+- **Booking:** 5/7 split; the left column is the chosen car in its open box (sticky) with the summary, the right is the form. On mobile the box becomes a 16:9 strip above the form and the summary is carried by the dock.
+- **Dock:** fixed to the bottom on home, car and booking pages. 88px desktop, 128px mobile. It tucks away (translateY 110%) while the page's own submit button is on screen.
 
 ## Elevation & Depth
 
@@ -188,28 +188,26 @@ Primary: ivory fill, lacquer text, 52px, arrow icon nudges 3px on hover. Line: t
 Bordered rectangles 44-48px tall. One selected state for every choice control (segmented switch, day, chip, filter): asphalt-2 fill, ivory text and a 2px sodium inset underline.
 
 ### Cards / Containers
-There are no cards. Cars are shown as photographic boxes (home row, 3:4) and lots (garage, 7/5 grid) with the name and prices set over a bottom gradient. Order and summary panels are asphalt blocks with a sodium top edge.
+There are no cards. The one container is the **garage box** (`.gbox`): a photograph inside a dark bay with a ceiling light strip and the car's tint spilling from above, a grooved door panel in front, the box number, a handle, and the name, price and light colour set over the bottom shade. Everything is driven by one custom property, `--open` (0 to 1): door translateY, ceiling light, photo brightness and scale, body opacity. The fleet floor uses the same box without the ceiling strip (`.carbox`). Order and summary panels are asphalt blocks with a sodium top edge.
 
 ### Inputs / Fields
 Night fill, line-strong border, label above, hint and error below, sodium focus border and 1px outline, sodium caret. Date and time fields open their native picker from the whole field. Checkboxes are custom 22px squares with a sodium tick; textareas do not show a resize grip. Errors link to fields with `aria-describedby` and are summarised at the top of the form.
 
 ### Navigation
-72px header: wordmark, «Гараж», «Условия», phone, a line button «Забронировать» (hidden on the home scene, where the scene's own button leads). Transparent over the home photograph, lacquer with a hairline elsewhere.
+72px header: wordmark, «Гараж», «Условия», phone. No header CTA: the dock carries the booking action. Transparent over the street on the home page, lacquer with a hairline elsewhere.
 
 ### Motion
-- **First visit intro (once per session):** the page opens black; two cool-white headlamps ignite exactly where the selected car's lamps sit in the photo (per-car `lamps` coordinates mapped through object-fit: cover), then the scene fades up and the time dial winds from 00:00 to the pickup time like a mechanical clock.
-- **Light trails:** a canvas of long-exposure streaks (white headlights to the right, red tail lights to the left, a few in sodium and the car's tint) runs on the road band behind the car, masked away from the type and placed under the scene shade; paused off screen and in hidden tabs.
-- **Depth:** on fine pointers the photograph leans away from the cursor (up to 14 px) and the car's light follows it.
-- **Lights on:** the scene and car hero photographs come up from dark (brightness 0.15 to 1, 1.5 s); switching car drives the new photo in 3% from the arrow's side while the scene glow cross-fades to the new car's tint.
-- **Garage doors:** each box and lot opens as a door panel rolling up (translateY -101%, 1.05 s, 110 ms stagger) when it scrolls into view; the photo settles from scale 1.1.
-- **Evening:** the five times light from dim blue to sodium one after another (380 ms apart) when the paragraph is read.
-- **Clock:** the colon in the time dial breathes (opacity 1 to 0.55, 3.2 s), paused off screen.
+- **Arrival:** on load the nearest box's door rolls up (translateY -101%, 1.05 s), the ceiling strip lights, then the car comes up from brightness 0.15 and scale 1.08 to rest.
+- **Walking the street:** the track pans with scroll in a rAF loop that runs only while the street is on screen (no window scroll listener); each box opens once when it crosses the centre, and the dock switches to the box nearest the centre, cross-fading `--tint` (registered `@property`) on its edge and dot.
+- **Floor plan:** doors open with an 80 ms stagger by index when the floor enters the viewport.
+- **Evening:** the five times light from dim blue to sodium one after another when the paragraph is read.
 - **Request number:** arrives as a split-flap board.
 - **Primary button:** a faint sodium headlight sweep on hover.
-- Reduced motion keeps colour and opacity changes, drops travel, scale, doors, sweep and the tick.
+- **Dock tuck:** 0.35 s translateY when the page's own submit is visible.
+- Reduced motion: every box is open (`--open: 1`), doors are hidden, the street is a vertical stack; only colour and opacity change.
 
-### Time dial (signature)
-`role="spinbutton"` with plus/minus buttons, arrow and page keys, and vertical drag for mouse and pen. Digits roll up or down on change; the scene crossfades when the car changes. Earliest pickup is now + 90 minutes, rounded to the quarter hour; the dial never goes earlier. Night hours (00:00-06:00) add 20% with a driver and say so under the dial.
+### Dock (signature)
+Car name with its light dot, a day select, pickup time with minus/plus in 15-minute steps, with/without driver, the total for the minimum hours and «Забронировать» linking to booking with the selection. Earliest pickup is now + 90 minutes, rounded to the quarter hour; night hours (00:00-06:00) add 20% with a driver. Self-drive-only cars lock the mode. On booking the dock becomes a summary bar with «Отправить заявку» bound to the form.
 
 ## Do's and Don'ts
 

@@ -15,22 +15,22 @@ Affluent Moscow clients and, very often, their assistants booking on a phone for
 
 ## Direction contract
 
-THESIS: The site sells a moment, not a car: the visitor sets the minute the car will be at the door, and everything else (car, price, the evening's timeline) follows that time. Refuses the category default of hero-with-widget, stepper, testimonial cards and CTA band.
+THESIS: The site is one night street: eight numbered garage boxes on Каретный Ряд, one car in each. The visitor walks past them, doors roll up, and the car in front of them is the car they are booking. Refuses hero-with-widget, card grids, steppers and CTA bands.
 
-OWN-WORLD: Moscow at night. Lacquer #0D0E10 and asphalt #1C1F23 grounds, ivory #ECE7DF text, muted #8D8A84, sodium streetlight #F2A541 used only as light (the time, active states, focus). All photography graded to one night look, plates blurred. Unbounded 300 for display and numerals, Golos Text for reading. Sharp corners, hairlines #2A2E33, no cards with shadows.
+OWN-WORLD: Moscow at night. Lacquer #0D0E10 and asphalt #1C1F23 grounds, ivory #ECE7DF text, sodium #F2A541 only as light (the time, states, focus), each car's own light colour spilling from its box ceiling. Night-graded photography, plates blurred. Unbounded 300 and Golos Text. Square corners, hairlines.
 
-STORY: The visitor sees a car at an entrance at night and a large time. They change the time and the car, see the price, read the evening as a timeline derived from their time, then book; on a phone a bottom bar always carries the total and the button.
+STORY: Arrive at the street, the first door rolls up and the Wraith lights up. Scroll and the street pans; each box opens as you pass and the dock picks up that car with its total. Garage is the floor plan, a car page is its box opening, booking shows the car standing in its open box.
 
-FIRST VIEWPORT: Full-bleed graded photo of the selected car. Bottom-left: h1 «Экипаж подан к» with the time as a giant sodium numeral control (minus/plus, arrow keys, day switch). Bottom-right: car switcher (name, mode, price) and «Забронировать». Header transparent on top.
+FIRST VIEWPORT: Left, h1 «Восемь боксов на Каретном Ряду» and one line of promise; right, box 1 opening with the next box's closed door at the edge; streetlamps on the kerb; the dock at the bottom with car, day, time, mode, total and «Забронировать». Header transparent.
 
-FORM: Night dispatch, grounded candidate B of 3 presented to the user (user choice). Seed key 023fb55a (degraded roll).
+FORM: Night street, structural redesign chosen by the user over the night-dispatch scene (whose intro animation was rejected). Palette and type carried from direction B.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
 ## Signature interaction
 
-The pickup time control: digits roll when the time changes, the scene crossfades when the car changes, and the evening timeline on the page recomputes from the chosen time (T-90 request, T-75 call, T-40 car ready, T-10 at the door).
+The door: one `--open` value per box rolls the door up, lights the ceiling strip and brings the car up from the dark; the dock follows the box nearest the centre.
 
 ## Fixes carried from the critique
 
-All 8 cars always shown (self-drive-only labelled), one primary CTA per viewport, sticky mobile bar with total, booking for another person, earliest pickup = now + 90 min enforced, request number and shareable summary on success, no fabricated testimonials.
+All 8 cars always shown (self-drive-only labelled), one primary CTA per viewport, bottom dock with total on every selling page, booking for another person, earliest pickup = now + 90 min enforced, request number and shareable summary on success, no fabricated testimonials.

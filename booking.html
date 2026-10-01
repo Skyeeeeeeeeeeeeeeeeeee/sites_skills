@@ -10,10 +10,10 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230d0e10'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23f2a541'/%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/unbounded-cyrillic-300-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css?v=6">
+<link rel="stylesheet" href="assets/css/style.css?v=11">
 <script>document.documentElement.classList.add("js");</script>
 </head>
-<body class="has-bar">
+<body class="has-dock">
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 <header class="site-header">
   <div class="container site-header__inner">
@@ -23,7 +23,6 @@
       <a href="terms.html">Условия</a>
     </nav>
     <a class="header-phone" data-phone href="tel:+74951824719">+7 495 182-47-19</a>
-    <a class="btn btn--sm btn--line" href="booking.html" aria-current="page">Забронировать</a>
     <button class="icon-btn menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-list"></use></svg><span class="visually-hidden">Открыть меню</span></button>
   </div>
 </header>
@@ -43,8 +42,30 @@
     </div>
 
     <div class="booking">
-      <div class="booking__form">
-        <section class="done page-head" id="done" tabindex="-1" hidden aria-labelledby="done-title">
+      <aside class="booking__side" data-before-submit aria-labelledby="summary-title">
+        <div class="gbox gbox--toggle" id="booking-box">
+          <div class="gbox__bay"><img id="booking-img" src="assets/cars/wraith.jpg" alt="" width="1920" height="1200"></div>
+          <div class="gbox__shade"></div>
+          <div class="gbox__body"><span class="gbox__label" id="booking-no"></span><span class="gbox__name" id="booking-name"></span></div>
+          <div class="gbox__door" aria-hidden="true"><span class="gbox__no" id="booking-door-no"></span><span class="gbox__handle"></span></div>
+        </div>
+        <div class="summary" id="summary">
+          <h2 class="visually-hidden" id="summary-title">Ваша подача</h2>
+          <dl class="summary" aria-live="polite">
+            <div class="summary__line"><dt>Режим</dt><dd data-line="mode">-</dd></div>
+            <div class="summary__line"><dt>Когда</dt><dd data-line="when">-</dd></div>
+            <div class="summary__line"><dt>Срок</dt><dd data-line="amount">-</dd></div>
+            <div class="summary__line"><dt>Адрес</dt><dd data-line="address">-</dd></div>
+            <div class="summary__line"><dt>Депозит</dt><dd data-line="deposit">-</dd></div>
+          </dl>
+          <div class="summary__total"><span>Итого</span><strong data-total>-</strong></div>
+          <p class="summary__note" data-night hidden>С 00:00 до 06:00 действует ночной тариф, +20% к часу.</p>
+          <p class="summary__note">Топливо, мойка и подача по Москве включены. Отмена бесплатно за 24 часа.</p>
+        </div>
+      </aside>
+
+      <div>
+        <section class="done page-head" id="done" tabindex="-1" hidden aria-labelledby="done-title" style="padding-top:0">
           <h1 class="display" id="done-title">Заявка принята</h1>
           <p class="done__no" data-done-no></p>
           <p class="lead">Менеджер перезвонит на <span data-done-phone></span> в течение 15 минут. Если звонка нет, наберите гараж и назовите номер заявки.</p>
@@ -58,23 +79,21 @@
 
         <form id="booking-form" novalidate>
           <div class="form-error-summary" role="alert"></div>
-
           <div class="step">
             <h2 class="step__title">Автомобиль</h2>
             <div class="field">
-              <label class="field__label" for="b-car">Машина</label>
+              <label class="field__label" for="b-car">Бокс</label>
               <select class="select" id="b-car" name="car"></select>
             </div>
-            <div class="car-preview" id="car-preview" aria-live="polite"></div>
-          </div>
-
-          <div class="step">
-            <h2 class="step__title">Когда и куда</h2>
-            <div class="mode-switch" role="radiogroup" aria-label="Режим аренды" style="max-width:420px">
+            <div class="seg" role="radiogroup" aria-label="Режим аренды">
               <label><input type="radio" name="mode" value="driver" checked><span>С водителем</span></label>
               <label><input type="radio" name="mode" value="self"><span>Без водителя</span></label>
             </div>
             <p class="field__hint" data-driver-note hidden>Эта машина выдаётся только без водителя.</p>
+          </div>
+
+          <div class="step">
+            <h2 class="step__title">Когда и куда</h2>
             <div class="grid-3">
               <div class="field" data-field="date">
                 <label class="field__label" for="b-date">Дата</label>
@@ -105,9 +124,9 @@
 
           <div class="step">
             <h2 class="step__title">Кто едет</h2>
-            <div class="chips" role="radiogroup" aria-label="Для кого заявка">
-              <label class="chip"><input type="radio" name="who" value="self" checked><span>Я сам</span></label>
-              <label class="chip"><input type="radio" name="who" value="other"><span>Другой человек</span></label>
+            <div class="seg" role="radiogroup" aria-label="Для кого заявка">
+              <label><input type="radio" name="who" value="self" checked><span>Я сам</span></label>
+              <label><input type="radio" name="who" value="other"><span>Другой человек</span></label>
             </div>
             <div class="grid-2" data-other-block hidden>
               <div class="field" data-field="pname">
@@ -137,10 +156,10 @@
             </div>
             <div class="field">
               <span class="field__label" id="contact-label">Как подтвердить заявку</span>
-              <div class="chips" role="radiogroup" aria-labelledby="contact-label">
-                <label class="chip"><input type="radio" name="contact" value="phone" checked><span><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>Звонок</span></label>
-                <label class="chip"><input type="radio" name="contact" value="telegram"><span><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"></use></svg>Telegram</span></label>
-                <label class="chip"><input type="radio" name="contact" value="whatsapp"><span><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"></use></svg>WhatsApp</span></label>
+              <div class="seg seg--3" role="radiogroup" aria-labelledby="contact-label">
+                <label><input type="radio" name="contact" value="phone" checked><span><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>Звонок</span></label>
+                <label><input type="radio" name="contact" value="telegram"><span><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"></use></svg>Telegram</span></label>
+                <label><input type="radio" name="contact" value="whatsapp"><span><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"></use></svg>WhatsApp</span></label>
               </div>
             </div>
             <div class="field">
@@ -149,44 +168,30 @@
             </div>
           </div>
 
-        </form>
-      </div>
-
-      <aside class="booking__aside" data-before-submit aria-labelledby="summary-title">
-        <div class="panel" id="summary">
-          <h2 class="panel__title" id="summary-title">Ваша подача</h2>
-          <dl class="panel__lines" aria-live="polite">
-            <div class="panel__line"><dt>Машина</dt><dd data-line="car">-</dd></div>
-            <div class="panel__line"><dt>Режим</dt><dd data-line="mode">-</dd></div>
-            <div class="panel__line"><dt>Когда</dt><dd data-line="when">-</dd></div>
-            <div class="panel__line"><dt>Срок</dt><dd data-line="amount">-</dd></div>
-            <div class="panel__line"><dt>Адрес</dt><dd data-line="address">-</dd></div>
-            <div class="panel__line"><dt>Депозит</dt><dd data-line="deposit">-</dd></div>
-          </dl>
-          <div class="panel__total"><span>Итого</span><strong data-total>-</strong></div>
-          <p class="panel__note" data-night hidden>С 00:00 до 06:00 действует ночной тариф, +20% к часу.</p>
-          <p class="panel__note">Топливо, мойка и подача по Москве включены. Отмена бесплатно за 24 часа.</p>
-        </div>
-      </aside>
-          <div class="booking__send" data-before-submit>
+          <div class="step">
             <div class="field" data-field="consent">
-              <label class="check"><input type="checkbox" id="b-consent" name="consent" form="booking-form"><span>Согласен на обработку персональных данных по <a href="terms.html#privacy">политике конфиденциальности</a></span></label>
+              <label class="check"><input type="checkbox" id="b-consent" name="consent"><span>Согласен на обработку персональных данных по <a href="terms.html#privacy">политике конфиденциальности</a></span></label>
               <p class="field__error" role="alert"></p>
             </div>
             <div class="form-actions">
-              <button class="btn" type="submit" form="booking-form" data-primary>Отправить заявку <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+              <button class="btn" type="submit">Отправить заявку <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
               <a class="text-link" data-phone href="tel:+74951824719">или позвоните</a>
             </div>
           </div>
-
+        </form>
+      </div>
     </div>
   </div>
 </main>
 
-<div class="bar" role="region" aria-label="Быстрая бронь">
-  <div class="bar__info"><span class="bar__what">Выберите машину</span><span class="bar__total" aria-live="polite">-</span></div>
-  <a class="icon-btn" data-phone href="tel:+74951824719" aria-label="Позвонить в гараж"><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg></a>
-  <button class="btn" type="submit" form="booking-form">Отправить заявку</button>
+<div class="dock" id="dock" role="region" aria-label="Заявка">
+  <div class="container dock__inner dock__inner--submit">
+    <div class="dock__car"><span class="dock__label" id="dock-label">Ваша подача</span><span class="dock__name" id="dock-name">-</span></div>
+    <div class="dock__note" id="dock-when"></div>
+    <div></div>
+    <div class="dock__price"><span class="dock__total" id="dock-total">-</span><span class="dock__unit" id="dock-unit"></span></div>
+    <button class="btn" type="submit" form="booking-form" id="dock-submit">Отправить заявку <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+  </div>
 </div>
 
 <footer class="site-footer">
@@ -205,8 +210,8 @@
     <p class="site-footer__legal">Каретный Ряд, 5/10, стр. 2, Москва. © <span data-year>2026</span> ООО «Каретный двор».</p>
   </div>
 </footer>
-<script src="assets/js/icons.js?v=6"></script>
-<script src="assets/js/data.js?v=6"></script>
-<script src="assets/js/main.js?v=6"></script>
+<script src="assets/js/icons.js?v=11"></script>
+<script src="assets/js/data.js?v=11"></script>
+<script src="assets/js/main.js?v=11"></script>
 </body>
 </html>
