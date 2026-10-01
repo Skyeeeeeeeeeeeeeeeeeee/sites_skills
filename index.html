@@ -12,6 +12,7 @@
 <link rel="preload" href="assets/fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" href="assets/cars/g63.jpg">
 <link rel="stylesheet" href="assets/css/style.css">
+<script>document.documentElement.classList.add("js");</script>
 </head>
 <body class="has-bar">
 <a class="skip-link" href="#main">Перейти к содержанию</a>
@@ -38,6 +39,7 @@
   <section class="scene" id="scene" aria-labelledby="scene-title">
     <div class="scene__media"></div>
     <div class="scene__shade"></div>
+    <div class="scene__glow" aria-hidden="true"></div>
     <div class="container scene__body">
       <div class="pickup">
         <h1 class="pickup__label" id="scene-title">Экипаж подан к<span class="visually-hidden"> выбранному времени</span></h1>
@@ -66,6 +68,7 @@
             <button class="icon-btn" id="car-next" type="button" aria-label="Следующая машина"><svg class="icon" aria-hidden="true"><use href="#i-caret-right"></use></svg></button>
           </div>
         </div>
+        <p class="carpick__light" id="carpick-light"></p>
         <div class="mode-switch" role="radiogroup" aria-label="Режим аренды">
           <label><input type="radio" name="scene-mode" value="driver" checked><span>С водителем</span></label>
           <label><input type="radio" name="scene-mode" value="self"><span>Без водителя</span></label>
@@ -95,7 +98,7 @@
     </div>
   </section>
 
-  <section class="section" aria-labelledby="evening-title" style="padding-top:0">
+  <section class="section band-blue" aria-labelledby="evening-title">
     <div class="container evening">
       <h2 class="visually-hidden" id="evening-title">Как пройдёт ваш вечер</h2>
       <p class="evening__text">
@@ -115,7 +118,7 @@
     <div class="container">
       <h2 class="visually-hidden" id="ways-title">Два способа поехать</h2>
       <div class="ways">
-        <div class="way">
+        <div class="way way--driver">
           <h3 class="h3">С водителем</h3>
           <p class="way__price">от 6&#8239;900&nbsp;₽<small>в час, минимум 3 часа</small></p>
           <ul class="dash-list">
@@ -124,7 +127,7 @@
             <li>С 00:00 до 06:00 ночной тариф, +20% к часу.</li>
           </ul>
         </div>
-        <div class="way">
+        <div class="way way--self">
           <h3 class="h3">За рулём сами</h3>
           <p class="way__price">от 98&#8239;000&nbsp;₽<small>в сутки, 300 км включены</small></p>
           <ul class="dash-list">

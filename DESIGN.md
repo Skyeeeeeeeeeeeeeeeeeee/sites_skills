@@ -17,6 +17,20 @@ colors:
   sodium: "#f2a541"
   sodium-ink: "#1a1206"
   error: "#ff9a8a"
+  blue-hour: "#101a2e"
+  blue-hour-2: "#16233d"
+  blue-ink: "#b9c2d6"
+  blue-muted: "#98a3bb"
+  blue-dim: "#56617a"
+  tint-wraith: "#8fb4e8"
+  tint-dawn: "#e8743b"
+  tint-m760li: "#5b8cff"
+  tint-panamera: "#ff4d4d"
+  tint-g63: "#b5c97a"
+  tint-range-rover: "#c9915e"
+  tint-huracan: "#ff3b47"
+  tint-911-gt3: "#5fd4c2"
+  self-drive: "#6fa8ff"
 typography:
   timedial:
     fontFamily: "Unbounded, Arial Black, sans-serif"
@@ -130,6 +144,12 @@ The world is dark only, by design: the brief is a night service and every photog
 - **Line** `#2a2e33` hairlines; **Line strong** `#3a3f45` control borders.
 - **Error** `#ff9a8a` on a 8% error tint, with a 1px full border.
 
+### Car lights (secondary, per car)
+Each car carries its own light colour taken from one of its details (`tint` in data.js): Wraith starlight `#8fb4e8`, Dawn mandarin leather `#e8743b`, M760Li laser headlights `#5b8cff`, Panamera light bar `#ff4d4d`, G 63 `#b5c97a`, Range Rover tan leather `#c9915e`, Huracán red rims `#ff3b47`, 911 GT3 `#5fd4c2`. Set as `--tint` (a registered `@property`, so it transitions), it spills as a radial glow into the home scene and the car hero, edges the car's box, lot, order panel, booking preview and mobile bar, and appears as a small dot with its name («Кожа Mandarin»). It never colours text.
+
+### Blue hour
+`#101a2e` to `#16233d` band behind the evening timeline, with its own text ramp (`#b9c2d6`, `#98a3bb`, dim `#56617a` for not-yet-lit times). Self-drive is marked with `#6fa8ff`, driver with sodium.
+
 ### Named Rules
 - **Sodium is light.** It colours numerals, thin edges and states. It never fills a button, a card or a section.
 - **One night.** Every raster is graded the same way (upper frame darkened, cool shadows, warm highlights, plates blurred). A photograph that still reads as daylight is cropped or replaced, never shipped as is.
@@ -176,6 +196,15 @@ Night fill, line-strong border, label above, hint and error below, sodium focus 
 ### Navigation
 72px header: wordmark, «Гараж», «Условия», phone, a line button «Забронировать» (hidden on the home scene, where the scene's own button leads). Transparent over the home photograph, lacquer with a hairline elsewhere.
 
+### Motion
+- **Lights on:** the scene and car hero photographs come up from dark (brightness 0.15 to 1, 1.5 s); switching car drives the new photo in 3% from the arrow's side while the scene glow cross-fades to the new car's tint.
+- **Garage doors:** each box and lot opens as a door panel rolling up (translateY -101%, 1.05 s, 110 ms stagger) when it scrolls into view; the photo settles from scale 1.1.
+- **Evening:** the five times light from dim blue to sodium one after another (380 ms apart) when the paragraph is read.
+- **Clock:** the colon in the time dial ticks every second, paused off screen.
+- **Request number:** arrives as a split-flap board.
+- **Primary button:** a faint sodium headlight sweep on hover.
+- Reduced motion keeps colour and opacity changes, drops travel, scale, doors, sweep and the tick.
+
 ### Time dial (signature)
 `role="spinbutton"` with plus/minus buttons, arrow and page keys, and vertical drag for mouse and pen. Digits roll up or down on change; the scene crossfades when the car changes. Earliest pickup is now + 90 minutes, rounded to the quarter hour; the dial never goes earlier. Night hours (00:00-06:00) add 20% with a driver and say so under the dial.
 
@@ -188,7 +217,7 @@ Night fill, line-strong border, label above, hint and error below, sodium focus 
 - Do keep all eight cars visible and label self-drive-only cars instead of hiding them.
 
 ### Don't:
-- Don't add shadows, rounded corners or filled cards.
+- Don't add shadows, glows, rounded corners or filled cards; light lines stay 1px.
 - Don't use sodium as a button or section fill, or add a second accent colour.
 - Don't add eyebrows, section numbers, testimonial cards or a CTA band.
 - Don't ship a daylight photograph, a visible licence plate, or a photo of a model that is not in the fleet.

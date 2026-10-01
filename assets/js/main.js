@@ -149,6 +149,32 @@
     $$("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
   }
 
+  function setTint(color) { document.documentElement.style.setProperty("--tint", color); }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  /* Garage doors: reveal boxes as they scroll into view */
+  function initDoors(root) {
+    var doors = $$(".door:not(.is-open)", root);
+    if (!doors.length) return;
+    if (reduceMotion || !("IntersectionObserver" in window)) { doors.forEach(function (d) { d.classList.add("is-open"); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("is-open"); io.unobserve(en.target); } });
+    }, { threshold: 0.15 });
+    doors.forEach(function (d) { io.observe(d); });
+  }
+
+  /* Evening: the times light up one after another when the paragraph is read */
+  function initEvening() {
+    var text = $(".evening__text");
+    if (!text) return;
+    $$("time", text).forEach(function (t, i) { t.style.setProperty("--i", i); });
+    if (!("IntersectionObserver" in window)) { text.classList.add("is-lit"); return; }
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { text.classList.add("is-lit"); io.disconnect(); }
+    }, { threshold: 0.45 });
+    io.observe(text);
+  }
+
   /* ---------- Mobile bar ---------- */
   /* Tuck the bar away while the page's own primary action is on screen: one primary CTA per viewport. */
   function initBarTuck() {
@@ -175,10 +201,12 @@
   /* ---------- Garage row (horizontal boxes) ---------- */
   function renderRow(row, cars) {
     row.innerHTML = cars.map(function (c) {
-      return '<a class="box" href="car.html?id=' + c.id + '">' +
+      return '<a class="box door" href="car.html?id=' + c.id + '" style="--tint:' + c.tint + ";--i:" + (cars.indexOf(c) % 4) + '">' +
         '<img src="assets/cars/' + c.photo + '" alt="" loading="lazy" decoding="async" width="1920" height="1200" style="object-position:' + c.pos + '">' +
+        '<span class="door__panel" aria-hidden="true"></span>' +
         '<span class="box__body"><span class="box__name">' + c.name + '</span>' +
         '<span class="box__price">' + fromPrice(c) + "</span>" +
+        '<span class="box__light">' + cap(c.tintName) + "</span>" +
         (c.selfDriveOnly ? '<span class="box__flag">только без водителя</span>' : "") +
         "</span></a>";
     }).join("");
@@ -212,6 +240,7 @@
 
     // Image stack: one img per car, created on demand
     var imgs = {};
+    var lastDir = 0;
     function showCar(car, first) {
       if (!imgs[car.id]) {
         var img = document.createElement("img");
@@ -225,9 +254,14 @@
         imgs[car.id] = img;
       }
       Object.keys(imgs).forEach(function (id) {
-        imgs[id].classList.toggle("is-current", id === car.id);
+        var img = imgs[id];
+        if (id === car.id && img.classList.contains("is-current")) return;
+        img.classList.remove("from-left", "from-right");
+        if (id === car.id && !first && lastDir) img.classList.add(lastDir > 0 ? "from-right" : "from-left");
+        img.classList.toggle("is-current", id === car.id);
         if (id === car.id) imgs[id].removeAttribute("aria-hidden"); else imgs[id].setAttribute("aria-hidden", "true");
       });
+      lastDir = 0;
       var i = K.fleet.indexOf(car);
       [K.fleet[(i + 1) % K.fleet.length], K.fleet[(i - 1 + K.fleet.length) % K.fleet.length]].forEach(function (n) {
         var pre = new Image(); pre.src = "assets/cars/" + n.photo;
@@ -288,6 +322,8 @@
       renderDays();
       showCar(car, first);
       nameEl.innerHTML = '<a href="car.html?id=' + car.id + '">' + car.name + "</a>";
+      setTint(car.tint);
+      $("#carpick-light").textContent = cap(car.tintName);
       priceEl.innerHTML = rub(q.total) + " <small>" + (sel.mode === "self" ? "за сутки" : "за " + q.unit) + "</small>";
       if (!first) flash(priceEl);
       cta.href = bookingHref(sel);
@@ -348,6 +384,7 @@
       var i = K.fleet.indexOf(prevCar);
       var next = K.fleet[(i + d + K.fleet.length) % K.fleet.length];
       sel.car = next.id;
+      lastDir = d;
       if (!next.selfDriveOnly && prevCar.selfDriveOnly) sel.mode = "driver";
       update();
     }
@@ -360,7 +397,11 @@
     update(true);
 
     var row = $("#garage-row");
-    if (row) { renderRow(row, K.fleet); initRowArrows(); }
+    if (row) { renderRow(row, K.fleet); initRowArrows(); initDoors(row); }
+    initEvening();
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (en) { scene.classList.toggle("is-offscreen", !en[0].isIntersecting); }).observe(scene);
+    }
   }
 
   /* ---------- Fleet page ---------- */
@@ -381,15 +422,17 @@
         return;
       }
       lots.innerHTML = list.map(function (c) {
-        return '<a class="lot" href="car.html?id=' + c.id + '">' +
+        return '<a class="lot door" href="car.html?id=' + c.id + '" style="--tint:' + c.tint + ";--i:" + (list.indexOf(c) % 2) + '">' +
           '<img src="assets/cars/' + c.photo + '" alt="" loading="lazy" decoding="async" width="1920" height="1200" style="object-position:' + c.pos + '">' +
-          '<span class="lot__body"><span><span class="lot__name">' + c.name + '</span><br><span class="lot__class">' + K.classes[c.cls] + ", " + c.seats + " " + plural(c.seats, "место", "места", "мест") + "</span></span>" +
+          '<span class="door__panel" aria-hidden="true"></span>' +
+          '<span class="lot__body"><span><span class="lot__name">' + c.name + '</span><br><span class="lot__class">' + K.classes[c.cls] + ", " + c.seats + " " + plural(c.seats, "место", "места", "мест") + '</span><br><span class="lot__light">' + cap(c.tintName) + "</span></span>" +
           '<span class="lot__prices">' +
             (c.selfDriveOnly ? "" : "<span><strong>" + rub(c.perHour) + "</strong> / час с водителем</span>") +
             "<span><strong>" + rub(c.perDay) + "</strong> / сутки без водителя</span></span>" +
           (c.selfDriveOnly ? '<span class="box__flag">только без водителя</span>' : "") +
           "</span></a>";
       }).join("");
+      initDoors(lots);
     }
     form.addEventListener("change", function () {
       render();
@@ -418,6 +461,7 @@
     var desc = $('meta[name="description"]');
     if (desc) desc.content = car.name + ": аренда " + (car.selfDriveOnly ? "без водителя" : "с водителем и без") + " в Москве, " + fromPrice(car) + ".";
 
+    setTint(car.tint);
     var hero = $("#car-hero-img");
     hero.src = "assets/cars/" + car.photo;
     hero.alt = car.name + ", " + car.color;
@@ -484,6 +528,7 @@
     if (row) {
       renderRow(row, K.fleet.filter(function (c) { return c.id !== car.id; }));
       initRowArrows();
+      initDoors(row);
     }
   }
 
@@ -541,6 +586,7 @@
       fillAmount(c, m);
       $("#car-preview").innerHTML = '<img src="assets/cars/' + c.photo + '" alt="" style="object-position:' + c.pos + '" width="1920" height="1200">' +
         '<div><p class="h3">' + c.name + '</p><p class="car-preview__price">' + fromPrice(c) + (c.selfDriveOnly ? ", только без водителя" : "") + "</p></div>";
+      setTint(c.tint);
       var q = quote(c, m, +amount.value, time.value);
       setText($("[data-line=car]", summary), c.name);
       setText($("[data-line=mode]", summary), m === "self" ? "без водителя" : "с водителем");
@@ -655,7 +701,7 @@
       ];
       var text = "Заявка " + no + " в «Каретный»\n" + rows.map(function (r) { return r[0] + ": " + r[1]; }).join("\n") + "\nТелефон гаража: " + K.phone;
       var ok = $("#done");
-      $("[data-done-no]", ok).textContent = no;
+      flap($("[data-done-no]", ok), no);
       $("[data-done-rows]", ok).innerHTML = rows.map(function (r) { return "<dt>" + r[0] + "</dt><dd>" + r[1].replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</dd>"; }).join("");
       $("[data-done-phone]", ok).textContent = $("#b-phone").value;
       $("#share-tg").href = "https://t.me/share/url?url=" + encodeURIComponent("https://karetny.ru") + "&text=" + encodeURIComponent(text);
@@ -679,6 +725,25 @@
     }
 
     update();
+  }
+
+  /* Split-flap reveal for the request number */
+  function flap(el, text) {
+    if (reduceMotion) { el.textContent = text; return; }
+    var pool = "0123456789КАРЕТНЫЙ";
+    el.setAttribute("aria-label", text);
+    el.innerHTML = text.split("").map(function (ch) { return '<span aria-hidden="true">' + ch + "</span>"; }).join("");
+    $$("span", el).forEach(function (s, i) {
+      var target = s.textContent;
+      if (target === "-") return;
+      var n = 0, stop = 6 + i * 2;
+      s.classList.add("is-flipping");
+      var t = setInterval(function () {
+        n++;
+        if (n >= stop) { s.textContent = target; s.classList.remove("is-flipping"); clearInterval(t); return; }
+        s.textContent = pool.charAt(Math.floor(Math.random() * pool.length));
+      }, 45);
+    });
   }
 
   /* ---------- Terms: active section ---------- */
