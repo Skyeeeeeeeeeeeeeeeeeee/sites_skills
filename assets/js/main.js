@@ -188,6 +188,7 @@
       o.value = c.id; o.textContent = c.name;
       carSel.appendChild(o);
     });
+    carSel.value = "dawn"; // matches the hero photograph
     date.min = isoDate(new Date());
     date.value = tomorrow();
 
@@ -222,7 +223,7 @@
   function initHomeFleet() {
     var grid = $("#home-fleet");
     if (!grid) return;
-    var picks = ["cullinan", "maybach", "g63", "continental-gtc", "flying-spur"];
+    var picks = ["wraith", "m760li", "g63", "dawn", "huracan"];
     var layout = ["bento__cell--hero", "", "", "bento__cell--wide", "bento__cell--wide"];
     grid.innerHTML = picks.map(function (id, i) {
       var c = carById(id);
@@ -274,7 +275,7 @@
       count.textContent = list.length + " " + plural(list.length, "автомобиль", "автомобиля", "автомобилей");
       if (!list.length) {
         grid.innerHTML = '<div class="empty"><h2>В этом сочетании машин нет</h2>' +
-          "<p>Открытые автомобили с водителем мы не подаём. Сбросьте фильтр или позвоните, подберём замену.</p>" +
+          "<p>Сбросьте фильтр или позвоните, подберём замену.</p>" +
           '<button type="button" class="btn btn--ghost btn--sm" data-reset>Показать весь автопарк</button></div>';
         return;
       }
@@ -326,6 +327,7 @@
     var main = $("#car-main");
     main.innerHTML = frame(car, 0, { eager: true, cls: "car-gallery__main" });
     var thumbs = $("#car-thumbs");
+    thumbs.hidden = car.photos.length < 2;
     thumbs.innerHTML = car.photos.map(function (p, i) {
       return '<button type="button" aria-pressed="' + (i === 0) + '" aria-label="Фото ' + (i + 1) + ' из ' + car.photos.length + '" data-idx="' + i + '">' + frame(car, i, { alt: "" }) + "</button>";
     }).join("");
