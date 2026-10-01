@@ -4,74 +4,79 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Бронирование | Каретный</title>
-<meta name="description" content="Забронируйте автомобиль с водителем или без. Менеджер перезвонит в течение 15 минут.">
-<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#121315" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23fbfbfa' stroke='%23111' stroke-width='2'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='%23111'%3EК%3C/text%3E%3C/svg%3E">
-<link rel="preload" href="assets/fonts/old-standard-tt-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="description" content="Заявка на подачу автомобиля. Менеджер перезвонит в течение 15 минут.">
+<meta name="theme-color" content="#0d0e10">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230d0e10'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23f2a541'/%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/unbounded-cyrillic-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/style.css">
-<script>document.documentElement.classList.add("js");</script>
 </head>
-<body>
+<body class="has-bar">
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="wordmark" href="index.html" aria-label="Каретный, на главную"><span class="wordmark__mark" aria-hidden="true">К</span>Каретный</a>
+    <a class="wordmark" href="index.html" aria-label="Каретный, на главную">Каретный</a>
     <nav class="nav" aria-label="Основная навигация">
-      <a href="fleet.html">Автопарк</a>
-      <a href="index.html#services">Услуги</a>
+      <a href="fleet.html">Гараж</a>
       <a href="terms.html">Условия</a>
-      <a href="#contacts">Контакты</a>
     </nav>
-    <div class="header-actions">
-      <a class="header-phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
-      <a class="btn btn--sm" href="booking.html">Забронировать</a>
-      <button class="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false"><span class="visually-hidden">Открыть меню</span></button>
-    </div>
+    <a class="header-phone" data-phone href="tel:+74951824719">+7 495 182-47-19</a>
+    <a class="btn btn--sm btn--line" href="booking.html" aria-current="page">Забронировать</a>
+    <button class="icon-btn menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-list"></use></svg><span class="visually-hidden">Открыть меню</span></button>
   </div>
 </header>
 <div class="mobile-menu" id="mobile-menu" inert>
-  <a href="fleet.html">Автопарк</a>
-  <a href="index.html#services">Услуги</a>
+  <a href="index.html">Подача</a>
+  <a href="fleet.html">Гараж</a>
   <a href="terms.html">Условия</a>
-  <a href="#contacts">Контакты</a>
-  <a class="btn btn--block" href="booking.html">Забронировать</a>
-  <a class="mobile-menu__phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
+  <a href="booking.html">Забронировать</a>
+  <a class="mobile-menu__phone" data-phone href="tel:+74951824719">+7 495 182-47-19</a>
 </div>
-
 <main id="main">
   <div class="container">
-    <div class="page-head">
-      <nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="index.html">Главная</a><span aria-hidden="true">/</span><span aria-current="page">Бронирование</span></nav>
-      <h1 class="display">Бронирование</h1>
-      <p class="lead">Заполните талон, и менеджер перезвонит в течение пятнадцати минут. Все поля обязательны, кроме пожеланий.</p>
+    <div class="page-head" data-before-submit>
+      <nav class="crumbs" aria-label="Хлебные крошки"><a href="index.html">Подача</a><span aria-hidden="true">/</span><span aria-current="page">Бронирование</span></nav>
+      <h1 class="display">Заявка на подачу</h1>
+      <p class="lead">Менеджер перезвонит в течение 15 минут. Все поля обязательны, кроме пожеланий.</p>
     </div>
 
     <div class="booking">
-      <div>
+      <div class="booking__form">
+        <section class="done page-head" id="done" tabindex="-1" hidden aria-labelledby="done-title">
+          <h1 class="display" id="done-title">Заявка принята</h1>
+          <p class="done__no" data-done-no></p>
+          <p class="lead">Менеджер перезвонит на <span data-done-phone></span> в течение 15 минут. Если звонка нет, наберите гараж и назовите номер заявки.</p>
+          <dl data-done-rows></dl>
+          <div class="done__actions">
+            <button class="btn" type="button" id="copy-summary"><svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg> Скопировать заявку</button>
+            <a class="btn btn--line" id="share-tg" href="https://t.me/share/url" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"></use></svg> Переслать в Telegram</a>
+            <a class="btn btn--line" data-phone href="tel:+74951824719"><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg> Позвонить в гараж</a>
+          </div>
+        </section>
+
         <form id="booking-form" novalidate>
           <div class="form-error-summary" role="alert"></div>
 
-          <div class="form-block">
-            <h2 class="form-block__title" id="car-title">Автомобиль</h2>
-            <div class="field" data-field="car">
-              <div class="car-picker" id="car-picker" role="radiogroup" aria-labelledby="car-title"></div>
-              <p class="field__error" role="alert"></p>
+          <div class="step">
+            <h2 class="step__title">Автомобиль</h2>
+            <div class="field">
+              <label class="field__label" for="b-car">Машина</label>
+              <select class="select" id="b-car" name="car"></select>
             </div>
+            <div class="car-preview" id="car-preview" aria-live="polite"></div>
           </div>
 
-          <div class="form-block">
-            <h2 class="form-block__title">Режим и время</h2>
-            <div class="segmented" role="radiogroup" aria-label="Режим аренды" style="max-width:420px">
-              <label><input type="radio" name="mode" value="driver" checked><span><svg class="icon" aria-hidden="true"><use href="#i-steering-wheel"></use></svg>С водителем</span></label>
-              <label><input type="radio" name="mode" value="self"><span><svg class="icon" aria-hidden="true"><use href="#i-car-profile"></use></svg>Без водителя</span></label>
+          <div class="step">
+            <h2 class="step__title">Когда и куда</h2>
+            <div class="mode-switch" role="radiogroup" aria-label="Режим аренды" style="max-width:420px">
+              <label><input type="radio" name="mode" value="driver" checked><span>С водителем</span></label>
+              <label><input type="radio" name="mode" value="self"><span>Без водителя</span></label>
             </div>
-            <p class="field__hint" data-driver-note hidden>Этот автомобиль выдаётся только без водителя.</p>
-            <div class="form-grid">
+            <p class="field__hint" data-driver-note hidden>Эта машина выдаётся только без водителя.</p>
+            <div class="grid-3">
               <div class="field" data-field="date">
-                <label class="field__label" for="b-date">Дата подачи</label>
+                <label class="field__label" for="b-date">Дата</label>
                 <input class="input" type="date" id="b-date" name="date" required>
                 <p class="field__error" role="alert"></p>
               </div>
@@ -84,142 +89,121 @@
                 <label class="field__label" for="b-amount" data-amount-label>Продолжительность</label>
                 <select class="select" id="b-amount" name="amount"></select>
               </div>
-              <div class="field field--full" data-field="address">
-                <label class="field__label" for="b-address">Адрес подачи</label>
-                <input class="input" type="text" id="b-address" name="address" autocomplete="street-address" placeholder="Например, Остоженка, 25" required>
-                <p class="field__hint">Аэропорт, вокзал или дом. Подача по Москве и области включена в цену.</p>
-                <p class="field__error" role="alert"></p>
-              </div>
+            </div>
+            <div class="field" data-field="address">
+              <label class="field__label" for="b-address">Адрес подачи</label>
+              <input class="input" type="text" id="b-address" name="address" autocomplete="street-address" placeholder="Остоженка, 25 или Шереметьево, терминал B" required>
+              <p class="field__hint">Подача по Москве и области включена в цену.</p>
+              <p class="field__error" role="alert"></p>
             </div>
             <div class="field" data-field="license" data-self-block hidden>
-              <label class="checkbox"><input type="checkbox" id="b-license" name="license"> Мне больше 25 лет, водительский стаж от 5 лет</label>
+              <label class="check"><input type="checkbox" id="b-license" name="license"> Водителю больше 25 лет, стаж от 5 лет</label>
               <p class="field__error" role="alert"></p>
             </div>
           </div>
 
-          <div class="form-block">
-            <h2 class="form-block__title">Контакты</h2>
-            <div class="form-grid">
+          <div class="step">
+            <h2 class="step__title">Кто едет</h2>
+            <div class="chips" role="radiogroup" aria-label="Для кого заявка">
+              <label class="chip"><input type="radio" name="who" value="self" checked><span>Я сам</span></label>
+              <label class="chip"><input type="radio" name="who" value="other"><span>Другой человек</span></label>
+            </div>
+            <div class="grid-2" data-other-block hidden>
+              <div class="field" data-field="pname">
+                <label class="field__label" for="b-pname">Имя пассажира</label>
+                <input class="input" type="text" id="b-pname" name="pname" autocomplete="off">
+                <p class="field__error" role="alert"></p>
+              </div>
+              <div class="field" data-field="pphone">
+                <label class="field__label" for="b-pphone">Телефон пассажира</label>
+                <input class="input" type="tel" id="b-pphone" name="pphone" inputmode="tel" placeholder="+7 (___) ___-__-__">
+                <p class="field__hint">Водитель позвонит пассажиру за 10 минут до подачи.</p>
+                <p class="field__error" role="alert"></p>
+              </div>
+            </div>
+            <div class="grid-2">
               <div class="field" data-field="name">
-                <label class="field__label" for="b-name">Имя</label>
+                <label class="field__label" for="b-name">Ваше имя</label>
                 <input class="input" type="text" id="b-name" name="name" autocomplete="name" required>
                 <p class="field__error" role="alert"></p>
               </div>
               <div class="field" data-field="phone">
-                <label class="field__label" for="b-phone">Телефон</label>
-                <input class="input mono" type="tel" id="b-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required>
+                <label class="field__label" for="b-phone">Ваш телефон</label>
+                <input class="input" type="tel" id="b-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required>
+                <p class="field__hint">На этот номер позвонит менеджер.</p>
                 <p class="field__error" role="alert"></p>
               </div>
-              <div class="field field--full">
-                <span class="field__label" id="contact-label">Как удобнее связаться</span>
-                <div class="chips" role="radiogroup" aria-labelledby="contact-label">
-                  <label class="chip"><input type="radio" name="contact" value="phone" checked><span><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>Звонок</span></label>
-                  <label class="chip"><input type="radio" name="contact" value="telegram"><span><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"></use></svg>Telegram</span></label>
-                  <label class="chip"><input type="radio" name="contact" value="whatsapp"><span><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"></use></svg>WhatsApp</span></label>
-                </div>
-              </div>
-              <div class="field field--full">
-                <label class="field__label" for="b-comment">Пожелания</label>
-                <textarea class="textarea" id="b-comment" name="comment" placeholder="Детское кресло, табличка с именем, номер рейса"></textarea>
-                <p class="field__hint">Необязательно.</p>
+            </div>
+            <div class="field">
+              <span class="field__label" id="contact-label">Как подтвердить заявку</span>
+              <div class="chips" role="radiogroup" aria-labelledby="contact-label">
+                <label class="chip"><input type="radio" name="contact" value="phone" checked><span><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>Звонок</span></label>
+                <label class="chip"><input type="radio" name="contact" value="telegram"><span><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"></use></svg>Telegram</span></label>
+                <label class="chip"><input type="radio" name="contact" value="whatsapp"><span><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"></use></svg>WhatsApp</span></label>
               </div>
             </div>
+            <div class="field">
+              <label class="field__label" for="b-comment">Пожелания</label>
+              <textarea class="textarea" id="b-comment" name="comment" placeholder="Номер рейса, детское кресло, табличка с именем"></textarea>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <aside class="booking__aside" data-before-submit aria-labelledby="summary-title">
+        <div class="panel" id="summary">
+          <h2 class="panel__title" id="summary-title">Ваша подача</h2>
+          <dl class="panel__lines" aria-live="polite">
+            <div class="panel__line"><dt>Машина</dt><dd data-line="car">-</dd></div>
+            <div class="panel__line"><dt>Режим</dt><dd data-line="mode">-</dd></div>
+            <div class="panel__line"><dt>Когда</dt><dd data-line="when">-</dd></div>
+            <div class="panel__line"><dt>Срок</dt><dd data-line="amount">-</dd></div>
+            <div class="panel__line"><dt>Адрес</dt><dd data-line="address">-</dd></div>
+            <div class="panel__line"><dt>Депозит</dt><dd data-line="deposit">-</dd></div>
+          </dl>
+          <div class="panel__total"><span>Итого</span><strong data-total>-</strong></div>
+          <p class="panel__note" data-night hidden>С 00:00 до 06:00 действует ночной тариф, +20% к часу.</p>
+          <p class="panel__note">Топливо, мойка и подача по Москве включены. Отмена бесплатно за 24 часа.</p>
+        </div>
+      </aside>
+          <div class="booking__send" data-before-submit>
             <div class="field" data-field="consent">
-              <label class="checkbox"><input type="checkbox" id="b-consent" name="consent"> Согласен на обработку персональных данных по <a href="terms.html#privacy">политике конфиденциальности</a></label>
+              <label class="check"><input type="checkbox" id="b-consent" name="consent" form="booking-form"><span>Согласен на обработку персональных данных по <a href="terms.html#privacy">политике конфиденциальности</a></span></label>
               <p class="field__error" role="alert"></p>
             </div>
             <div class="form-actions">
-              <button class="btn" type="submit">Забронировать <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
-              <span class="field__hint">или позвоните: <a data-phone href="tel:+74951824719">+7 (495) 182-47-19</a></span>
+              <button class="btn" type="submit" form="booking-form" data-primary>Отправить заявку <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+              <a class="text-link" data-phone href="tel:+74951824719">или позвоните</a>
             </div>
           </div>
-        </form>
 
-        <div class="success" id="booking-success" aria-live="polite">
-          <span class="success__icon"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-check"></use></svg></span>
-          <h2 class="h2">Заявка принята</h2>
-          <p class="body-muted"><span data-success-car></span>, <span data-success-when></span>. Менеджер перезвонит на номер <span class="mono" data-success-phone></span> в течение пятнадцати минут и подтвердит подачу.</p>
-          <div class="hero__actions">
-            <a class="btn btn--ghost" href="fleet.html">Вернуться к автопарку</a>
-          </div>
-        </div>
-      </div>
-
-      <aside class="booking__aside" aria-label="Талон подачи">
-        <div class="slip" id="booking-slip">
-          <span class="slip__stamp" aria-hidden="true">ПРИНЯТО</span>
-          <div class="slip__head">
-            <span class="slip__title">Талон подачи</span>
-            <span class="slip__no" data-slip-no>№ 0000</span>
-          </div>
-          <div class="slip__perf" aria-hidden="true"></div>
-          <div class="slip__lines" aria-live="polite">
-            <div class="slip__line" data-line="car"><span>Автомобиль</span><span>не выбрано</span></div>
-            <div class="slip__line" data-line="mode"><span>Режим</span><span>-</span></div>
-            <div class="slip__line" data-line="when"><span>Подача</span><span>-</span></div>
-            <div class="slip__line" data-line="amount"><span>Срок</span><span>-</span></div>
-            <div class="slip__line" data-line="address"><span>Адрес</span><span>-</span></div>
-            <div class="slip__line" data-line="deposit"><span>Депозит</span><span>-</span></div>
-            <div class="slip__total">
-              <span class="slip__total-label">Итого</span>
-              <span class="slip__total-value" data-total>-</span>
-            </div>
-          </div>
-          <div class="slip__perf" aria-hidden="true"></div>
-          <div class="slip__foot">
-            <p class="slip__note">Топливо, мойка и подача по Москве включены. Бесплатная отмена за 24 часа.</p>
-          </div>
-        </div>
-      </aside>
     </div>
   </div>
 </main>
 
-<footer class="site-footer" id="contacts">
+<div class="bar" role="region" aria-label="Быстрая бронь">
+  <div class="bar__info"><span class="bar__what">Выберите машину</span><span class="bar__total" aria-live="polite">-</span></div>
+  <a class="icon-btn" data-phone href="tel:+74951824719" aria-label="Позвонить в гараж"><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg></a>
+  <button class="btn" type="submit" form="booking-form">Отправить</button>
+</div>
+
+<footer class="site-footer">
   <div class="container">
-    <div class="site-footer__grid">
-      <div class="site-footer__about">
-        <a class="wordmark" href="index.html" aria-label="Каретный, на главную"><span class="wordmark__mark" aria-hidden="true">К</span>Каретный</a>
-        <p>Аренда автомобилей представительского класса с водителем и без. Частный гараж в центре Москвы, подача круглосуточно.</p>
-        <div class="socials">
-          <a data-telegram href="https://t.me/karetny_garage" aria-label="Написать в Telegram"><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"></use></svg></a>
-          <a data-whatsapp href="https://wa.me/74951824719" aria-label="Написать в WhatsApp"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"></use></svg></a>
-          <a href="mailto:garage@karetny.ru" aria-label="Написать на почту"><svg class="icon" aria-hidden="true"><use href="#i-envelope-simple"></use></svg></a>
-        </div>
-      </div>
-      <div>
-        <h2>Гараж</h2>
-        <ul>
-          <li>Каретный Ряд, 5/10, стр. 2</li>
-          <li>Метро «Цветной бульвар»</li>
-          <li>Выдача по записи, 24/7</li>
-        </ul>
-      </div>
-      <div>
-        <h2>Связь</h2>
-        <ul>
-          <li><a data-phone href="tel:+74951824719">+7 (495) 182-47-19</a></li>
-          <li><a data-email href="mailto:garage@karetny.ru">garage@karetny.ru</a></li>
-          <li><a data-telegram href="https://t.me/karetny_garage">Telegram</a></li>
-        </ul>
-      </div>
-      <div>
-        <h2>Разделы</h2>
-        <ul>
-          <li><a href="fleet.html">Автопарк</a></li>
-          <li><a href="booking.html">Бронирование</a></li>
-          <li><a href="terms.html">Условия аренды</a></li>
-          <li><a href="terms.html#faq">Вопросы и ответы</a></li>
-        </ul>
-      </div>
+    <div class="site-footer__row">
+      <a class="wordmark" href="index.html" aria-label="Каретный, на главную">Каретный</a>
+      <nav aria-label="Разделы">
+        <a href="fleet.html">Гараж</a>
+        <a href="booking.html">Бронирование</a>
+        <a href="terms.html">Условия</a>
+        <a href="terms.html#privacy">Конфиденциальность</a>
+        <a href="https://t.me/karetny_garage">Telegram</a>
+        <a href="mailto:garage@karetny.ru">garage@karetny.ru</a>
+      </nav>
     </div>
-    <div class="site-footer__bottom">
-      <span>© <span data-year>2026</span> ООО «Каретный двор». ОГРН 1117746382915</span>
-      <a href="terms.html#privacy">Политика конфиденциальности</a>
-    </div>
+    <p class="site-footer__legal">Каретный Ряд, 5/10, стр. 2, Москва. © <span data-year>2026</span> ООО «Каретный двор». Цены и автопарк на сайте демонстрационные.</p>
   </div>
 </footer>
-
 <script src="assets/js/icons.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/main.js"></script>

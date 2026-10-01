@@ -3,132 +3,93 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Условия аренды | Каретный</title>
-<meta name="description" content="Требования к водителю, депозит, тарифы, отмена брони и конфиденциальность.">
-<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#121315" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23fbfbfa' stroke='%23111' stroke-width='2'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='%23111'%3EК%3C/text%3E%3C/svg%3E">
-<link rel="preload" href="assets/fonts/old-standard-tt-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<title>Условия | Каретный</title>
+<meta name="description" content="Требования к водителю, депозит, доплаты, отмена брони и конфиденциальность.">
+<meta name="theme-color" content="#0d0e10">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230d0e10'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23f2a541'/%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/unbounded-cyrillic-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/style.css">
-<script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="wordmark" href="index.html" aria-label="Каретный, на главную"><span class="wordmark__mark" aria-hidden="true">К</span>Каретный</a>
+    <a class="wordmark" href="index.html" aria-label="Каретный, на главную">Каретный</a>
     <nav class="nav" aria-label="Основная навигация">
-      <a href="fleet.html">Автопарк</a>
-      <a href="index.html#services">Услуги</a>
+      <a href="fleet.html">Гараж</a>
       <a href="terms.html" aria-current="page">Условия</a>
-      <a href="#contacts">Контакты</a>
     </nav>
-    <div class="header-actions">
-      <a class="header-phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
-      <a class="btn btn--sm" href="booking.html">Забронировать</a>
-      <button class="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false"><span class="visually-hidden">Открыть меню</span></button>
-    </div>
+    <a class="header-phone" data-phone href="tel:+74951824719">+7 495 182-47-19</a>
+    <a class="btn btn--sm btn--line" href="booking.html">Забронировать</a>
+    <button class="icon-btn menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-list"></use></svg><span class="visually-hidden">Открыть меню</span></button>
   </div>
 </header>
 <div class="mobile-menu" id="mobile-menu" inert>
-  <a href="fleet.html">Автопарк</a>
-  <a href="index.html#services">Услуги</a>
+  <a href="index.html">Подача</a>
+  <a href="fleet.html">Гараж</a>
   <a href="terms.html">Условия</a>
-  <a href="#contacts">Контакты</a>
-  <a class="btn btn--block" href="booking.html">Забронировать</a>
-  <a class="mobile-menu__phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
+  <a href="booking.html">Забронировать</a>
+  <a class="mobile-menu__phone" data-phone href="tel:+74951824719">+7 495 182-47-19</a>
 </div>
-
 <main id="main">
   <div class="container">
     <div class="page-head">
-      <nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="index.html">Главная</a><span aria-hidden="true">/</span><span aria-current="page">Условия</span></nav>
-      <h1 class="display">Условия аренды</h1>
-      <p class="lead">Всё, что обычно уточняют перед первой поездкой. Если чего-то не хватает, менеджер ответит по телефону.</p>
+      <nav class="crumbs" aria-label="Хлебные крошки"><a href="index.html">Подача</a><span aria-hidden="true">/</span><span aria-current="page">Условия</span></nav>
+      <h1 class="display">Условия</h1>
+      <p class="lead">Всё, что обычно спрашивают перед первой поездкой. Если чего-то нет, менеджер ответит по телефону в любое время.</p>
     </div>
-
     <div class="terms-layout">
       <nav class="terms-nav" aria-label="Разделы условий">
         <a href="#driver">С водителем</a>
         <a href="#self">Без водителя</a>
-        <a href="#tariffs">Тарифы и доплаты</a>
+        <a href="#tariffs">Доплаты</a>
         <a href="#cancel">Отмена и перенос</a>
-        <a href="#faq">Вопросы и ответы</a>
         <a href="#privacy">Конфиденциальность</a>
       </nav>
-
       <div>
-        <section class="terms-section" id="driver" aria-labelledby="driver-title">
-          <h2 class="h2" id="driver-title">С водителем</h2>
+        <section class="terms-section" id="driver" aria-labelledby="t-driver">
+          <h2 class="h2" id="t-driver">С водителем</h2>
           <div class="prose">
-            <p>Минимальный заказ <strong>3 часа</strong>, для открытых автомобилей <strong>4 часа</strong>. Время считается с момента подачи до окончания поездки, ожидание входит в оплаченные часы.</p>
-            <p>Водители работают у нас в штате, у каждого стаж от десяти лет и рекомендации. Говорят по-английски, соблюдают дресс-код и не обсуждают пассажиров.</p>
-            <p>Оплата после поездки картой, переводом или по счёту для компаний.</p>
+            <p>Минимальный заказ <strong>3 часа</strong>, для Rolls-Royce Dawn <strong>4 часа</strong>. Время считается от подачи до конца поездки, ожидание входит в оплаченные часы.</p>
+            <p>Водители работают у нас в штате, у каждого стаж от десяти лет. Говорят по-английски, соблюдают дресс-код и не обсуждают пассажиров.</p>
+            <p>Подать машину можно через <strong>90 минут</strong> после заявки. Оплата после поездки картой, переводом или по счёту для компаний.</p>
           </div>
         </section>
-
-        <section class="terms-section" id="self" aria-labelledby="self-title">
-          <h2 class="h2" id="self-title">Без водителя</h2>
-          <div class="req-grid">
-            <div class="req"><span class="req__value">25 лет</span><span class="req__label">минимальный возраст</span></div>
-            <div class="req"><span class="req__value">5 лет</span><span class="req__label">водительский стаж</span></div>
-            <div class="req"><span class="req__value">300 км</span><span class="req__label">пробег в сутки без доплаты</span></div>
-            <div class="req req--tint"><span class="req__value">в день сдачи</span><span class="req__label">снимаем блокировку депозита, если машина вернулась без повреждений</span></div>
-          </div>
+        <section class="terms-section" id="self" aria-labelledby="t-self">
+          <h2 class="h2" id="t-self">Без водителя</h2>
+          <dl class="facts">
+            <dt>25 лет</dt><dd>минимальный возраст, для Lamborghini 30 лет</dd>
+            <dt>5 лет</dt><dd>водительский стаж, для Lamborghini 8 лет</dd>
+            <dt>300 км</dt><dd>пробег в сутки без доплаты</dd>
+            <dt>День сдачи</dt><dd>когда снимаем блокировку депозита, если машина вернулась без повреждений</dd>
+          </dl>
           <div class="prose">
-            <p>Нужны паспорт и водительское удостоверение. Депозит блокируется на карте, его размер зависит от автомобиля и указан на странице каждой машины.</p>
-            <p>Страховка КАСКО с франшизой включена. Курение в салоне и выезд на гоночные треки запрещены.</p>
+            <p>Нужны паспорт и водительское удостоверение. Размер депозита указан на странице каждой машины. КАСКО с франшизой включено, курение в салоне и выезд на треки запрещены.</p>
           </div>
         </section>
-
-        <section class="terms-section" id="tariffs" aria-labelledby="tariffs-title">
-          <h2 class="h2" id="tariffs-title">Тарифы и доплаты</h2>
-          <div>
-            <div class="tariff"><span class="tariff__name">Подача по Москве и области</span><span class="tariff__price">включена</span></div>
-            <div class="tariff"><span class="tariff__name">Встреча в аэропорту с табличкой</span><span class="tariff__price">включена</span><span class="tariff__note">Ожидание при задержке рейса бесплатно.</span></div>
-            <div class="tariff"><span class="tariff__name">Каждый километр сверх 300 в сутки</span><span class="tariff__price">120&nbsp;₽</span></div>
-            <div class="tariff"><span class="tariff__name">Ночное время, с 00:00 до 06:00</span><span class="tariff__price">+20%</span><span class="tariff__note">Только для заказов с водителем.</span></div>
-            <div class="tariff"><span class="tariff__name">Свадебное оформление</span><span class="tariff__price">9&#8239;500&nbsp;₽</span></div>
-          </div>
+        <section class="terms-section" id="tariffs" aria-labelledby="t-tariffs">
+          <h2 class="h2" id="t-tariffs">Доплаты</h2>
+          <dl class="facts">
+            <dt>0&nbsp;₽</dt><dd>подача по Москве и области, встреча в аэропорту с табличкой</dd>
+            <dt>+20%</dt><dd>к часу с 00:00 до 06:00, только с водителем</dd>
+            <dt>120&nbsp;₽</dt><dd>за каждый километр сверх 300 в сутки</dd>
+            <dt>9&#8239;500&nbsp;₽</dt><dd>свадебное оформление машины</dd>
+          </dl>
         </section>
-
-        <section class="terms-section" id="cancel" aria-labelledby="cancel-title">
-          <h2 class="h2" id="cancel-title">Отмена и перенос</h2>
+        <section class="terms-section" id="cancel" aria-labelledby="t-cancel">
+          <h2 class="h2" id="t-cancel">Отмена и перенос</h2>
           <div class="prose">
-            <p>Отмена бесплатна, если вы сообщили о ней <strong>за 24 часа</strong> до подачи. Позже удерживаем стоимость первого часа или 30% суток.</p>
-            <p>Перенос на другую дату бесплатный, если машина свободна.</p>
+            <p>Отмена бесплатна <strong>за 24 часа</strong> до подачи. Позже удерживаем стоимость первого часа или 30% суток.</p>
+            <p>Перенос на другое время бесплатный, если машина свободна.</p>
           </div>
         </section>
-
-        <section class="terms-section" id="faq" aria-labelledby="faq2-title">
-          <h2 class="h2" id="faq2-title">Вопросы и ответы</h2>
-          <div class="faq">
-            <details>
-              <summary>Можно ли заказать машину с ребёнком?<svg class="icon icon--lg" aria-hidden="true"><use href="#i-plus"></use></svg></summary>
-              <div class="faq__answer"><p>Да. Детское кресло или бустер ставим бесплатно, укажите возраст ребёнка в пожеланиях.</p></div>
-            </details>
-            <details>
-              <summary>Что если поездка затянется?<svg class="icon icon--lg" aria-hidden="true"><use href="#i-plus"></use></svg></summary>
-              <div class="faq__answer"><p>Скажите водителю. Дополнительное время считаем по тарифу машины, без повышающих коэффициентов.</p></div>
-            </details>
-            <details>
-              <summary>Можно ли выбрать конкретного водителя?<svg class="icon icon--lg" aria-hidden="true"><use href="#i-plus"></use></svg></summary>
-              <div class="faq__answer"><p>Да, если он свободен. Постоянным клиентам закрепляем одного водителя.</p></div>
-            </details>
-            <details>
-              <summary>Где можно вернуть машину?<svg class="icon icon--lg" aria-hidden="true"><use href="#i-plus"></use></svg></summary>
-              <div class="faq__answer"><p>В гараже на Каретном Ряду или по любому адресу в Москве: заберём сами.</p></div>
-            </details>
-          </div>
-        </section>
-
-        <section class="terms-section" id="privacy" aria-labelledby="privacy-title">
-          <h2 class="h2" id="privacy-title">Конфиденциальность</h2>
+        <section class="terms-section" id="privacy" aria-labelledby="t-privacy">
+          <h2 class="h2" id="t-privacy">Конфиденциальность</h2>
           <div class="prose">
-            <p>Мы храним только имя, телефон и историю поездок, чтобы не переспрашивать вас при следующем заказе. Данные не передаются третьим лицам, кроме случаев, предусмотренных законом.</p>
-            <p>Маршруты и пассажиры не обсуждаются ни с кем, включая других клиентов. Удалить данные можно по запросу на <a data-email href="mailto:garage@karetny.ru">garage@karetny.ru</a>.</p>
+            <p>Храним только имя, телефон и историю поездок, чтобы не переспрашивать при следующем заказе. Данные не передаются третьим лицам, кроме случаев, предусмотренных законом.</p>
+            <p>Маршруты и пассажиры не обсуждаются ни с кем. Удалить данные можно по запросу на <a href="mailto:garage@karetny.ru">garage@karetny.ru</a>.</p>
           </div>
         </section>
       </div>
@@ -136,51 +97,22 @@
   </div>
 </main>
 
-<footer class="site-footer" id="contacts">
+<footer class="site-footer">
   <div class="container">
-    <div class="site-footer__grid">
-      <div class="site-footer__about">
-        <a class="wordmark" href="index.html" aria-label="Каретный, на главную"><span class="wordmark__mark" aria-hidden="true">К</span>Каретный</a>
-        <p>Аренда автомобилей представительского класса с водителем и без. Частный гараж в центре Москвы, подача круглосуточно.</p>
-        <div class="socials">
-          <a data-telegram href="https://t.me/karetny_garage" aria-label="Написать в Telegram"><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"></use></svg></a>
-          <a data-whatsapp href="https://wa.me/74951824719" aria-label="Написать в WhatsApp"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"></use></svg></a>
-          <a href="mailto:garage@karetny.ru" aria-label="Написать на почту"><svg class="icon" aria-hidden="true"><use href="#i-envelope-simple"></use></svg></a>
-        </div>
-      </div>
-      <div>
-        <h2>Гараж</h2>
-        <ul>
-          <li>Каретный Ряд, 5/10, стр. 2</li>
-          <li>Метро «Цветной бульвар»</li>
-          <li>Выдача по записи, 24/7</li>
-        </ul>
-      </div>
-      <div>
-        <h2>Связь</h2>
-        <ul>
-          <li><a data-phone href="tel:+74951824719">+7 (495) 182-47-19</a></li>
-          <li><a data-email href="mailto:garage@karetny.ru">garage@karetny.ru</a></li>
-          <li><a data-telegram href="https://t.me/karetny_garage">Telegram</a></li>
-        </ul>
-      </div>
-      <div>
-        <h2>Разделы</h2>
-        <ul>
-          <li><a href="fleet.html">Автопарк</a></li>
-          <li><a href="booking.html">Бронирование</a></li>
-          <li><a href="terms.html">Условия аренды</a></li>
-          <li><a href="terms.html#faq">Вопросы и ответы</a></li>
-        </ul>
-      </div>
+    <div class="site-footer__row">
+      <a class="wordmark" href="index.html" aria-label="Каретный, на главную">Каретный</a>
+      <nav aria-label="Разделы">
+        <a href="fleet.html">Гараж</a>
+        <a href="booking.html">Бронирование</a>
+        <a href="terms.html">Условия</a>
+        <a href="terms.html#privacy">Конфиденциальность</a>
+        <a href="https://t.me/karetny_garage">Telegram</a>
+        <a href="mailto:garage@karetny.ru">garage@karetny.ru</a>
+      </nav>
     </div>
-    <div class="site-footer__bottom">
-      <span>© <span data-year>2026</span> ООО «Каретный двор». ОГРН 1117746382915</span>
-      <a href="terms.html#privacy">Политика конфиденциальности</a>
-    </div>
+    <p class="site-footer__legal">Каретный Ряд, 5/10, стр. 2, Москва. © <span data-year>2026</span> ООО «Каретный двор». Цены и автопарк на сайте демонстрационные.</p>
   </div>
 </footer>
-
 <script src="assets/js/icons.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/main.js"></script>

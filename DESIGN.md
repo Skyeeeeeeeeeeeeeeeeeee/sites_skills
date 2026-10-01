@@ -1,189 +1,194 @@
 ---
 name: Каретный
-description: Premium car rental with and without a chauffeur, framed as a carriage call slip.
+description: Night dispatch. The visitor sets the minute the car is at the door; car, price and the evening follow that time.
 colors:
-  paper: "#fbfbfa"
-  surface: "#ffffff"
-  surface-2: "#f3f3f1"
-  line: "#eaeaea"
-  line-strong: "#d9d9d6"
-  ink: "#111111"
-  ink-2: "#2f3437"
-  muted: "#65645f"
-  placeholder: "#6f6e69"
-  cobalt: "#2440b3"
-  cobalt-soft: "#e8ecfa"
-  error: "#9f2f2d"
-  error-soft: "#fdebec"
-  ok: "#346538"
-  ok-soft: "#edf3ec"
-  dark-paper: "#121315"
-  dark-surface: "#18191c"
-  dark-surface-2: "#1f2024"
-  dark-line: "#2a2b30"
-  dark-line-strong: "#3a3b41"
-  dark-ink: "#eeeeec"
-  dark-ink-2: "#d6d6d3"
-  dark-muted: "#a3a29d"
-  dark-placeholder: "#8d8c87"
-  dark-cobalt: "#8ea2ff"
-  dark-cobalt-ink: "#0e1330"
-  dark-cobalt-soft: "#1d2340"
+  lacquer: "#0d0e10"
+  night: "#131518"
+  asphalt: "#1c1f23"
+  asphalt-2: "#24282d"
+  line: "#2a2e33"
+  line-strong: "#3a3f45"
+  ivory: "#ece7df"
+  ivory-2: "#c9c4bb"
+  ivory-hover: "#fffaf2"
+  muted: "#8d8a84"
+  muted-2: "#5b5953"
+  placeholder: "#8a877f"
+  sodium: "#f2a541"
+  sodium-ink: "#1a1206"
+  error: "#ff9a8a"
 typography:
+  timedial:
+    fontFamily: "Unbounded, Arial Black, sans-serif"
+    fontSize: "clamp(5rem, 1.5rem + 11vw, 11.5rem)"
+    fontWeight: 300
+    lineHeight: 0.9
+    letterSpacing: "-0.06em"
   display:
-    fontFamily: "Old Standard, Times New Roman, serif"
-    fontSize: "clamp(2.6rem, 1.4rem + 4.2vw, 5.4rem)"
-    fontWeight: 400
-    lineHeight: 1.02
-    letterSpacing: "-0.025em"
+    fontFamily: "Unbounded, Arial Black, sans-serif"
+    fontSize: "clamp(2.4rem, 1.2rem + 4.4vw, 5.6rem)"
+    fontWeight: 300
+    lineHeight: 1.04
+    letterSpacing: "-0.035em"
   h2:
-    fontFamily: "Old Standard, Times New Roman, serif"
-    fontSize: "clamp(2rem, 1.3rem + 2.4vw, 3.5rem)"
-    fontWeight: 400
+    fontFamily: "Unbounded, Arial Black, sans-serif"
+    fontSize: "clamp(1.6rem, 1.1rem + 2.4vw, 3.6rem)"
+    fontWeight: 300
     lineHeight: 1.08
-    letterSpacing: "-0.02em"
+    letterSpacing: "-0.03em"
   h3:
-    fontFamily: "Old Standard, Times New Roman, serif"
-    fontSize: "clamp(1.5rem, 1.2rem + 0.9vw, 2rem)"
-    fontWeight: 400
-    lineHeight: 1.15
+    fontFamily: "Unbounded, Arial Black, sans-serif"
+    fontSize: "clamp(1.3rem, 1.1rem + 0.7vw, 1.8rem)"
+    fontWeight: 300
+    lineHeight: 1.2
+    letterSpacing: "-0.02em"
+  wordmark:
+    fontFamily: "Unbounded, Arial Black, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 500
+    letterSpacing: "0.16em"
   body:
-    fontFamily: "Onest, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Golos Text, Helvetica Neue, Arial, sans-serif"
     fontSize: "16px"
     fontWeight: 400
     lineHeight: 1.6
-  label:
-    fontFamily: "Onest, Helvetica Neue, Arial, sans-serif"
-    fontSize: "0.8125rem"
-    fontWeight: 500
-  slip-data:
-    fontFamily: "JetBrains Mono, ui-monospace, monospace"
-    fontSize: "0.8rem"
+  lead:
+    fontFamily: "Golos Text, Helvetica Neue, Arial, sans-serif"
+    fontSize: "clamp(1.05rem, 1rem + 0.3vw, 1.25rem)"
     fontWeight: 400
+    lineHeight: 1.55
+  label:
+    fontFamily: "Golos Text, Helvetica Neue, Arial, sans-serif"
+    fontSize: "0.95rem"
+    fontWeight: 500
 rounded:
-  inner: "4px"
-  control: "6px"
-  card: "8px"
-  pill: "999px"
+  none: "0px"
 spacing:
-  gutter: "clamp(16px, 4vw, 48px)"
-  section: "clamp(88px, 11vw, 160px)"
-  container: "1320px"
-  nav: "68px"
+  gutter: "clamp(16px, 4vw, 56px)"
+  section: "clamp(96px, 12vw, 176px)"
+  container: "1360px"
+  header: "72px"
+  bar: "72px"
 components:
   button-primary:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.control}"
-    height: "48px"
-    padding: "0 22px"
-  button-ghost:
+    backgroundColor: "{colors.ivory}"
+    textColor: "{colors.lacquer}"
+    rounded: "{rounded.none}"
+    height: "52px"
+    padding: "0 26px"
+  button-primary-hover:
+    backgroundColor: "{colors.ivory-hover}"
+  button-line:
     backgroundColor: "transparent"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.control}"
-    height: "48px"
-    padding: "0 22px"
-  chip:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink-2}"
-    rounded: "{rounded.pill}"
-    height: "34px"
-  chip-selected:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.pill}"
+    textColor: "{colors.ivory}"
+    rounded: "{rounded.none}"
+    height: "52px"
+    padding: "0 26px"
+  icon-button:
+    backgroundColor: "transparent"
+    textColor: "{colors.ivory}"
+    rounded: "{rounded.none}"
+    size: "48px"
   input:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.control}"
+    backgroundColor: "{colors.night}"
+    textColor: "{colors.ivory}"
+    rounded: "{rounded.none}"
+    height: "52px"
+    padding: "12px 16px"
+  chip:
+    backgroundColor: "transparent"
+    textColor: "{colors.ivory-2}"
+    rounded: "{rounded.none}"
     height: "46px"
-    padding: "10px 14px"
-  card:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.card}"
-  slip:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.card}"
-    width: "360px"
+  panel:
+    backgroundColor: "{colors.asphalt}"
+    textColor: "{colors.ivory}"
+    rounded: "{rounded.none}"
+    padding: "28px"
+  bar:
+    backgroundColor: "{colors.night}"
+    textColor: "{colors.ivory}"
+    height: "72px"
 ---
 
 # Design System: Каретный
 
 ## Overview
 
-The house rents cars the way a doorman calls a carriage. Every surface is a sheet of warm-white paper ruled in hairlines; the one object with weight is the **call slip** («талон подачи»), a perforated ticket the visitor fills in. Data on the slip is typed in mono like a dispatcher's form, headings are set in Old Standard (late 19th-century Russian book type, the era of the coach-makers on Karetny Ryad), and the interface around it stays quiet in Onest.
+Moscow at night, seen from the kerb. The page is lacquer-black asphalt; the only colour is the sodium of a streetlight, and it is spent on one thing: the time. The first viewport is a full-bleed photograph of the chosen car at a door, and over it a giant time, «Экипаж подан к 22:30», that the visitor changes with plus and minus, arrow keys or a vertical drag. Everything else answers to that time: the car switcher and price beside it, the prose timeline further down («В 21:00 вы оставляете заявку… в 22:30 вы садитесь»), the mobile bar.
 
-Light by default, with a full dark token set under `prefers-color-scheme: dark`. Color is scarce: ink black carries actions, cobalt ink appears only where something is stamped, focused or selected.
+The world is dark only, by design: the brief is a night service and every photograph is graded to night. Contrast is held at WCAG AA throughout.
 
 ## Colors
 
 ### Primary
-- **Cobalt stamp ink** `#2440b3` (dark: `#8ea2ff`): the «ПРИНЯТО» stamp, focus rings, caret, text selection, check icons, the one tinted requirement tile. Never a button fill, never a section background.
+- **Sodium** `#f2a541`: light, never paint. Used for the time numerals, the timeline times, active and selected states (inset underline), the top edge of order panels, focus rings, caret and text selection. Text placed on sodium uses `sodium-ink` `#1a1206`.
 
 ### Neutral
-- **Paper** `#fbfbfa` page ground; **Surface** `#ffffff` cards and slip; **Surface 2** `#f3f3f1` image wells and segmented tracks.
-- **Ink** `#111111` headings and primary buttons; **Ink 2** `#2f3437` body; **Muted** `#65645f` secondary text (5.9:1 on paper).
-- **Line** `#eaeaea` every hairline; **Line strong** `#d9d9d6` control borders and perforation.
+- **Lacquer** `#0d0e10` page ground; **Night** `#131518` inputs, image wells, the mobile bar; **Asphalt** `#1c1f23` order panels; **Asphalt 2** `#24282d` selected segment.
+- **Ivory** `#ece7df` headings and primary text and the primary button; **Ivory 2** `#c9c4bb` body; **Muted** `#8d8a84` secondary (5.5:1 on lacquer, 4.8:1 on asphalt).
+- **Line** `#2a2e33` hairlines; **Line strong** `#3a3f45` control borders.
+- **Error** `#ff9a8a` on a 8% error tint, with a 1px full border.
 
 ### Named Rules
-- **One Ink Rule.** Cobalt is ink on paper, not paint: it marks, it never fills an area larger than a tag or a tile.
-- **Semantic pastels only.** `error-soft` / `ok-soft` appear only on error summaries and the success mark.
+- **Sodium is light.** It colours numerals, thin edges and states. It never fills a button, a card or a section.
+- **One night.** Every raster is graded the same way (upper frame darkened, cool shadows, warm highlights, plates blurred). A photograph that still reads as daylight is cropped or replaced, never shipped as is.
 
 ## Typography
 
 ### Hierarchy
-- **Display** (Old Standard 400, up to 5.4rem, -0.025em): page titles and the hero line. Roman, no italic emphasis.
-- **H2 / H3** (Old Standard): section titles, car names, service names, spec values.
-- **Body / UI** (Onest 400-600, 16px / 1.6): paragraphs, nav, buttons, labels.
-- **Slip data** (JetBrains Mono): prices, times, slip numbers, phone numbers. Mono is for measured values only.
+- **Time dial** (Unbounded 300, up to 11.5rem, -0.06em): the pickup time in the first viewport only. It is a control, not a headline, which is why it exceeds the 6rem display ceiling.
+- **Display** (Unbounded 300, up to 5.6rem): page titles («Гараж», «Заявка на подачу», car names).
+- **H2 / H3** (Unbounded 300): section titles, prices on the «two ways» block, panel totals, the evening timeline prose.
+- **Wordmark** (Unbounded 500, uppercase, 0.16em tracking): «КАРЕТНЫЙ» only.
+- **Body / UI** (Golos Text 400-600, 16px / 1.6): reading text, labels, buttons, prices in lists.
 
 ### Named Rules
-- **Measured values in mono.** Any price, time or number a client could dispute is set in JetBrains Mono with tabular figures.
+- **Light weight, wide face.** Unbounded is only ever set at 300 (500 for the wordmark). Emphasis comes from size and sodium, not weight or italic.
+- **No eyebrows.** Section titles stand alone; categories are given by position, not small uppercase labels.
 
 ## Layout
 
-12-column container at 1320px with a fluid gutter; sections breathe at `clamp(88px, 11vw, 160px)`. Every section uses a different layout family: split hero with overlapping slip, 8+4 bento of cars, horizontal timeline, typographic service index, image/quote split, scroll-snap reviews, accordion, bordered closing panel. Everything collapses to one column under 860px (980px for hero and bento), and the slip moves under the photo with a 48px overlap.
+12-column container at 1360px, fluid gutter `clamp(16px, 4vw, 56px)`, sections spaced `clamp(96px, 12vw, 176px)`. The home page runs as a night drive: full-bleed scene, a horizontal scroll-snap row of garage boxes (3:4), the evening as one paragraph of large prose, two ways (with driver / self-drive) split by a hairline, a full-bleed garage photograph, questions as a two-column definition list, and a giant phone number as the close. The garage page alternates 7/5 and 5/7 column lots. Below 980px the scene photo stacks above the controls; below 900px the header collapses to a menu and a fixed bottom bar carries the current car, time, total, a call button and «Забронировать». The bar tucks away while the page's own primary action is on screen.
 
 ## Elevation & Depth
 
-Flat by default: hairline borders separate. Only two things lift: the slip (it sits on top of the photo) and a hovered car card.
-
-### Shadow Vocabulary
-- `--shadow-lift`: `0 1px 2px rgb(17 17 17 / .04), 0 6px 16px rgb(17 17 17 / .06)`.
+No shadows. Depth comes from photography under dark gradients and from two surface steps (lacquer to asphalt). Order panels are lifted by a 2px sodium top edge, not by a shadow.
 
 ## Shapes
 
-Controls 6px (4px for the thumb inside a segmented control), cards and slip 8px, chips and tags full pill, round icon buttons for the car-card arrow and socials. The slip carries half-circle punch holes at each perforation line.
+All corners are square (0px), including buttons, inputs, chips, panels and the bar. Controls are bordered rectangles; selection is shown by a sodium inset underline or border, not a fill change.
 
 ## Components
 
 ### Buttons
-Primary is ink on paper with a 3px arrow nudge on hover and `scale(.98)` on press. Ghost is a line-strong outline. One label per intent: «Забронировать» for booking everywhere.
+Primary: ivory fill, lacquer text, 52px, arrow icon nudges 3px on hover. Line: transparent with a line-strong border that turns ivory on hover. Icon buttons are 48-52px squares. One primary action per viewport; «Забронировать» is the only booking label.
 
 ### Chips
-Pill radios; selected state inverts to ink. 44px tall on coarse pointers.
+Bordered rectangles 44-48px tall; checked state is a sodium border (and inset underline on day and filter chips).
 
 ### Cards / Containers
-White, 1px line, 8px radius; image well on top at 16:10 with a soft bottom shade so photography sits in the monochrome page.
+There are no cards. Cars are shown as photographic boxes (home row, 3:4) and lots (garage, 7/5 grid) with the name and prices set over a bottom gradient. Order and summary panels are asphalt blocks with a sodium top edge.
 
 ### Inputs / Fields
-Label above, hint and error below; cobalt focus ring with a soft halo; errors in `error` with an `aria-describedby` link and a summary at the top of the form.
+Night fill, line-strong border, label above, hint and error below, sodium focus border plus 1px ring, sodium caret. Errors link to fields with `aria-describedby` and are summarised at the top of the form.
 
 ### Navigation
-68px sticky bar on blurred paper, hairline appears once the page scrolls; collapses to a full-screen menu under 860px.
+72px header: wordmark, «Гараж», «Условия», phone, a line button «Забронировать» (hidden on the home scene, where the scene's own button leads). Transparent over the home photograph, lacquer with a hairline elsewhere.
 
-### Call slip (signature)
-Head with title and mono slip number, dashed perforation with punch holes, fields, mono data lines that flash cobalt-soft when they change, total in mono 1.35rem, primary action. On submit the cobalt «ПРИНЯТО» stamp presses in (scale 1.6 → 1, rotate -8°).
+### Time dial (signature)
+`role="spinbutton"` with plus/minus buttons, arrow and page keys, and vertical drag for mouse and pen. Digits roll up or down on change; the scene crossfades when the car changes. Earliest pickup is now + 90 minutes, rounded to the quarter hour; the dial never goes earlier. Night hours (00:00-06:00) add 20% with a driver and say so under the dial.
 
 ## Do's and Don'ts
 
 ### Do:
-- Do put every price, time and plate-like code on a slip or in mono.
-- Do keep cobalt to stamps, focus and selection.
-- Do let a real car photograph carry each card; the image well is the page's only large color.
+- Do derive every time on the page from the chosen pickup time.
+- Do keep sodium to numerals, thin edges, states and focus.
+- Do grade every new photograph with the same night recipe and blur plates before it ships (see assets/cars/SOURCES.md).
+- Do keep all eight cars visible and label self-drive-only cars instead of hiding them.
 
 ### Don't:
-- Don't add eyebrows or section numbers above headings.
-- Don't use italic display for emphasis or gradient text.
-- Don't fill buttons or sections with cobalt.
-- Don't show a photo of a car that is not in the fleet.
+- Don't add shadows, rounded corners or filled cards.
+- Don't use sodium as a button or section fill, or add a second accent colour.
+- Don't add eyebrows, section numbers, testimonial cards or a CTA band.
+- Don't ship a daylight photograph, a visible licence plate, or a photo of a model that is not in the fleet.

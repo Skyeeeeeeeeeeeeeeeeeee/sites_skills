@@ -1,47 +1,49 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T12:00:00Z",
+  "generatedAt": "2026-10-01T12:40:00Z",
   "title": "Design System: Каретный",
   "extensions": {
     "colorMeta": {
-      "cobalt": { "role": "primary", "displayName": "Cobalt stamp ink", "tonalRamp": ["#0f1c52", "#16277a", "#1d33a0", "#2440b3", "#4a63cc", "#7a8fe0", "#b3c0f0", "#e8ecfa"] },
-      "paper": { "role": "neutral", "displayName": "Paper", "tonalRamp": ["#111111", "#2f3437", "#65645f", "#8d8c87", "#d9d9d6", "#eaeaea", "#f3f3f1", "#fbfbfa"] }
+      "sodium": { "role": "primary", "displayName": "Sodium streetlight", "tonalRamp": ["#3a2408", "#5e3a0c", "#8a5611", "#b87518", "#e0912a", "#f2a541", "#f7c27e", "#fbe0bc"] },
+      "lacquer": { "role": "neutral", "displayName": "Lacquer to ivory", "tonalRamp": ["#0d0e10", "#131518", "#1c1f23", "#24282d", "#3a3f45", "#8d8a84", "#c9c4bb", "#ece7df"] }
     },
     "typographyMeta": {
-      "display": { "displayName": "Old Standard display", "purpose": "Page titles and hero line, roman only." },
-      "slip-data": { "displayName": "Slip data", "purpose": "Prices, times, slip numbers, phones." }
+      "timedial": { "displayName": "Time dial", "purpose": "The pickup time control in the home first viewport only." },
+      "display": { "displayName": "Display", "purpose": "Page titles and car names." },
+      "body": { "displayName": "Body", "purpose": "Reading text and UI (Golos Text)." }
     },
-    "shadows": [
-      { "name": "lift", "value": "0 1px 2px rgb(17 17 17 / 0.04), 0 6px 16px rgb(17 17 17 / 0.06)", "purpose": "The call slip over photography and hovered car cards." }
-    ],
+    "shadows": [],
     "motion": [
-      { "name": "ease", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "All transitions and reveals." },
-      { "name": "stamp", "value": "0.55s scale 1.6 to 1, rotate -8deg", "purpose": "Booking accepted." },
-      { "name": "line-flash", "value": "0.6s cobalt-soft to transparent", "purpose": "A slip line changed." }
+      { "name": "ease", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "All transitions." },
+      { "name": "digit-roll", "value": "0.42s translateY 70% to 0 with fade, direction follows the change", "purpose": "Time dial digits." },
+      { "name": "scene-crossfade", "value": "0.9s opacity, 1.6s scale 1.04 to 1", "purpose": "Car change in the home scene." },
+      { "name": "bar-tuck", "value": "0.3s translateY 110%", "purpose": "Mobile bar hides while the page's primary action is visible." }
     ],
     "breakpoints": [
       { "name": "mobile", "value": "640px" },
-      { "name": "tablet", "value": "860px" },
-      { "name": "hero-stack", "value": "980px" },
+      { "name": "header-menu", "value": "900px" },
+      { "name": "scene-stack", "value": "980px" },
       { "name": "aside-stack", "value": "1080px" }
     ]
   },
   "components": [
-    { "name": "Primary Button", "kind": "button", "refersTo": "button-primary", "description": "Booking and other primary actions.", "html": "<button class=\"ds-btn\">Забронировать</button>", "css": ".ds-btn{background:#111;color:#fbfbfa;border:1px solid #111;border-radius:6px;min-height:48px;padding:0 22px;font:500 15.6px Onest,Arial,sans-serif;cursor:pointer;transition:background .2s}.ds-btn:hover{background:#333}.ds-btn:active{transform:scale(.98)}.ds-btn:focus-visible{outline:2px solid #2440b3;outline-offset:3px}" },
-    { "name": "Ghost Button", "kind": "button", "refersTo": "button-ghost", "description": "Secondary navigation actions.", "html": "<button class=\"ds-btn-ghost\">Автопарк</button>", "css": ".ds-btn-ghost{background:transparent;color:#111;border:1px solid #d9d9d6;border-radius:6px;min-height:48px;padding:0 22px;font:500 15.6px Onest,Arial,sans-serif;cursor:pointer}.ds-btn-ghost:hover{background:#f3f3f1}.ds-btn-ghost:focus-visible{outline:2px solid #2440b3;outline-offset:3px}" },
-    { "name": "Chip", "kind": "chip", "refersTo": "chip", "description": "Filter and contact-method radios.", "html": "<span class=\"ds-chip\">Все</span><span class=\"ds-chip ds-on\">Внедорожники</span>", "css": ".ds-chip{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;margin-right:6px;border:1px solid #d9d9d6;border-radius:999px;font:13px Onest,Arial,sans-serif;color:#2f3437;background:#fff}.ds-chip:hover{border-color:#111}.ds-on{background:#111;color:#fbfbfa;border-color:#111}" },
-    { "name": "Input", "kind": "input", "refersTo": "input", "description": "Text fields with label above.", "html": "<input class=\"ds-input\" placeholder=\"Например, Остоженка, 25\">", "css": ".ds-input{min-height:46px;padding:10px 14px;border:1px solid #d9d9d6;border-radius:6px;background:#fff;color:#111;font:16px Onest,Arial,sans-serif}.ds-input::placeholder{color:#6f6e69}.ds-input:focus{outline:none;border-color:#2440b3;box-shadow:0 0 0 3px #e8ecfa}" },
-    { "name": "Call slip", "kind": "custom", "refersTo": "slip", "description": "Signature booking ticket with perforation and mono data lines.", "html": "<div class=\"ds-slip\"><div class=\"ds-h\">Талон подачи <span>№ 0640</span></div><div class=\"ds-perf\"></div><div class=\"ds-l\"><span>Автомобиль</span><span>Rolls-Royce Ghost</span></div><div class=\"ds-l\"><span>Итого</span><b>37 500 ₽</b></div></div>", "css": ".ds-slip{width:320px;background:#fff;border:1px solid #eaeaea;border-radius:8px;box-shadow:0 1px 2px rgb(17 17 17/.04),0 6px 16px rgb(17 17 17/.06);padding:18px 22px}.ds-h{display:flex;justify-content:space-between;font:22px 'Old Standard',serif;color:#111}.ds-h span{font:12px 'JetBrains Mono',monospace;color:#65645f}.ds-perf{height:1px;margin:14px 0;background:linear-gradient(90deg,#d9d9d6 50%,transparent 50%) 0 0/8px 1px}.ds-l{display:flex;justify-content:space-between;font:13px 'JetBrains Mono',monospace;color:#65645f;padding:3px 0}.ds-l span:last-child,.ds-l b{color:#111}" }
+    { "name": "Primary Button", "kind": "button", "refersTo": "button-primary", "description": "The one booking action per viewport.", "html": "<a class=\"ds-btn\" href=\"#\">Забронировать</a>", "css": ".ds-btn{display:inline-flex;align-items:center;min-height:52px;padding:0 26px;background:#ece7df;color:#0d0e10;border:1px solid #ece7df;font:500 16px 'Golos Text',Arial,sans-serif;text-decoration:none;transition:background .25s}.ds-btn:hover{background:#fffaf2}.ds-btn:focus-visible{outline:2px solid #f2a541;outline-offset:3px}" },
+    { "name": "Line Button", "kind": "button", "refersTo": "button-line", "description": "Secondary actions and header booking link.", "html": "<a class=\"ds-btn-line\" href=\"#\">Переслать в Telegram</a>", "css": ".ds-btn-line{display:inline-flex;align-items:center;min-height:52px;padding:0 26px;background:transparent;color:#ece7df;border:1px solid #3a3f45;font:500 16px 'Golos Text',Arial,sans-serif;text-decoration:none}.ds-btn-line:hover{border-color:#ece7df}.ds-btn-line:focus-visible{outline:2px solid #f2a541;outline-offset:3px}" },
+    { "name": "Input", "kind": "input", "refersTo": "input", "description": "Text fields, label above.", "html": "<input class=\"ds-input\" placeholder=\"Остоженка, 25\">", "css": ".ds-input{min-height:52px;padding:12px 16px;background:#131518;color:#ece7df;border:1px solid #3a3f45;border-radius:0;font:16px 'Golos Text',Arial,sans-serif;caret-color:#f2a541}.ds-input::placeholder{color:#8a877f}.ds-input:focus{outline:none;border-color:#f2a541;box-shadow:0 0 0 1px #f2a541}" },
+    { "name": "Chip", "kind": "chip", "refersTo": "chip", "description": "Day, filter and contact choices.", "html": "<span class=\"ds-chip ds-on\">Сегодня</span><span class=\"ds-chip\">Завтра</span>", "css": ".ds-chip{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;margin-right:6px;border:1px solid #3a3f45;color:#c9c4bb;font:500 15px 'Golos Text',Arial,sans-serif}.ds-on{border-color:#f2a541;color:#ece7df;box-shadow:inset 0 -2px 0 #f2a541}" },
+    { "name": "Time Dial", "kind": "custom", "refersTo": "timedial", "description": "Signature pickup-time control.", "html": "<div class=\"ds-dial\">22:30</div>", "css": ".ds-dial{font:300 120px/0.9 Unbounded,'Arial Black',sans-serif;letter-spacing:-0.06em;color:#f2a541;background:#0d0e10;padding:24px}" },
+    { "name": "Order Panel", "kind": "card", "refersTo": "panel", "description": "Price calculation and booking summary.", "html": "<div class=\"ds-panel\"><p class=\"ds-pt\">Ваша подача</p><p class=\"ds-tot\"><span>Итого</span><b>54 000 ₽</b></p></div>", "css": ".ds-panel{width:340px;background:#1c1f23;border-top:2px solid #f2a541;padding:28px;color:#ece7df;font:16px 'Golos Text',Arial,sans-serif}.ds-pt{font:300 22px Unbounded,sans-serif;margin:0 0 20px}.ds-tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #3a3f45;padding-top:16px;margin:0}.ds-tot span{color:#c9c4bb}.ds-tot b{font:300 30px Unbounded,sans-serif}" }
   ],
   "narrative": {
-    "northStar": "The carriage call slip",
-    "overview": "Warm-white paper ruled in hairlines; the perforated call slip is the only object with weight. Old Standard headings, Onest UI, mono for every measured value, cobalt ink only where something is stamped or focused.",
-    "keyCharacteristics": ["Perforated call slip as signature", "Mono for prices and times", "Cobalt as stamp ink only", "Hairline structure, minimal elevation"],
+    "northStar": "Night dispatch",
+    "overview": "Lacquer-black asphalt with one sodium light spent on the time. The visitor sets the minute the car is at the door; car, price, timeline and the mobile bar follow that time.",
+    "keyCharacteristics": ["Giant sodium time dial as the first viewport", "Uniform night grading on every photograph", "Square corners, no shadows, hairlines", "Unbounded 300 with Golos Text"],
     "rules": [
-      { "name": "One Ink Rule", "body": "Cobalt marks, it never fills an area larger than a tag or tile.", "section": "colors" },
-      { "name": "Measured values in mono", "body": "Prices, times, slip numbers and phones use JetBrains Mono.", "section": "typography" }
+      { "name": "Sodium is light", "body": "Sodium colours numerals, thin edges, states and focus; never a fill.", "section": "colors" },
+      { "name": "One night", "body": "Every raster gets the same night grade; daylight frames are cropped or replaced.", "section": "colors" },
+      { "name": "Light weight, wide face", "body": "Unbounded only at 300 (500 for the wordmark); emphasis by size and sodium.", "section": "typography" }
     ],
-    "dos": ["Do put prices and times on a slip or in mono", "Do keep cobalt to stamps, focus and selection"],
-    "donts": ["Don't add eyebrows or section numbers", "Don't use italic display or gradient text", "Don't fill buttons or sections with cobalt"]
+    "dos": ["Derive every time on the page from the chosen pickup time", "Keep all eight cars visible, label self-drive-only"],
+    "donts": ["No shadows, rounded corners or filled cards", "No eyebrows, testimonial cards or CTA bands", "No visible licence plates or daylight photos"]
   }
 }
