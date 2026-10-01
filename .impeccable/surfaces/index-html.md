@@ -15,21 +15,19 @@ Affluent Moscow clients and, very often, their assistants booking on a phone for
 
 ## Direction contract
 
-THESIS: The site is one night street: eight numbered garage boxes on Каретный Ряд, one car in each. The visitor walks past them, doors roll up, and the car in front of them is the car they are booking. Refuses hero-with-widget, card grids, steppers and CTA bands.
+THESIS: Catalogue-first rental site in the genre the user pointed to (moscowdreamcars.ru, vroomclub.ru, brook-drive.ru, premiercars.ru, erdescars.ru). The visitor compares cars and prices in seconds and books or messages without friction. Replaces the «Ночная улица» concept, which the user rejected.
 
-OWN-WORLD: Moscow at night. Lacquer #0D0E10 and asphalt #1C1F23 grounds, ivory #ECE7DF text, sodium #F2A541 only as light (the time, states, focus), each car's own light colour spilling from its box ceiling. Night-graded photography, plates blurred. Unbounded 300 and Golos Text. Square corners, hairlines.
+OWN-WORLD: Dark ground #0E0F11, cards #1A1C20, one amber accent #F2A541 as fill for actions and states, Montserrat 800 uppercase headings, 12px cards, WhatsApp/Telegram colours on their buttons only.
 
-STORY: Arrive at the street, the first door rolls up and the Wraith lights up. Scroll and the street pans; each box opens as you pass and the dock picks up that car with its total. Garage is the floor plan, a car page is its box opening, booking shows the car standing in its open box.
+STORY: Hero with a Bentley at night, headline, four perks, phone and brand chips; catalogue with class tabs; occasions; three steps; lead form; reasons; terms; FAQ; contacts. Fleet page with filters, car page with tariff ladder and live total, booking with summary.
 
-FIRST VIEWPORT: Left, h1 «Восемь боксов на Каретном Ряду» and one line of promise; right, box 1 opening with the next box's closed door at the edge; streetlamps on the kerb; the dock at the bottom with car, day, time, mode, total and «Забронировать». Header transparent.
+FIRST VIEWPORT: Photo hero, uppercase H1 «Аренда премиум-авто в Москве», 2x2 perk tiles, «Выбрать автомобиль» + phone, brand chips. Mobile: bottom bar with call, WhatsApp and «Забронировать».
 
-FORM: Night street, structural redesign chosen by the user over the night-dispatch scene (whose intro animation was rejected). Palette and type carried from direction B.
-
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+FINISH: screenshots at 1440 and 390, no horizontal scroll, functional click-through of tabs, filters, calculator and both forms.
 
 ## Signature interaction
 
-The door: one `--open` value per box rolls the door up, lights the ceiling strip and brings the car up from the dark; the dock follows the box nearest the centre.
+The price panel on the car page: dates and with/without driver recalculate the total, highlight the active tariff tier and carry the choice into booking.
 
 ## Fixes carried from the critique
 
