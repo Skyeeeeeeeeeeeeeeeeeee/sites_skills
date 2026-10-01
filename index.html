@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Каретный: аренда автомобилей премиум-класса с водителем и без</title>
+<meta name="description" content="Аренда Rolls-Royce, Maybach, Bentley и G-Class в Москве с водителем и без. Частный гараж на Каретном Ряду, подача круглосуточно.">
+<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121315" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23fbfbfa' stroke='%23111' stroke-width='2'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='%23111'%3EК%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/old-standard-tt-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/style.css">
+<script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="wordmark" href="index.html" aria-label="Каретный, на главную"><span class="wordmark__mark" aria-hidden="true">К</span>Каретный</a>
+    <nav class="nav" aria-label="Основная навигация">
+      <a href="fleet.html">Автопарк</a>
+      <a href="index.html#services">Услуги</a>
+      <a href="terms.html">Условия</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <div class="header-actions">
+      <a class="header-phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
+      <a class="btn btn--sm" href="booking.html">Забронировать</a>
+      <button class="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false"><span class="visually-hidden">Открыть меню</span></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobile-menu" inert>
+  <a href="fleet.html">Автопарк</a>
+  <a href="index.html#services">Услуги</a>
+  <a href="terms.html">Условия</a>
+  <a href="#contacts">Контакты</a>
+  <a class="btn btn--block" href="booking.html">Забронировать</a>
+  <a class="mobile-menu__phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
+</div>
+
+<main id="main">
+  <section class="hero">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <h1 class="display" style="--i:0">Экипаж подан к&nbsp;часу</h1>
+        <p class="lead" style="--i:1">Восемь автомобилей из частного гаража на Каретном Ряду. С водителем или без, по Москве и области, круглосуточно.</p>
+        <div class="hero__actions" style="--i:2">
+          <a class="btn" href="booking.html">Забронировать <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+          <a class="btn btn--ghost" href="fleet.html">Автопарк</a>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="frame hero__photo" data-label="Rolls-Royce Cullinan у подъезда">
+          <img src="assets/cars/hero.jpg" alt="Чёрный Rolls-Royce Cullinan у входа в дом в центре Москвы" width="1200" height="1500" fetchpriority="high" decoding="async">
+        </div>
+
+        <form class="slip hero__slip" id="hero-slip" aria-label="Талон подачи: быстрый расчёт" onsubmit="return false">
+          <div class="slip__head">
+            <span class="slip__title">Талон подачи</span>
+            <span class="slip__no" data-slip-no>№ 0000</span>
+          </div>
+          <div class="slip__perf" aria-hidden="true"></div>
+          <div class="slip__body">
+            <div class="slip__row">
+              <label class="slip__row-label" for="hs-car">Автомобиль</label>
+              <select class="select input--sm" id="hs-car"></select>
+            </div>
+            <div class="segmented" role="radiogroup" aria-label="Режим аренды">
+              <label><input type="radio" name="hs-mode" value="driver" checked><span><svg class="icon" aria-hidden="true"><use href="#i-steering-wheel"></use></svg>С водителем</span></label>
+              <label><input type="radio" name="hs-mode" value="self"><span><svg class="icon" aria-hidden="true"><use href="#i-car-profile"></use></svg>Без водителя</span></label>
+            </div>
+            <div class="field-pair">
+              <div class="slip__row">
+                <label class="slip__row-label" for="hs-date">Дата</label>
+                <input class="input input--sm" type="date" id="hs-date">
+              </div>
+              <div class="slip__row">
+                <label class="slip__row-label" for="hs-time">Время</label>
+                <input class="input input--sm" type="time" id="hs-time" value="10:00" step="900">
+              </div>
+            </div>
+          </div>
+          <div class="slip__perf" aria-hidden="true"></div>
+          <div class="slip__lines" aria-live="polite">
+            <div class="slip__line" data-line="car"><span>Автомобиль</span><span>не выбрано</span></div>
+            <div class="slip__line" data-line="when"><span>Подача</span><span>-</span></div>
+            <div class="slip__line" data-line="mode"><span>Режим</span><span>-</span></div>
+            <div class="slip__total">
+              <span class="slip__total-label">Итого от</span>
+              <span class="slip__total-value" data-total>-</span>
+            </div>
+          </div>
+          <div class="slip__foot">
+            <p class="slip__note" data-note></p>
+            <a class="btn btn--block" data-go href="booking.html">Забронировать <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="fleet-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 class="h2" id="fleet-title">Восемь машин, каждая в одном экземпляре</h2>
+        <p class="body-muted">Мы не держим очередь из одинаковых автомобилей. Каждую машину знаем по имени, и она ждёт только вашей подачи.</p>
+      </div>
+      <div class="bento" id="home-fleet">
+        <div class="bento__cell bento__cell--hero"><div class="skeleton"><div class="skeleton__img"></div><div class="skeleton__line"></div><div class="skeleton__line"></div></div></div>
+        <div class="bento__cell"><div class="skeleton"><div class="skeleton__img"></div><div class="skeleton__line"></div><div class="skeleton__line"></div></div></div>
+        <div class="bento__cell"><div class="skeleton"><div class="skeleton__img"></div><div class="skeleton__line"></div><div class="skeleton__line"></div></div></div>
+      </div>
+      <p style="margin-top:32px" class="reveal"><a class="link-arrow" href="fleet.html">Весь автопарк и цены <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a></p>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="process-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 class="h2" id="process-title">От заявки до подъезда</h2>
+      </div>
+      <ol class="timeline">
+        <li class="timeline__step reveal" style="--i:0">
+          <span class="timeline__time">0:00</span>
+          <h3 class="timeline__title">Заявка</h3>
+          <p class="timeline__text">Талон на сайте, звонок или сообщение в Telegram. Предоплата не нужна.</p>
+        </li>
+        <li class="timeline__step reveal" style="--i:1">
+          <span class="timeline__time">до 0:15</span>
+          <h3 class="timeline__title">Звонок менеджера</h3>
+          <p class="timeline__text">Уточняем маршрут, пассажиров и пожелания: воду, детское кресло, табличку в аэропорту.</p>
+        </li>
+        <li class="timeline__step reveal" style="--i:2">
+          <span class="timeline__time">за 2 часа</span>
+          <h3 class="timeline__title">Подготовка</h3>
+          <p class="timeline__text">Мойка, проверка, полный бак. Водитель получает маршрут и номер для связи с вами.</p>
+        </li>
+        <li class="timeline__step reveal" style="--i:3">
+          <span class="timeline__time">к часу</span>
+          <h3 class="timeline__title">Подача</h3>
+          <p class="timeline__text">Машина у подъезда за десять минут до назначенного времени. Оплата после поездки.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="services" aria-labelledby="services-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 class="h2" id="services-title">Услуги</h2>
+      </div>
+      <div class="services">
+        <div class="service reveal">
+          <h3 class="service__name">С водителем</h3>
+          <p class="service__text">Водители с опытом от десяти лет, в костюме, говорят по-английски. Встречи, рабочие дни, поездки за город.</p>
+          <p class="service__price">от 6&#8239;400&nbsp;₽ / час</p>
+        </div>
+        <div class="service reveal">
+          <h3 class="service__name">Без водителя</h3>
+          <p class="service__text">Машина у вашего дома с полным баком. Депозит возвращаем в день сдачи, страховка КАСКО включена.</p>
+          <p class="service__price">от 98&#8239;000&nbsp;₽ / сутки</p>
+        </div>
+        <div class="service reveal">
+          <h3 class="service__name">Свадьбы и события</h3>
+          <p class="service__text">Белый Ghost, лента в цвет платья, кортеж до трёх машин с одним координатором на связи.</p>
+          <p class="service__price">от 4 часов</p>
+        </div>
+        <div class="service reveal">
+          <h3 class="service__name">Аэропорты</h3>
+          <p class="service__text">Встреча в зале прилёта с табличкой, помощь с багажом. Следим за рейсом, ожидание при задержке бесплатно.</p>
+          <p class="service__price">фиксированная цена</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="garage-title">
+    <div class="container garage">
+      <div class="frame garage__photo reveal" data-label="Гараж на Каретном Ряду">
+        <img src="assets/cars/garage.jpg" alt="Автомобили в гараже на Каретном Ряду" width="1600" height="1200" loading="lazy" decoding="async">
+      </div>
+      <div class="garage__quote reveal" style="--i:1">
+        <h2 class="visually-hidden" id="garage-title">О гараже</h2>
+        <blockquote class="quote">«Перед каждым выездом машину проверяет один и тот же механик. Если ему что-то не нравится, она остаётся в гараже, а вы получаете другую.»</blockquote>
+        <div class="quote-by">
+          <span class="quote-by__mono" aria-hidden="true">П</span>
+          <div>
+            <div class="quote-by__name">Павел Оболенский</div>
+            <div class="quote-by__role">Основатель «Каретного»</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="reviews-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 class="h2" id="reviews-title">Что говорят клиенты</h2>
+      </div>
+      <div class="reviews" id="reviews" role="region" tabindex="0" aria-label="Отзывы клиентов, прокручиваются по горизонтали"></div>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 class="h2" id="faq-title">Частые вопросы</h2>
+      </div>
+      <div class="faq reveal">
+        <details>
+          <summary>Как быстро вы можете подать машину?<svg class="icon icon--lg" aria-hidden="true"><use href="#i-plus"></use></svg></summary>
+          <div class="faq__answer"><p>В пределах Садового кольца от 90 минут, если машина свободна. Для поездок на завтра лучше оставить заявку до 20:00.</p></div>
+        </details>
+        <details>
+          <summary>Что нужно для аренды без водителя?<svg class="icon icon--lg" aria-hidden="true"><use href="#i-plus"></use></svg></summary>
+          <div class="faq__answer"><p>Паспорт, права, возраст от 25 лет и стаж от 5 лет. Депозит блокируем на карте и снимаем блок в день сдачи.</p></div>
+        </details>
+        <details>
+          <summary>Можно ли выехать за пределы Москвы?<svg class="icon icon--lg" aria-hidden="true"><use href="#i-plus"></use></svg></summary>
+          <div class="faq__answer"><p>Да, по Московской и соседним областям без доплаты. Поездки дальше обсуждаем с менеджером заранее.</p></div>
+        </details>
+        <details>
+          <summary>Как отменить бронь?<svg class="icon icon--lg" aria-hidden="true"><use href="#i-plus"></use></svg></summary>
+          <div class="faq__answer"><p>Бесплатно за 24 часа до подачи. Позже удерживаем стоимость первого часа или 30% суток.</p></div>
+        </details>
+        <details>
+          <summary>Вы работаете с компаниями?<svg class="icon icon--lg" aria-hidden="true"><use href="#i-plus"></use></svg></summary>
+          <div class="faq__answer"><p>Да, по договору с ежемесячными закрывающими документами. Для постоянных клиентов закрепляем водителя и машину.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="closing-title">
+    <div class="container">
+      <div class="closing reveal">
+        <div style="display:grid;gap:16px">
+          <h2 class="h2" id="closing-title">Назовите время и адрес</h2>
+          <p class="body-muted">Остальное подготовим мы. Менеджер перезвонит в течение пятнадцати минут, в любое время суток.</p>
+        </div>
+        <div class="closing__actions">
+          <a class="btn" href="booking.html">Забронировать <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+          <a class="closing__phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" id="contacts">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__about">
+        <a class="wordmark" href="index.html" aria-label="Каретный, на главную"><span class="wordmark__mark" aria-hidden="true">К</span>Каретный</a>
+        <p>Аренда автомобилей представительского класса с водителем и без. Частный гараж в центре Москвы, подача круглосуточно.</p>
+        <div class="socials">
+          <a data-telegram href="https://t.me/karetny_garage" aria-label="Написать в Telegram"><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"></use></svg></a>
+          <a data-whatsapp href="https://wa.me/74951824719" aria-label="Написать в WhatsApp"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"></use></svg></a>
+          <a href="mailto:garage@karetny.ru" aria-label="Написать на почту"><svg class="icon" aria-hidden="true"><use href="#i-envelope-simple"></use></svg></a>
+        </div>
+      </div>
+      <div>
+        <h2>Гараж</h2>
+        <ul>
+          <li>Каретный Ряд, 5/10, стр. 2</li>
+          <li>Метро «Цветной бульвар»</li>
+          <li>Выдача по записи, 24/7</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Связь</h2>
+        <ul>
+          <li><a data-phone href="tel:+74951824719">+7 (495) 182-47-19</a></li>
+          <li><a data-email href="mailto:garage@karetny.ru">garage@karetny.ru</a></li>
+          <li><a data-telegram href="https://t.me/karetny_garage">Telegram</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Разделы</h2>
+        <ul>
+          <li><a href="fleet.html">Автопарк</a></li>
+          <li><a href="booking.html">Бронирование</a></li>
+          <li><a href="terms.html">Условия аренды</a></li>
+          <li><a href="terms.html#faq">Вопросы и ответы</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>© <span data-year>2026</span> ООО «Каретный двор». ОГРН 1117746382915</span>
+      <a href="terms.html#privacy">Политика конфиденциальности</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Автопарк | Каретный</title>
+<meta name="description" content="Восемь автомобилей представительского класса: цены за час с водителем и за сутки без водителя.">
+<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121315" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23fbfbfa' stroke='%23111' stroke-width='2'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='%23111'%3EК%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/old-standard-tt-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/style.css">
+<script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="wordmark" href="index.html" aria-label="Каретный, на главную"><span class="wordmark__mark" aria-hidden="true">К</span>Каретный</a>
+    <nav class="nav" aria-label="Основная навигация">
+      <a href="fleet.html" aria-current="page">Автопарк</a>
+      <a href="index.html#services">Услуги</a>
+      <a href="terms.html">Условия</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <div class="header-actions">
+      <a class="header-phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
+      <a class="btn btn--sm" href="booking.html">Забронировать</a>
+      <button class="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false"><span class="visually-hidden">Открыть меню</span></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobile-menu" inert>
+  <a href="fleet.html">Автопарк</a>
+  <a href="index.html#services">Услуги</a>
+  <a href="terms.html">Условия</a>
+  <a href="#contacts">Контакты</a>
+  <a class="btn btn--block" href="booking.html">Забронировать</a>
+  <a class="mobile-menu__phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
+</div>
+
+<main id="main">
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="index.html">Главная</a><span aria-hidden="true">/</span><span aria-current="page">Автопарк</span></nav>
+      <h1 class="display">Автопарк</h1>
+      <p class="lead">Цены указаны за час с водителем или за сутки без водителя. Топливо, мойка и подача по Москве уже включены.</p>
+    </div>
+
+    <form class="toolbar" id="fleet-filters" aria-label="Фильтры автопарка" onsubmit="return false">
+      <div class="chips" role="radiogroup" aria-label="Класс автомобиля">
+        <label class="chip"><input type="radio" name="cls" value="all" checked><span>Все</span></label>
+        <label class="chip"><input type="radio" name="cls" value="executive"><span>Представительские</span></label>
+        <label class="chip"><input type="radio" name="cls" value="suv"><span>Внедорожники</span></label>
+        <label class="chip"><input type="radio" name="cls" value="open"><span>Открытые</span></label>
+      </div>
+      <div class="toolbar__right">
+        <div class="segmented" role="radiogroup" aria-label="Режим аренды">
+          <label><input type="radio" name="fmode" value="driver" checked><span>С водителем</span></label>
+          <label><input type="radio" name="fmode" value="self"><span>Без водителя</span></label>
+        </div>
+        <label class="visually-hidden" for="fleet-sort">Сортировка</label>
+        <select class="select" id="fleet-sort">
+          <option value="default">Как в гараже</option>
+          <option value="asc">Сначала доступнее</option>
+          <option value="desc">Сначала дороже</option>
+        </select>
+      </div>
+    </form>
+
+    <p class="visually-hidden" id="fleet-count" aria-live="polite"></p>
+    <h2 class="visually-hidden">Список автомобилей</h2>
+    <div class="fleet-grid" id="fleet-grid">
+      <div class="skeleton"><div class="skeleton__img"></div><div class="skeleton__line"></div><div class="skeleton__line"></div></div>
+      <div class="skeleton"><div class="skeleton__img"></div><div class="skeleton__line"></div><div class="skeleton__line"></div></div>
+      <div class="skeleton"><div class="skeleton__img"></div><div class="skeleton__line"></div><div class="skeleton__line"></div></div>
+    </div>
+
+    <section class="section section--tight">
+      <div class="closing reveal">
+        <div style="display:grid;gap:16px">
+          <h2 class="h2">Не нашли нужную машину?</h2>
+          <p class="body-muted">Через партнёрские гаражи подберём модель под ваш запрос за сутки. Позвоните или оставьте заявку с комментарием.</p>
+        </div>
+        <div class="closing__actions">
+          <a class="btn" href="booking.html">Забронировать <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+          <a class="closing__phone" data-phone href="tel:+74951824719">+7 (495) 182-47-19</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer" id="contacts">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__about">
+        <a class="wordmark" href="index.html" aria-label="Каретный, на главную"><span class="wordmark__mark" aria-hidden="true">К</span>Каретный</a>
+        <p>Аренда автомобилей представительского класса с водителем и без. Частный гараж в центре Москвы, подача круглосуточно.</p>
+        <div class="socials">
+          <a data-telegram href="https://t.me/karetny_garage" aria-label="Написать в Telegram"><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"></use></svg></a>
+          <a data-whatsapp href="https://wa.me/74951824719" aria-label="Написать в WhatsApp"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"></use></svg></a>
+          <a href="mailto:garage@karetny.ru" aria-label="Написать на почту"><svg class="icon" aria-hidden="true"><use href="#i-envelope-simple"></use></svg></a>
+        </div>
+      </div>
+      <div>
+        <h2>Гараж</h2>
+        <ul>
+          <li>Каретный Ряд, 5/10, стр. 2</li>
+          <li>Метро «Цветной бульвар»</li>
+          <li>Выдача по записи, 24/7</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Связь</h2>
+        <ul>
+          <li><a data-phone href="tel:+74951824719">+7 (495) 182-47-19</a></li>
+          <li><a data-email href="mailto:garage@karetny.ru">garage@karetny.ru</a></li>
+          <li><a data-telegram href="https://t.me/karetny_garage">Telegram</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Разделы</h2>
+        <ul>
+          <li><a href="fleet.html">Автопарк</a></li>
+          <li><a href="booking.html">Бронирование</a></li>
+          <li><a href="terms.html">Условия аренды</a></li>
+          <li><a href="terms.html#faq">Вопросы и ответы</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>© <span data-year>2026</span> ООО «Каретный двор». ОГРН 1117746382915</span>
+      <a href="terms.html#privacy">Политика конфиденциальности</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

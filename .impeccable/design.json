@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-01T12:00:00Z",
+  "title": "Design System: Каретный",
+  "extensions": {
+    "colorMeta": {
+      "cobalt": { "role": "primary", "displayName": "Cobalt stamp ink", "tonalRamp": ["#0f1c52", "#16277a", "#1d33a0", "#2440b3", "#4a63cc", "#7a8fe0", "#b3c0f0", "#e8ecfa"] },
+      "paper": { "role": "neutral", "displayName": "Paper", "tonalRamp": ["#111111", "#2f3437", "#65645f", "#8d8c87", "#d9d9d6", "#eaeaea", "#f3f3f1", "#fbfbfa"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Old Standard display", "purpose": "Page titles and hero line, roman only." },
+      "slip-data": { "displayName": "Slip data", "purpose": "Prices, times, slip numbers, phones." }
+    },
+    "shadows": [
+      { "name": "lift", "value": "0 1px 2px rgb(17 17 17 / 0.04), 0 6px 16px rgb(17 17 17 / 0.06)", "purpose": "The call slip over photography and hovered car cards." }
+    ],
+    "motion": [
+      { "name": "ease", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "All transitions and reveals." },
+      { "name": "stamp", "value": "0.55s scale 1.6 to 1, rotate -8deg", "purpose": "Booking accepted." },
+      { "name": "line-flash", "value": "0.6s cobalt-soft to transparent", "purpose": "A slip line changed." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "640px" },
+      { "name": "tablet", "value": "860px" },
+      { "name": "hero-stack", "value": "980px" },
+      { "name": "aside-stack", "value": "1080px" }
+    ]
+  },
+  "components": [
+    { "name": "Primary Button", "kind": "button", "refersTo": "button-primary", "description": "Booking and other primary actions.", "html": "<button class=\"ds-btn\">Забронировать</button>", "css": ".ds-btn{background:#111;color:#fbfbfa;border:1px solid #111;border-radius:6px;min-height:48px;padding:0 22px;font:500 15.6px Onest,Arial,sans-serif;cursor:pointer;transition:background .2s}.ds-btn:hover{background:#333}.ds-btn:active{transform:scale(.98)}.ds-btn:focus-visible{outline:2px solid #2440b3;outline-offset:3px}" },
+    { "name": "Ghost Button", "kind": "button", "refersTo": "button-ghost", "description": "Secondary navigation actions.", "html": "<button class=\"ds-btn-ghost\">Автопарк</button>", "css": ".ds-btn-ghost{background:transparent;color:#111;border:1px solid #d9d9d6;border-radius:6px;min-height:48px;padding:0 22px;font:500 15.6px Onest,Arial,sans-serif;cursor:pointer}.ds-btn-ghost:hover{background:#f3f3f1}.ds-btn-ghost:focus-visible{outline:2px solid #2440b3;outline-offset:3px}" },
+    { "name": "Chip", "kind": "chip", "refersTo": "chip", "description": "Filter and contact-method radios.", "html": "<span class=\"ds-chip\">Все</span><span class=\"ds-chip ds-on\">Внедорожники</span>", "css": ".ds-chip{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;margin-right:6px;border:1px solid #d9d9d6;border-radius:999px;font:13px Onest,Arial,sans-serif;color:#2f3437;background:#fff}.ds-chip:hover{border-color:#111}.ds-on{background:#111;color:#fbfbfa;border-color:#111}" },
+    { "name": "Input", "kind": "input", "refersTo": "input", "description": "Text fields with label above.", "html": "<input class=\"ds-input\" placeholder=\"Например, Остоженка, 25\">", "css": ".ds-input{min-height:46px;padding:10px 14px;border:1px solid #d9d9d6;border-radius:6px;background:#fff;color:#111;font:16px Onest,Arial,sans-serif}.ds-input::placeholder{color:#6f6e69}.ds-input:focus{outline:none;border-color:#2440b3;box-shadow:0 0 0 3px #e8ecfa}" },
+    { "name": "Call slip", "kind": "custom", "refersTo": "slip", "description": "Signature booking ticket with perforation and mono data lines.", "html": "<div class=\"ds-slip\"><div class=\"ds-h\">Талон подачи <span>№ 0640</span></div><div class=\"ds-perf\"></div><div class=\"ds-l\"><span>Автомобиль</span><span>Rolls-Royce Ghost</span></div><div class=\"ds-l\"><span>Итого</span><b>37 500 ₽</b></div></div>", "css": ".ds-slip{width:320px;background:#fff;border:1px solid #eaeaea;border-radius:8px;box-shadow:0 1px 2px rgb(17 17 17/.04),0 6px 16px rgb(17 17 17/.06);padding:18px 22px}.ds-h{display:flex;justify-content:space-between;font:22px 'Old Standard',serif;color:#111}.ds-h span{font:12px 'JetBrains Mono',monospace;color:#65645f}.ds-perf{height:1px;margin:14px 0;background:linear-gradient(90deg,#d9d9d6 50%,transparent 50%) 0 0/8px 1px}.ds-l{display:flex;justify-content:space-between;font:13px 'JetBrains Mono',monospace;color:#65645f;padding:3px 0}.ds-l span:last-child,.ds-l b{color:#111}" }
+  ],
+  "narrative": {
+    "northStar": "The carriage call slip",
+    "overview": "Warm-white paper ruled in hairlines; the perforated call slip is the only object with weight. Old Standard headings, Onest UI, mono for every measured value, cobalt ink only where something is stamped or focused.",
+    "keyCharacteristics": ["Perforated call slip as signature", "Mono for prices and times", "Cobalt as stamp ink only", "Hairline structure, minimal elevation"],
+    "rules": [
+      { "name": "One Ink Rule", "body": "Cobalt marks, it never fills an area larger than a tag or tile.", "section": "colors" },
+      { "name": "Measured values in mono", "body": "Prices, times, slip numbers and phones use JetBrains Mono.", "section": "typography" }
+    ],
+    "dos": ["Do put prices and times on a slip or in mono", "Do keep cobalt to stamps, focus and selection"],
+    "donts": ["Don't add eyebrows or section numbers", "Don't use italic display or gradient text", "Don't fill buttons or sections with cobalt"]
+  }
+}

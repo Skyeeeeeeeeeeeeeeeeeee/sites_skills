@@ -1,0 +1,196 @@
+/* «Каретный» fleet data.
+   Demo content: models, prices, plates and availability are illustrative and should be replaced with the real fleet. */
+window.KARETNY = {
+  phone: "+7 (495) 182-47-19",
+  phoneHref: "tel:+74951824719",
+  telegram: "https://t.me/karetny_garage",
+  whatsapp: "https://wa.me/74951824719",
+  email: "garage@karetny.ru",
+  address: "Москва, Каретный Ряд, 5/10, стр. 2",
+
+  classes: {
+    executive: "Представительский",
+    suv: "Внедорожник",
+    open: "Открытый"
+  },
+
+  fleet: [
+    {
+      id: "cullinan",
+      name: "Rolls-Royce Cullinan",
+      cls: "suv",
+      year: 2024,
+      color: "Black Diamond",
+      seats: 4,
+      power: 571,
+      engine: "6.75 V12",
+      accel: "5,2 с",
+      luggage: "560 л",
+      perHour: 14500,
+      perDay: 285000,
+      minHours: 3,
+      deposit: 500000,
+      summary: "Самый тихий салон в гараже. Задние сиденья с массажем и холодильник между ними; выбирают для делегаций и долгих дорог за город.",
+      features: ["Звёздное небо в потолке", "Задние кресла с массажем", "Холодильник с бокалами", "Пневмоподвеска с камерой дороги"],
+      photos: ["cullinan-1.jpg", "cullinan-2.jpg", "cullinan-3.jpg"],
+      featured: true
+    },
+    {
+      id: "ghost",
+      name: "Rolls-Royce Ghost",
+      cls: "executive",
+      year: 2023,
+      color: "Arctic White",
+      seats: 4,
+      power: 571,
+      engine: "6.75 V12",
+      accel: "4,8 с",
+      luggage: "507 л",
+      perHour: 12500,
+      perDay: 245000,
+      minHours: 3,
+      deposit: 450000,
+      summary: "Белый седан для свадеб и торжественных подач. Двери открываются против хода, водитель в перчатках по запросу.",
+      features: ["Двери против хода", "Зонт в каждой двери", "Шумоизоляция 100 кг", "Задние шторки"],
+      photos: ["ghost-1.jpg", "ghost-2.jpg", "ghost-3.jpg"]
+    },
+    {
+      id: "maybach",
+      name: "Mercedes-Maybach S 680",
+      cls: "executive",
+      year: 2024,
+      color: "Obsidian / Silver",
+      seats: 4,
+      power: 612,
+      engine: "6.0 V12",
+      accel: "4,5 с",
+      luggage: "390 л",
+      perHour: 9800,
+      perDay: 190000,
+      minHours: 3,
+      deposit: 350000,
+      summary: "Кабинет на колёсах: кресла-шезлонги сзади, столики и тишина для звонков. Главный автомобиль для деловых дней.",
+      features: ["Кресла-шезлонги", "Складные столики", "Сзади два экрана", "Подогрев шеи и плеч"],
+      photos: ["maybach-1.jpg", "maybach-2.jpg", "maybach-3.jpg"]
+    },
+    {
+      id: "flying-spur",
+      name: "Bentley Flying Spur",
+      cls: "executive",
+      year: 2023,
+      color: "Verdant Green",
+      seats: 5,
+      power: 635,
+      engine: "6.0 W12",
+      accel: "3,8 с",
+      luggage: "420 л",
+      perHour: 8900,
+      perDay: 165000,
+      minHours: 3,
+      deposit: 300000,
+      summary: "Седан, который хочется вести самому. Тёмно-зелёный лак и светлая кожа; на выходные без водителя.",
+      features: ["Вращающаяся панель приборов", "Кожа ручной строчки", "Аудио Naim", "Полный привод"],
+      photos: ["flying-spur-1.jpg", "flying-spur-2.jpg", "flying-spur-3.jpg"]
+    },
+    {
+      id: "g63",
+      name: "Mercedes-AMG G 63",
+      cls: "suv",
+      year: 2024,
+      color: "Night Black Magno",
+      seats: 5,
+      power: 585,
+      engine: "4.0 V8 biturbo",
+      accel: "4,5 с",
+      luggage: "480 л",
+      perHour: 6900,
+      perDay: 115000,
+      minHours: 3,
+      deposit: 250000,
+      summary: "Матовый чёрный «Гелендваген» для города и загородных домов. Понятный выбор, когда дорога неизвестна заранее.",
+      features: ["Три блокировки дифференциала", "Матовая окраска", "Аудио Burmester", "Высокая посадка"],
+      photos: ["g63-1.jpg", "g63-2.jpg", "g63-3.jpg"]
+    },
+    {
+      id: "range-rover-sv",
+      name: "Range Rover SV",
+      cls: "suv",
+      year: 2024,
+      color: "Ionian Silver",
+      seats: 4,
+      power: 615,
+      engine: "4.4 V8",
+      accel: "4,5 с",
+      luggage: "541 л",
+      perHour: 7400,
+      perDay: 128000,
+      minHours: 3,
+      deposit: 250000,
+      summary: "Четырёхместная версия с длинной базой: сзади два отдельных кресла и консоль между ними. Для трансферов в аэропорт с багажом.",
+      features: ["Длинная база", "Задние кресла с массажем", "Электрическая консоль", "Пневмоподвеска"],
+      photos: ["range-rover-sv-1.jpg", "range-rover-sv-2.jpg", "range-rover-sv-3.jpg"]
+    },
+    {
+      id: "continental-gtc",
+      name: "Bentley Continental GTC",
+      cls: "open",
+      year: 2023,
+      color: "Glacier White",
+      seats: 4,
+      power: 659,
+      engine: "6.0 W12",
+      accel: "3,8 с",
+      luggage: "235 л",
+      perHour: 7900,
+      perDay: 138000,
+      minHours: 4,
+      deposit: 300000,
+      summary: "Кабриолет для летних выходных и фотосессий. Мягкая крыша складывается за 19 секунд на ходу.",
+      features: ["Мягкий верх", "Обогрев шеи", "Кожа Beluga", "Аудио Bang & Olufsen"],
+      photos: ["continental-gtc-1.jpg", "continental-gtc-2.jpg", "continental-gtc-3.jpg"]
+    },
+    {
+      id: "911-cabriolet",
+      name: "Porsche 911 Turbo S Cabriolet",
+      cls: "open",
+      year: 2024,
+      color: "GT Silver",
+      seats: 2,
+      power: 650,
+      engine: "3.7 flat-6 biturbo",
+      accel: "2,8 с",
+      luggage: "128 л",
+      perHour: 6400,
+      perDay: 98000,
+      minHours: 4,
+      deposit: 300000,
+      summary: "Единственная машина в гараже, которую не подают с водителем. Только для самостоятельных поездок, опыт вождения от 5 лет.",
+      features: ["Полный привод", "Керамические тормоза", "Задние подруливающие колёса", "Крыша за 12 секунд"],
+      photos: ["911-cabriolet-1.jpg", "911-cabriolet-2.jpg", "911-cabriolet-3.jpg"],
+      selfDriveOnly: true
+    }
+  ],
+
+  reviews: [
+    {
+      text: "Заказывали Ghost на свадьбу дочери. Машина пришла за сорок минут до времени, водитель сам предложил маршрут без пробок к ЗАГСу.",
+      name: "Ирина Волконская",
+      role: "Свадьба, июнь"
+    },
+    {
+      text: "Пользуюсь Maybach для встреч с партнёрами из Дубая. Ни разу не пришлось объяснять, куда и когда. Всё помнят с прошлого раза.",
+      name: "Тимур Сабитов",
+      role: "Клиент с 2021 года"
+    },
+    {
+      text: "Брал Continental на выходные в Завидово. Сдал машину у дома, депозит вернули в тот же вечер.",
+      name: "Арсений Лопухин",
+      role: "Аренда без водителя"
+    },
+    {
+      text: "Организовывали трансфер для двенадцати гостей конференции. Три машины, одно окно связи, никаких накладок.",
+      name: "Вера Шаховская",
+      role: "Ассистент генерального директора"
+    }
+  ]
+};
