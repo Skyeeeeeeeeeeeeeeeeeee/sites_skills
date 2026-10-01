@@ -207,7 +207,7 @@
         '<span class="box__body"><span class="box__name">' + c.name + '</span>' +
         '<span class="box__price">' + fromPrice(c) + "</span>" +
         '<span class="box__light">' + cap(c.tintName) + "</span>" +
-        (c.selfDriveOnly ? '<span class="box__flag">только без водителя</span>' : "") +
+        (c.selfDriveOnly ? '<span class="box__flag">Только без водителя</span>' : "") +
         "</span></a>";
     }).join("");
   }
@@ -296,7 +296,10 @@
       rTomorrow.checked = sel.date === tomorrow;
       dateInput.min = e.date;
       dateInput.value = sel.date;
-      dateInput.classList.toggle("is-active", sel.date !== today && sel.date !== tomorrow);
+      var custom = sel.date !== today && sel.date !== tomorrow;
+      var btn = $("#pickup-date-btn");
+      btn.classList.toggle("is-active", custom);
+      btn.textContent = custom ? cap(parseIso(sel.date).toLocaleDateString("ru-RU", { weekday: "short", day: "numeric", month: "short" })) : "Другая дата";
     }
 
     function timeline() {
@@ -328,7 +331,7 @@
       if (!first) flash(priceEl);
       cta.href = bookingHref(sel);
       timeline();
-      setBar(car.name + ", " + humanDate(sel.date) + " в " + sel.time, rub(q.total), bookingHref(sel));
+      setBar(car.short + ", " + humanDate(sel.date) + " в " + sel.time, rub(q.total), bookingHref(sel));
       saveSel(sel);
     }
 
@@ -378,6 +381,10 @@
     dateInput.addEventListener("change", function () {
       if (dateInput.value) { sel.date = dateInput.value < dateInput.min ? dateInput.min : dateInput.value; update(); }
     });
+    $("#pickup-date-btn").addEventListener("click", function () {
+      try { if (dateInput.showPicker) { dateInput.showPicker(); return; } } catch (e) { /* fall through */ }
+      dateInput.removeAttribute("tabindex"); dateInput.focus();
+    });
 
     function stepCar(d) {
       var prevCar = carById(sel.car);
@@ -395,6 +402,53 @@
     });
 
     update(true);
+    placeBeams(carById(sel.car));
+    spinDial(sel.time);
+
+    /* Put the intro headlamps where this car's lamps will appear (object-fit: cover maths) */
+    function placeBeams(car) {
+      var intro = $(".intro", scene);
+      if (!intro || !car.lamps) return;
+      var sr = scene.getBoundingClientRect(), mr = media.getBoundingClientRect();
+      var scale = Math.max(mr.width / 1920, mr.height / 1200);
+      var dw = 1920 * scale, dh = 1200 * scale;
+      var pos = car.pos.split(" ").map(function (v) { return parseFloat(v) / 100; });
+      var ox = (mr.width - dw) * pos[0], oy = (mr.height - dh) * pos[1];
+      car.lamps.forEach(function (l, i) {
+        var x = mr.left - sr.left + ox + l[0] * dw;
+        var y = mr.top - sr.top + oy + l[1] * dh;
+        intro.style.setProperty("--lx" + (i + 1), x.toFixed(0) + "px");
+        intro.style.setProperty("--ly" + (i + 1), y.toFixed(0) + "px");
+      });
+    }
+    initTrails(scene);
+    initDepth(scene);
+    if (document.documentElement.classList.contains("is-intro")) {
+      setTimeout(function () { document.documentElement.classList.remove("is-intro"); }, 3200);
+    }
+
+    /* The clock winds to the chosen time like a mechanical dial */
+    function spinDial(target) {
+      if (reduceMotion) return;
+      var startDelay = document.documentElement.classList.contains("is-intro") ? 1700 : 250;
+      var chars = target.replace(":", "").split("");
+      var spans = digits.map(function (d) { return d.firstElementChild; });
+      spans.forEach(function (s) { s.textContent = "0"; });
+      dial.classList.add("is-waiting");
+      setTimeout(function () {
+        dial.classList.remove("is-waiting");
+        spans.forEach(function (s, i) {
+          var n = 0, stop = 8 + i * 4;
+          var t = setInterval(function () {
+            n++;
+            var v = n >= stop ? chars[i] : String((+s.textContent + 1) % (i === 0 ? 3 : i === 2 ? 6 : 10));
+            s.textContent = v;
+            s.classList.remove("digit-up"); void s.offsetWidth; s.classList.add("digit-up");
+            if (n >= stop) clearInterval(t);
+          }, 70);
+        });
+      }, startDelay);
+    }
 
     var row = $("#garage-row");
     if (row) { renderRow(row, K.fleet); initRowArrows(); initDoors(row); }
@@ -402,6 +456,92 @@
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(function (en) { scene.classList.toggle("is-offscreen", !en[0].isIntersecting); }).observe(scene);
     }
+  }
+
+  /* Long-exposure light trails over the night scene (canvas, paused off screen) */
+  function initTrails(scene) {
+    var canvas = $(".scene__trails", scene);
+    if (!canvas || reduceMotion || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    var w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var trails = [], running = false, raf = 0, last = 0;
+    var small = window.matchMedia("(max-width: 980px)").matches;
+    var COUNT = small ? 8 : 14;
+
+    function tint() { return getComputedStyle(document.documentElement).getPropertyValue("--tint").trim() || "#f2a541"; }
+    function spawn(t, initial) {
+      var depth = Math.random();                       // 0 far, 1 near
+      var dir = Math.random() < 0.55 ? 1 : -1;         // right: headlights, left: tail lights
+      var r = Math.random();
+      var color = dir > 0 ? (r < 0.2 ? tint() : r < 0.45 ? "#f2a541" : "#fff1d6") : (r < 0.25 ? tint() : "#ff4d4d");
+      t.depth = depth; t.dir = dir; t.color = color;
+      t.y = h * (0.58 + depth * 0.16) + (Math.random() - 0.5) * h * 0.02;
+      t.len = (90 + depth * 340) * (small ? 0.6 : 1);
+      t.speed = (90 + depth * 520) * (small ? 0.7 : 1);
+      t.width = 0.6 + depth * 2.2;
+      t.alpha = 0.18 + depth * 0.35;
+      t.x = initial ? Math.random() * w : (dir > 0 ? -t.len - Math.random() * w * 0.5 : w + t.len + Math.random() * w * 0.5);
+      return t;
+    }
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      w = r.width; h = r.height;
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      trails = []; for (var i = 0; i < COUNT; i++) trails.push(spawn({}, true));
+    }
+    function frame(now) {
+      var dt = Math.min(0.05, (now - (last || now)) / 1000); last = now;
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.lineCap = "round";
+      trails.forEach(function (t) {
+        t.x += t.dir * t.speed * dt;
+        var tail = t.x - t.dir * t.len;
+        var g = ctx.createLinearGradient(tail, 0, t.x, 0);
+        g.addColorStop(0, "rgba(0,0,0,0)");
+        g.addColorStop(1, t.color);
+        ctx.globalAlpha = t.alpha;
+        ctx.strokeStyle = g;
+        ctx.lineWidth = t.width;
+        ctx.beginPath(); ctx.moveTo(tail, t.y); ctx.lineTo(t.x, t.y); ctx.stroke();
+        if ((t.dir > 0 && tail > w) || (t.dir < 0 && tail < 0)) spawn(t, false);
+      });
+      ctx.globalAlpha = 1;
+      if (running) raf = requestAnimationFrame(frame);
+    }
+    function start() { if (running) return; running = true; last = 0; raf = requestAnimationFrame(frame); }
+    function stop() { running = false; cancelAnimationFrame(raf); }
+    resize();
+    window.addEventListener("resize", function () { clearTimeout(resize._t); resize._t = setTimeout(resize, 150); });
+    var visible = true;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible && !document.hidden) start(); else stop(); }).observe(scene);
+    }
+    document.addEventListener("visibilitychange", function () { if (document.hidden) stop(); else if (visible) start(); });
+    setTimeout(function () { scene.classList.add("is-live"); start(); }, document.documentElement.classList.contains("is-intro") ? 1800 : 300);
+  }
+
+  /* Depth: the photograph and the car's light lean away from the pointer */
+  function initDepth(scene) {
+    if (reduceMotion || !window.matchMedia("(pointer: fine)").matches) return;
+    var pending = false, px = 0, py = 0;
+    scene.addEventListener("pointermove", function (e) {
+      var r = scene.getBoundingClientRect();
+      px = ((e.clientX - r.left) / r.width) * 2 - 1;
+      py = ((e.clientY - r.top) / r.height) * 2 - 1;
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () {
+        scene.style.setProperty("--px", px.toFixed(3));
+        scene.style.setProperty("--py", py.toFixed(3));
+        scene.style.setProperty("--gx", (72 + px * 14).toFixed(1) + "%");
+        pending = false;
+      });
+    });
+    scene.addEventListener("pointerleave", function () {
+      scene.style.setProperty("--px", 0); scene.style.setProperty("--py", 0); scene.style.setProperty("--gx", "72%");
+    });
   }
 
   /* ---------- Fleet page ---------- */
@@ -429,7 +569,7 @@
           '<span class="lot__prices">' +
             (c.selfDriveOnly ? "" : "<span><strong>" + rub(c.perHour) + "</strong> / час с водителем</span>") +
             "<span><strong>" + rub(c.perDay) + "</strong> / сутки без водителя</span></span>" +
-          (c.selfDriveOnly ? '<span class="box__flag">только без водителя</span>' : "") +
+          (c.selfDriveOnly ? '<span class="box__flag">Только без водителя</span>' : "") +
           "</span></a>";
       }).join("");
       initDoors(lots);
@@ -445,7 +585,7 @@
     var sel = loadSel();
     var car = carById(sel.car);
     var q = quote(car, sel.mode, sel.amount, sel.time);
-    setBar(car.name + ", " + humanDate(sel.date) + " в " + sel.time, rub(q.total), bookingHref(sel));
+    setBar(car.short + ", " + humanDate(sel.date) + " в " + sel.time, rub(q.total), bookingHref(sel));
   }
 
   /* ---------- Car page ---------- */
@@ -517,7 +657,7 @@
       setText($("[data-line=deposit]", panel), sel.mode === "self" ? rub(car.deposit) : "не нужен");
       setText($("[data-total]", panel), rub(q.total));
       $("#cp-go").href = bookingHref(sel);
-      setBar(car.name + ", " + humanDate(sel.date) + " в " + sel.time, rub(q.total), bookingHref(sel));
+      setBar(car.short + ", " + humanDate(sel.date) + " в " + sel.time, rub(q.total), bookingHref(sel));
       saveSel(sel);
     }
     panel.addEventListener("change", update);
@@ -592,11 +732,11 @@
       setText($("[data-line=mode]", summary), m === "self" ? "без водителя" : "с водителем");
       setText($("[data-line=when]", summary), date.value ? humanDate(date.value) + (time.value ? ", " + time.value : "") : "-");
       setText($("[data-line=amount]", summary), q.unit);
-      setText($("[data-line=address]", summary), $("#b-address").value.trim() || "-");
+      setText($("[data-line=address]", summary), $("#b-address").value.trim() || "укажите в форме");
       setText($("[data-line=deposit]", summary), m === "self" ? rub(c.deposit) : "не нужен");
       setText($("[data-total]", summary), rub(q.total));
       $("[data-night]", summary).hidden = !q.night;
-      setBar(c.name + (time.value ? ", " + time.value : ""), rub(q.total));
+      setBar(c.short + (time.value ? ", " + humanDate(date.value) + " в " + time.value : ""), rub(q.total));
 
       saveSel({ car: c.id, mode: m, date: date.value, time: time.value, amount: +amount.value });
       store("set", "karetny-draft", {

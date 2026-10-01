@@ -26,7 +26,7 @@ colors:
   tint-dawn: "#e8743b"
   tint-m760li: "#5b8cff"
   tint-panamera: "#ff4d4d"
-  tint-g63: "#b5c97a"
+  tint-g63: "#aebbc8"
   tint-range-rover: "#c9915e"
   tint-huracan: "#ff3b47"
   tint-911-gt3: "#5fd4c2"
@@ -145,14 +145,14 @@ The world is dark only, by design: the brief is a night service and every photog
 - **Error** `#ff9a8a` on a 8% error tint, with a 1px full border.
 
 ### Car lights (secondary, per car)
-Each car carries its own light colour taken from one of its details (`tint` in data.js): Wraith starlight `#8fb4e8`, Dawn mandarin leather `#e8743b`, M760Li laser headlights `#5b8cff`, Panamera light bar `#ff4d4d`, G 63 `#b5c97a`, Range Rover tan leather `#c9915e`, Huracán red rims `#ff3b47`, 911 GT3 `#5fd4c2`. Set as `--tint` (a registered `@property`, so it transitions), it spills as a radial glow into the home scene and the car hero, edges the car's box, lot, order panel, booking preview and mobile bar, and appears as a small dot with its name («Кожа Mandarin»). It never colours text.
+Each car carries its own light colour taken from one of its details (`tint` in data.js): Wraith starlight `#8fb4e8`, Dawn mandarin leather `#e8743b`, M760Li laser headlights `#5b8cff`, Panamera light bar `#ff4d4d`, G 63 platinum `#aebbc8`, Range Rover tan leather `#c9915e`, Huracán red rims `#ff3b47`, 911 GT3 `#5fd4c2`. Set as `--tint` (a registered `@property`, so it transitions), it spills as a radial glow into the home scene and the car hero, edges the car's box, lot, order panel, booking preview and mobile bar, and appears as a small dot with its name («Кожа Mandarin»). It never colours text.
 
 ### Blue hour
 `#101a2e` to `#16233d` band behind the evening timeline, with its own text ramp (`#b9c2d6`, `#98a3bb`, dim `#56617a` for not-yet-lit times). Self-drive is marked with `#6fa8ff`, driver with sodium.
 
 ### Named Rules
 - **Sodium is light.** It colours numerals, thin edges and states. It never fills a button, a card or a section.
-- **One night.** Every raster is graded the same way (upper frame darkened, cool shadows, warm highlights, plates blurred). A photograph that still reads as daylight is cropped or replaced, never shipped as is.
+- **One grade.** Every raster gets the same treatment: upper frame darkened, neutral whites, saturation 0.82, plates replaced by a soft smudge. The night itself comes from the CSS shade and the car's light, not from muddy pixels.
 
 ## Typography
 
@@ -185,22 +185,25 @@ All corners are square (0px), including buttons, inputs, chips, panels and the b
 Primary: ivory fill, lacquer text, 52px, arrow icon nudges 3px on hover. Line: transparent with a line-strong border that turns ivory on hover. Icon buttons are 48-52px squares. One primary action per viewport; «Забронировать» is the only booking label.
 
 ### Chips
-Bordered rectangles 44-48px tall; checked state is a sodium border (and inset underline on day and filter chips).
+Bordered rectangles 44-48px tall. One selected state for every choice control (segmented switch, day, chip, filter): asphalt-2 fill, ivory text and a 2px sodium inset underline.
 
 ### Cards / Containers
 There are no cards. Cars are shown as photographic boxes (home row, 3:4) and lots (garage, 7/5 grid) with the name and prices set over a bottom gradient. Order and summary panels are asphalt blocks with a sodium top edge.
 
 ### Inputs / Fields
-Night fill, line-strong border, label above, hint and error below, sodium focus border plus 1px ring, sodium caret. Errors link to fields with `aria-describedby` and are summarised at the top of the form.
+Night fill, line-strong border, label above, hint and error below, sodium focus border and 1px outline, sodium caret. Date and time fields open their native picker from the whole field. Checkboxes are custom 22px squares with a sodium tick; textareas do not show a resize grip. Errors link to fields with `aria-describedby` and are summarised at the top of the form.
 
 ### Navigation
 72px header: wordmark, «Гараж», «Условия», phone, a line button «Забронировать» (hidden on the home scene, where the scene's own button leads). Transparent over the home photograph, lacquer with a hairline elsewhere.
 
 ### Motion
+- **First visit intro (once per session):** the page opens black; two cool-white headlamps ignite exactly where the selected car's lamps sit in the photo (per-car `lamps` coordinates mapped through object-fit: cover), then the scene fades up and the time dial winds from 00:00 to the pickup time like a mechanical clock.
+- **Light trails:** a canvas of long-exposure streaks (white headlights to the right, red tail lights to the left, a few in sodium and the car's tint) runs on the road band behind the car, masked away from the type and placed under the scene shade; paused off screen and in hidden tabs.
+- **Depth:** on fine pointers the photograph leans away from the cursor (up to 14 px) and the car's light follows it.
 - **Lights on:** the scene and car hero photographs come up from dark (brightness 0.15 to 1, 1.5 s); switching car drives the new photo in 3% from the arrow's side while the scene glow cross-fades to the new car's tint.
 - **Garage doors:** each box and lot opens as a door panel rolling up (translateY -101%, 1.05 s, 110 ms stagger) when it scrolls into view; the photo settles from scale 1.1.
 - **Evening:** the five times light from dim blue to sodium one after another (380 ms apart) when the paragraph is read.
-- **Clock:** the colon in the time dial ticks every second, paused off screen.
+- **Clock:** the colon in the time dial breathes (opacity 1 to 0.55, 3.2 s), paused off screen.
 - **Request number:** arrives as a split-flap board.
 - **Primary button:** a faint sodium headlight sweep on hover.
 - Reduced motion keeps colour and opacity changes, drops travel, scale, doors, sweep and the tick.

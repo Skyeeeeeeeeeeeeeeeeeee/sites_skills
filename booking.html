@@ -10,7 +10,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230d0e10'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23f2a541'/%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/unbounded-cyrillic-300-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css?v=6">
 <script>document.documentElement.classList.add("js");</script>
 </head>
 <body class="has-bar">
@@ -28,7 +28,7 @@
   </div>
 </header>
 <div class="mobile-menu" id="mobile-menu" inert>
-  <a href="index.html">Подача</a>
+  <a href="index.html">Главная</a>
   <a href="fleet.html">Гараж</a>
   <a href="terms.html">Условия</a>
   <a href="booking.html">Забронировать</a>
@@ -37,9 +37,9 @@
 <main id="main">
   <div class="container">
     <div class="page-head" data-before-submit>
-      <nav class="crumbs" aria-label="Хлебные крошки"><a href="index.html">Подача</a><span aria-hidden="true">/</span><span aria-current="page">Бронирование</span></nav>
+      <nav class="crumbs" aria-label="Хлебные крошки"><a href="index.html">Главная</a><span aria-hidden="true">/</span><span aria-current="page">Бронирование</span></nav>
       <h1 class="display">Заявка на подачу</h1>
-      <p class="lead">Менеджер перезвонит в течение 15 минут. Все поля обязательны, кроме пожеланий.</p>
+      <p class="lead">Менеджер перезвонит в течение 15 минут и уточнит детали.</p>
     </div>
 
     <div class="booking">
@@ -78,12 +78,12 @@
             <div class="grid-3">
               <div class="field" data-field="date">
                 <label class="field__label" for="b-date">Дата</label>
-                <input class="input" type="date" id="b-date" name="date" required>
+                <input class="input" type="date" id="b-date" name="date" required lang="ru">
                 <p class="field__error" role="alert"></p>
               </div>
               <div class="field" data-field="time">
                 <label class="field__label" for="b-time">Время подачи</label>
-                <input class="input" type="time" id="b-time" name="time" step="900" required>
+                <input class="input" type="time" id="b-time" name="time" step="900" required lang="ru">
                 <p class="field__error" role="alert"></p>
               </div>
               <div class="field">
@@ -144,7 +144,7 @@
               </div>
             </div>
             <div class="field">
-              <label class="field__label" for="b-comment">Пожелания</label>
+              <label class="field__label" for="b-comment">Пожелания <span class="field__opt">необязательно</span></label>
               <textarea class="textarea" id="b-comment" name="comment" placeholder="Номер рейса, детское кресло, табличка с именем"></textarea>
             </div>
           </div>
@@ -186,7 +186,7 @@
 <div class="bar" role="region" aria-label="Быстрая бронь">
   <div class="bar__info"><span class="bar__what">Выберите машину</span><span class="bar__total" aria-live="polite">-</span></div>
   <a class="icon-btn" data-phone href="tel:+74951824719" aria-label="Позвонить в гараж"><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg></a>
-  <button class="btn" type="submit" form="booking-form">Отправить</button>
+  <button class="btn" type="submit" form="booking-form">Отправить заявку</button>
 </div>
 
 <footer class="site-footer">
@@ -202,11 +202,11 @@
         <a href="mailto:garage@karetny.ru">garage@karetny.ru</a>
       </nav>
     </div>
-    <p class="site-footer__legal">Каретный Ряд, 5/10, стр. 2, Москва. © <span data-year>2026</span> ООО «Каретный двор». Цены и автопарк на сайте демонстрационные.</p>
+    <p class="site-footer__legal">Каретный Ряд, 5/10, стр. 2, Москва. © <span data-year>2026</span> ООО «Каретный двор».</p>
   </div>
 </footer>
-<script src="assets/js/icons.js"></script>
-<script src="assets/js/data.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/icons.js?v=6"></script>
+<script src="assets/js/data.js?v=6"></script>
+<script src="assets/js/main.js?v=6"></script>
 </body>
 </html>

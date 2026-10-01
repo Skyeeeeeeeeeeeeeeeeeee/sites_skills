@@ -2,12 +2,13 @@
 
 All photos are Unsplash stock (https://unsplash.com/license: free to use, attribution appreciated), downloaded from images.unsplash.com at 2400 px wide.
 
-Every file was then processed the same way with ffmpeg (a uniform "night" grade so stock reads as one shoot):
+Every file was then processed the same way with ffmpeg:
 
-- cropped to 16:10 (911-gt3 and range-rover cropped tighter around the car) and scaled to 1920x1200 (garage.jpg keeps its 1.72 ratio);
-- licence plates and a photographer's sticker blurred (boxblur over the plate region);
-- the upper frame darkened progressively (sky and background), contrast up, saturation 0.5, highlights crushed;
-- shadows pushed cool, highlights pushed warm (sodium streetlight), vignette.
+- cropped to 16:10 (911-gt3 and range-rover cropped tighter around the car; garage.jpg cropped to the car's rear lights) and scaled to 1920x1200 with Lanczos;
+- licence plates and a photographer's sticker replaced by a soft smudge (area-downscaled and blurred patch);
+- the upper frame darkened progressively (sky and background) so stock settings recede;
+- neutral whites, saturation 0.82, gentle contrast, slightly cool shadows, soft vignette; exported at JPEG quality 3.
+The night mood is completed in CSS (scene shade and the per-car light glow), not baked into the pixels.
 
 | File | Model shown | Unsplash source |
 |---|---|---|

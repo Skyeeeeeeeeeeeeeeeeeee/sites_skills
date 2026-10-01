@@ -10,7 +10,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230d0e10'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23f2a541'/%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/unbounded-cyrillic-300-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css?v=6">
 <script>document.documentElement.classList.add("js");</script>
 </head>
 <body class="has-bar">
@@ -28,7 +28,7 @@
   </div>
 </header>
 <div class="mobile-menu" id="mobile-menu" inert>
-  <a href="index.html">Подача</a>
+  <a href="index.html">Главная</a>
   <a href="fleet.html">Гараж</a>
   <a href="terms.html">Условия</a>
   <a href="booking.html">Забронировать</a>
@@ -40,7 +40,7 @@
       <img id="car-hero-img" src="assets/cars/wraith.jpg" alt="" width="1920" height="1200" fetchpriority="high">
       <div class="car-hero__glow" aria-hidden="true"></div>
       <div class="container car-hero__body">
-        <nav class="crumbs" aria-label="Хлебные крошки"><a href="index.html">Подача</a><span aria-hidden="true">/</span><a href="fleet.html">Гараж</a><span aria-hidden="true">/</span><span aria-current="page" data-car-crumb>Автомобиль</span></nav>
+        <nav class="crumbs" aria-label="Хлебные крошки"><a href="index.html">Главная</a><span aria-hidden="true">/</span><a href="fleet.html">Гараж</a><span aria-hidden="true">/</span><span aria-current="page" data-car-crumb>Автомобиль</span></nav>
         <h1 class="display" data-car-name>Автомобиль</h1>
         <p class="car-hero__meta" data-car-meta></p>
       </div>
@@ -63,8 +63,8 @@
             <label><input type="radio" name="cp-mode" value="self"><span>Без водителя</span></label>
           </div>
           <div class="grid-2">
-            <div class="field"><label class="field__label" for="cp-date">Дата</label><input class="input" type="date" id="cp-date"></div>
-            <div class="field"><label class="field__label" for="cp-time">Время</label><input class="input" type="time" id="cp-time" step="900"></div>
+            <div class="field"><label class="field__label" for="cp-date">Дата</label><input class="input" type="date" id="cp-date" lang="ru"></div>
+            <div class="field"><label class="field__label" for="cp-time">Время</label><input class="input" type="time" id="cp-time" step="900" lang="ru"></div>
             <div class="field full"><label class="field__label" for="cp-amount" data-amount-label>Продолжительность</label><select class="select" id="cp-amount"></select></div>
           </div>
           <p class="field__error" id="cp-error" role="alert" hidden style="display:block"></p>
@@ -81,7 +81,7 @@
     </div>
     <section class="section container" aria-labelledby="more-title">
       <div class="section-head">
-        <h2 class="h2" id="more-title">Другие боксы</h2>
+        <h2 class="h2" id="more-title">Ещё в гараже</h2>
         <div class="row-arrows">
           <button class="icon-btn" type="button" data-row-prev aria-controls="garage-row" aria-label="Прокрутить назад"><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg></button>
           <button class="icon-btn" type="button" data-row-next aria-controls="garage-row" aria-label="Прокрутить вперёд"><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
@@ -111,11 +111,11 @@
         <a href="mailto:garage@karetny.ru">garage@karetny.ru</a>
       </nav>
     </div>
-    <p class="site-footer__legal">Каретный Ряд, 5/10, стр. 2, Москва. © <span data-year>2026</span> ООО «Каретный двор». Цены и автопарк на сайте демонстрационные.</p>
+    <p class="site-footer__legal">Каретный Ряд, 5/10, стр. 2, Москва. © <span data-year>2026</span> ООО «Каретный двор».</p>
   </div>
 </footer>
-<script src="assets/js/icons.js"></script>
-<script src="assets/js/data.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/icons.js?v=6"></script>
+<script src="assets/js/data.js?v=6"></script>
+<script src="assets/js/main.js?v=6"></script>
 </body>
 </html>
