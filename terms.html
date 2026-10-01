@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0e0f11">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%23f2a541%22/%3E%3Ctext x=%2216%22 y=%2223%22 font-family=%22Arial%22 font-weight=%22900%22 font-size=%2220%22 text-anchor=%22middle%22 fill=%22%2317110a%22%3EК%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/montserrat-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css?v=27">
+<link rel="stylesheet" href="assets/css/style.css?v=34">
 <script>document.documentElement.classList.remove("no-js");</script>
 </head>
 <body>
@@ -138,9 +138,10 @@
         </div>
       </div>
       <form class="js-lead" novalidate>
-        <div class="field"><label for="lead-name">Имя</label><input id="lead-name" name="name" autocomplete="name" placeholder="Как к вам обращаться"><span class="field__error">Напишите имя</span></div>
-        <div class="field"><label for="lead-phone">Телефон</label><input id="lead-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" data-phone-mask><span class="field__error">Проверьте номер: нужно 10 цифр после +7</span></div>
+        <div class="field"><label for="lead-name">Имя<span class="req" aria-hidden="true">*</span></label><input id="lead-name" name="name" autocomplete="name" required placeholder="Как к вам обращаться"><span class="field__error">Напишите имя</span></div>
+        <div class="field"><label for="lead-phone">Телефон<span class="req" aria-hidden="true">*</span></label><input id="lead-phone" name="phone" type="tel" required inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" data-phone-mask><span class="field__error">Проверьте номер: нужно 10 цифр после +7</span></div>
         <label class="check"><input type="checkbox" name="agree" checked><span>Согласен на обработку персональных данных по <a href="terms.html#privacy">политике конфиденциальности</a></span></label>
+        <p class="field__error">Без согласия мы не сможем перезвонить: отметьте галочку</p>
         <button class="btn btn--dark" type="submit">Перезвоните мне <svg class="icon icon--go" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
         <div class="done" role="status"><b>Заявка принята</b><span>Номер <code></code>. Перезвоним в течение 5 минут.</span></div>
       </form>
@@ -157,11 +158,11 @@
         <p>Собственный парк из 22 автомобилей. С водителем и без, от трёх часов до нескольких месяцев.</p>
       </div>
       <div>
-        <h4>Автопарк</h4>
+        <h2 class="footer__title">Автопарк</h2>
         <ul><li><a href="fleet.html">Все автомобили</a></li><li><a href="fleet.html?cls=executive">Представительские</a></li><li><a href="fleet.html?cls=suv">Внедорожники</a></li><li><a href="fleet.html?cls=sport">Спорткары</a></li><li><a href="fleet.html?cls=open">Кабриолеты</a></li></ul>
       </div>
       <div>
-        <h4>Клиентам</h4>
+        <h2 class="footer__title">Клиентам</h2>
         <ul>
           <li><a href="terms.html">Условия аренды</a></li>
           <li><a href="fleet.html?driver=1">Аренда с водителем</a></li>
@@ -171,7 +172,7 @@
         </ul>
       </div>
       <div>
-        <h4>Контакты</h4>
+        <h2 class="footer__title">Контакты</h2>
         <ul>
           <li><a class="footer__phone" href="tel:+74951824719">+7 (495) 182-47-19</a></li>
           <li><a href="mailto:garage@karetny.ru">garage@karetny.ru</a></li>
@@ -192,8 +193,8 @@
   <a class="btn" href="booking.html" data-mbar-book>Забронировать</a>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="assets/js/icons.js?v=27"></script>
-<script src="assets/js/data.js?v=27"></script>
-<script src="assets/js/main.js?v=27"></script>
+<script src="assets/js/icons.js?v=34"></script>
+<script src="assets/js/data.js?v=34"></script>
+<script src="assets/js/main.js?v=34"></script>
 </body>
 </html>

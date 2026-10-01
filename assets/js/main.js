@@ -56,6 +56,12 @@
   function addDays(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
   function daysBetween(a, b) { if (!a || !b) return 1; return Math.max(1, Math.ceil((b - a) / DAY - 0.01)); }
   function fmtDate(d) { return d.toLocaleDateString("ru-RU", { day: "numeric", month: "long" }); }
+  /* Responsive WebP: 800w for cards, 1600w for wide views. */
+  function imgHTML(c, sizes, eager) {
+    var base = "assets/cars/" + c.photo;
+    return '<img src="' + base + '-1600.webp" srcset="' + base + '-800.webp 800w, ' + base + '-1600.webp 1600w" sizes="' + sizes + '" width="1600" height="1000" alt="' + esc(c.name) + '"' +
+      (eager ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async" style="object-position:' + c.pos + '">';
+  }
   function popRank(c) { return c.badges.indexOf("hit") >= 0 ? 0 : c.badges.indexOf("new") >= 0 ? 1 : 2; }
   function byPop(list) { return list.map(function (c, i) { return [c, i]; }).sort(function (a, b) { return popRank(a[0]) - popRank(b[0]) || a[1] - b[1]; }).map(function (x) { return x[0]; }); }
 
@@ -89,6 +95,16 @@
     $$(".reveal:not(.is-in)", root).forEach(function (el) { if (io) io.observe(el); else el.classList.add("is-in"); });
   }
 
+  /* Keep Tab inside an open dialog. */
+  function trapFocus(container, e) {
+    if (e.key !== "Tab") return;
+    var items = $$('a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select, textarea, summary', container).filter(function (el) { return el.offsetParent !== null; });
+    if (!items.length) return;
+    var first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
   /* ---------- Header, drawer, counts ---------- */
   function initHeader() {
     $$("[data-drop]").forEach(function (drop) {
@@ -113,7 +129,10 @@
       opener.addEventListener("click", function () { setDrawer(true); });
       $$("[data-close-drawer]", drawer).forEach(function (b) { b.addEventListener("click", function () { setDrawer(false); }); });
       $$(".drawer__nav a", drawer).forEach(function (a) { a.addEventListener("click", function () { if (drawer.classList.contains("is-open")) setDrawer(false); }); });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && drawer.classList.contains("is-open")) setDrawer(false); });
+      document.addEventListener("keydown", function (e) {
+        if (!drawer.classList.contains("is-open")) return;
+        if (e.key === "Escape") setDrawer(false); else trapFocus($(".drawer__panel", drawer), e);
+      });
     }
 
     var counts = { all: K.fleet.length };
@@ -144,7 +163,7 @@
   function cardHTML(c, i) {
     var href = "car.html?id=" + c.id;
     return '<article class="card reveal" style="--i:' + (i % 3) + '">' +
-      '<div class="card__media">' + badgesHTML(c) + '<img src="assets/cars/' + c.photo + '" alt="' + esc(c.name) + '" loading="lazy" decoding="async" style="object-position:' + c.pos + '"></div>' +
+      '<div class="card__media">' + badgesHTML(c) + imgHTML(c, "(max-width: 640px) 100vw, (max-width: 1080px) 50vw, 430px") + "</div>" +
       '<div class="card__body">' +
         '<div><h3 class="card__title"><a href="' + href + '">' + esc(c.name) + '</a></h3><p class="card__meta">' + c.year + " · " + esc(K.classes[c.cls]) + "</p></div>" +
         priceHTML(c) + chipsHTML(c) +
@@ -156,9 +175,9 @@
     var href = "car.html?id=" + c.id;
     var range = rub(fromPrice(c)).replace(" ₽", "") + " – " + rub(c.perDay);
     return '<article class="row reveal">' +
-      '<div class="card__media">' + badgesHTML(c) + '<img src="assets/cars/' + c.photo + '" alt="' + esc(c.name) + '" loading="lazy" decoding="async" style="object-position:' + c.pos + '"></div>' +
+      '<div class="card__media">' + badgesHTML(c) + imgHTML(c, "(max-width: 1080px) 100vw, 480px") + "</div>" +
       '<div class="row__body">' +
-        '<div><h3 class="card__title"><a href="' + href + '">' + esc(c.name) + '</a></h3><p class="card__meta">' + c.year + " · " + esc(c.color) + "</p></div>" +
+        '<div><h2 class="card__title"><a href="' + href + '">' + esc(c.name) + '</a></h2><p class="card__meta">' + c.year + " · " + esc(c.color) + "</p></div>" +
         '<p class="row__desc">' + esc(c.summary) + "</p>" + chipsHTML(c, true) +
         '<div class="row__price">' + (c.oldPerDay ? '<s class="muted">' + rub(c.oldPerDay) + "</s>" : "") + "<b>" + range + "</b><span>/ сутки</span></div>" +
         (c.perHour ? '<p class="note">С водителем от ' + rub(c.perHour) + " в час, минимум 3 часа</p>" : "") +
@@ -298,11 +317,16 @@
     function setFilters(open) {
       filters.classList.toggle("is-open", open); scrim.classList.toggle("is-shown", open);
       document.body.classList.toggle("is-locked", open); opener.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) { filters.setAttribute("role", "dialog"); filters.setAttribute("aria-modal", "true"); var f = $(".filters__head button", filters); if (f) f.focus(); }
+      else { filters.removeAttribute("role"); filters.removeAttribute("aria-modal"); if (window.matchMedia("(max-width: 980px)").matches) opener.focus(); }
     }
     opener.addEventListener("click", function () { setFilters(true); });
     scrim.addEventListener("click", function () { setFilters(false); });
     $$("[data-close-filters]").forEach(function (b) { b.addEventListener("click", function () { setFilters(false); }); });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && filters.classList.contains("is-open")) setFilters(false); });
+    document.addEventListener("keydown", function (e) {
+      if (!filters.classList.contains("is-open")) return;
+      if (e.key === "Escape") setFilters(false); else trapFocus(filters, e);
+    });
 
     apply();
   }
@@ -317,7 +341,7 @@
     $("#car-crumb").textContent = c.name;
     $("#car-title").textContent = "Аренда " + c.name;
     $("#car-from").innerHTML = "от <b>" + rub(fromPrice(c)) + "</b> в сутки" + (c.perHour ? " · с водителем от " + rub(c.perHour) + " в час" : "");
-    gallery.innerHTML = badgesHTML(c) + '<img src="assets/cars/' + c.photo + '" alt="' + esc(c.name) + '" style="object-position:' + c.pos + '">';
+    gallery.innerHTML = badgesHTML(c) + imgHTML(c, "(max-width: 1000px) 100vw, 60vw", true);
     $("#car-specs").innerHTML = [
       specHTML("engine", "Двигатель", esc(c.engine)), specHTML("gauge", "Мощность", c.power + " л.с."),
       specHTML("timer", "0–100 км/ч", String(c.accel).replace(".", ",") + " с"), specHTML("road-horizon", "Макс. скорость", c.top + " км/ч"),
@@ -385,7 +409,46 @@
     input.addEventListener("blur", function () { if (input.value.replace(/\D/g, "").length <= 1) input.value = ""; });
   }
   function phoneOk(v) { return v.replace(/\D/g, "").length === 11; }
-  function setInvalid(field, bad) { if (field) field.classList.toggle("is-invalid", !!bad); }
+  function setInvalid(field, bad) {
+    if (!field) return;
+    field.classList.toggle("is-invalid", !!bad);
+    var input = $("input, select, textarea", field) || (field.matches("input") ? field : null);
+    if (input) { if (bad) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid"); }
+  }
+  function setCheckInvalid(label, bad) {
+    label.classList.toggle("is-invalid", !!bad);
+    var input = $("input", label); if (bad) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid");
+  }
+  /* Connect every inline error to its control, and validate a field when the visitor leaves it. */
+  var rules = {
+    name: function (v) { return !!v.trim(); },
+    phone: phoneOk,
+    address: function (v) { return !!v.trim(); }
+  };
+  function wireFields() {
+    var n = 0;
+    $$(".field__error").forEach(function (err) {
+      var prev = err.previousElementSibling;
+      var control = prev && prev.matches(".check") ? $("input", prev) : $("input, select, textarea", err.parentElement);
+      if (!control) return;
+      err.id = err.id || "err-" + (control.id || "f") + "-" + (n++);
+      var ids = (control.getAttribute("aria-describedby") || "").split(" ").filter(Boolean);
+      if (ids.indexOf(err.id) < 0) ids.push(err.id);
+      control.setAttribute("aria-describedby", ids.join(" "));
+      var rule = rules[control.name];
+      if (rule) {
+        control.addEventListener("blur", function () { if (control.value.replace(/[+7\s()_-]/g, "") || control.closest(".is-invalid")) setInvalid(control.closest(".field"), !rule(control.value)); });
+        control.addEventListener("input", function () { if (control.closest(".is-invalid") && rule(control.value)) setInvalid(control.closest(".field"), false); });
+      }
+      if (control.type === "checkbox") control.addEventListener("change", function () { if (control.checked) setCheckInvalid(control.closest(".check"), false); });
+    });
+  }
+  function submitting(btn, done) {
+    var html = btn.innerHTML;
+    btn.classList.add("is-loading"); btn.setAttribute("aria-disabled", "true");
+    btn.firstChild.textContent = "Отправляем ";
+    setTimeout(function () { btn.classList.remove("is-loading"); btn.removeAttribute("aria-disabled"); btn.innerHTML = html; done(); }, reduceMotion ? 200 : 700);
+  }
   function requestNo() { return "К-" + String(Date.now()).slice(-6); }
 
   function initLeadForms() {
@@ -396,14 +459,17 @@
         var name = form.elements.name, phone = form.elements.phone, agree = form.elements.agree;
         var badName = !name.value.trim(), badPhone = !phoneOk(phone.value), badAgree = !agree.checked;
         setInvalid(name.closest(".field"), badName); setInvalid(phone.closest(".field"), badPhone);
-        agree.closest(".check").classList.toggle("is-invalid", badAgree);
+        setCheckInvalid(agree.closest(".check"), badAgree);
         if (badName) { name.focus(); return; }
         if (badPhone) { phone.focus(); return; }
-        if (badAgree) { toast("Нужно согласие на обработку данных"); return; }
-        var no = requestNo();
-        $$(".field, .check, button[type=submit]", form).forEach(function (el) { el.hidden = true; });
-        var done = $(".done", form); $("code", done).textContent = no; done.classList.add("is-shown");
-        store.set("karetny-lead", { no: no, at: Date.now() });
+        if (badAgree) { agree.focus(); return; }
+        submitting($("button[type=submit]", form), function () {
+          var no = requestNo();
+          $$(".field, .check, .field__error, button[type=submit]", form).forEach(function (el) { el.hidden = true; });
+          var done = $(".done", form); $("code", done).textContent = no; done.classList.add("is-shown");
+          done.setAttribute("tabindex", "-1"); done.focus();
+          store.set("karetny-lead", { no: no, at: Date.now() });
+        });
       });
     });
   }
@@ -441,7 +507,7 @@
       var mode = ($("#b-mode input:checked") || {}).value;
       var q = quote(c, a, b, mode, DELIVERY[place.value]);
       $("#b-address-field").hidden = place.value === "office";
-      $("#s-media").innerHTML = '<img src="assets/cars/' + c.photo + '" alt="' + esc(c.name) + '" style="object-position:' + c.pos + '">';
+      if ($("#s-media").getAttribute("data-car") !== c.id) { $("#s-media").innerHTML = imgHTML(c, "(max-width: 1000px) 100vw, 480px", true); $("#s-media").setAttribute("data-car", c.id); }
       $("#s-name").textContent = c.name;
       $("#s-facts").innerHTML =
         "<div><dt>Получение</dt><dd>" + (a ? fmtDate(a) + ", " + $("#b-from-time").value : "—") + "</dd></div>" +
@@ -471,7 +537,7 @@
       check("b-name", !form.elements.name.value.trim(), "Имя");
       check("b-phone", !phoneOk(form.elements.phone.value), "Телефон");
       var agree = $("#b-agree");
-      $("#b-agree-wrap").classList.toggle("is-invalid", !agree.checked);
+      setCheckInvalid($("#b-agree-wrap"), !agree.checked);
       if (!agree.checked) errs.push(["b-agree", "Согласие на обработку данных"]);
       var box = $("#form-errors");
       if (errs.length) {
@@ -480,6 +546,9 @@
         return;
       }
       box.classList.remove("is-shown");
+      submitting($("#b-submit"), function () { finish(a, b); });
+    });
+    function finish(a, b) {
       var q = calc(), c = car(), no = requestNo();
       form.hidden = true;
       $("#done-no").textContent = no;
@@ -488,7 +557,7 @@
       store.set("karetny-last", { no: no, car: c.id, at: Date.now() });
       store.set("karetny-draft", null);
       window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
-    });
+    }
     $("#form-errors").addEventListener("click", function (e) {
       var a = e.target.closest("a"); if (!a) return;
       e.preventDefault(); var el = $(a.getAttribute("href")); if (el) el.focus();
@@ -499,11 +568,19 @@
 
   /* ---------- Mobile bar tuck: hide while the page's own booking button is visible ---------- */
   function initBarTuck() {
-    var bar = $("#mbar"), target = $("#c-book") || $(".lead-band form");
-    if (!bar || !target || !("IntersectionObserver" in window)) return;
-    new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { bar.classList.toggle("is-tucked", e.isIntersecting); });
-    }).observe(target);
+    var bar = $("#mbar");
+    var targets = $$("#c-book, .hero__actions, .lead-band form");
+    if (!bar || !targets.length || !("IntersectionObserver" in window)) return;
+    var visible = [];
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var i = visible.indexOf(e.target);
+        if (e.isIntersecting && i < 0) visible.push(e.target);
+        if (!e.isIntersecting && i >= 0) visible.splice(i, 1);
+      });
+      bar.classList.toggle("is-tucked", visible.length > 0);
+    });
+    targets.forEach(function (t) { io.observe(t); });
   }
 
   initHeader();
@@ -512,6 +589,7 @@
   initCar();
   initBooking();
   initLeadForms();
+  wireFields();
   initBarTuck();
   reveal(document);
 })();

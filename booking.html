@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0e0f11">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%23f2a541%22/%3E%3Ctext x=%2216%22 y=%2223%22 font-family=%22Arial%22 font-weight=%22900%22 font-size=%2220%22 text-anchor=%22middle%22 fill=%22%2317110a%22%3EК%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/montserrat-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css?v=27">
+<link rel="stylesheet" href="assets/css/style.css?v=34">
 <script>document.documentElement.classList.remove("no-js");</script>
 </head>
 <body>
@@ -84,25 +84,27 @@
           <div class="field"><label for="b-car">Автомобиль</label><select id="b-car" name="car"></select></div>
           <div class="seg" id="b-mode"><label><input type="radio" name="mode" value="self" checked>Без водителя</label><label><input type="radio" name="mode" value="driver">С водителем</label></div>
           <div class="form-grid form-grid--keep">
-            <div class="field"><label for="b-from">Дата получения</label><input id="b-from" name="from" type="date" required><span class="field__error">Выберите дату не раньше сегодняшней</span></div>
+            <div class="field"><label for="b-from">Дата получения<span class="req" aria-hidden="true">*</span></label><input id="b-from" name="from" type="date" required><span class="field__error">Выберите дату не раньше сегодняшней</span></div>
             <div class="field"><label for="b-from-time">Время</label><input id="b-from-time" name="fromTime" type="time" step="900" value="12:00"></div>
-            <div class="field"><label for="b-to">Дата возврата</label><input id="b-to" name="to" type="date" required><span class="field__error">Возврат должен быть позже получения</span></div>
+            <div class="field"><label for="b-to">Дата возврата<span class="req" aria-hidden="true">*</span></label><input id="b-to" name="to" type="date" required><span class="field__error">Возврат должен быть позже получения</span></div>
             <div class="field"><label for="b-to-time">Время</label><input id="b-to-time" name="toTime" type="time" step="900" value="12:00"></div>
           </div>
           <div class="field"><label for="b-place">Где передать машину</label><select id="b-place" name="place"><option value="office">Заберу сам на Каретном Ряду (бесплатно)</option><option value="garden">Доставка в пределах Садового кольца (бесплатно)</option><option value="mkad">Доставка по Москве в пределах МКАД (3 000 ₽)</option><option value="airport">Доставка в аэропорт (5 000 ₽)</option></select></div>
-          <div class="field" id="b-address-field" hidden><label for="b-address">Адрес</label><input id="b-address" name="address" autocomplete="street-address" placeholder="Улица, дом, подъезд или терминал"><span class="field__error">Укажите адрес доставки</span></div>
+          <div class="field" id="b-address-field" hidden><label for="b-address">Адрес<span class="req" aria-hidden="true">*</span></label><input id="b-address" required name="address" autocomplete="street-address" placeholder="Улица, дом, подъезд или терминал"><span class="field__error">Укажите адрес доставки</span></div>
         </fieldset>
         <fieldset class="fieldset">
           <legend><span>2</span>Контакты</legend>
           <div class="form-grid">
-            <div class="field"><label for="b-name">Имя</label><input id="b-name" name="name" autocomplete="name" required placeholder="Как к вам обращаться"><span class="field__error">Напишите имя</span></div>
-            <div class="field"><label for="b-phone">Телефон</label><input id="b-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="+7 (___) ___-__-__" data-phone-mask><span class="field__error">Проверьте номер: нужно 10 цифр после +7</span></div>
+            <div class="field"><label for="b-name">Имя<span class="req" aria-hidden="true">*</span></label><input id="b-name" name="name" autocomplete="name" required placeholder="Как к вам обращаться"><span class="field__error">Напишите имя</span></div>
+            <div class="field"><label for="b-phone">Телефон<span class="req" aria-hidden="true">*</span></label><input id="b-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="+7 (___) ___-__-__" data-phone-mask><span class="field__error">Проверьте номер: нужно 10 цифр после +7</span></div>
           </div>
           <div class="field"><span class="label">Как удобнее связаться</span>
             <div class="seg" id="b-contact"><label><input type="radio" name="contact" value="call" checked><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Звонок</label><label><input type="radio" name="contact" value="wa"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp-logo"/></svg>WhatsApp</label><label><input type="radio" name="contact" value="tg"><svg class="icon" aria-hidden="true"><use href="#i-telegram-logo"/></svg>Telegram</label></div>
           </div>
           <div class="field"><label for="b-comment">Комментарий <i>необязательно</i></label><textarea id="b-comment" name="comment" placeholder="Номер рейса, детское кресло, оформление на свадьбу"></textarea></div>
           <label class="check" id="b-agree-wrap"><input type="checkbox" id="b-agree" name="agree"><span>Согласен на обработку персональных данных по <a href="terms.html#privacy">политике конфиденциальности</a></span></label>
+          <p class="field__error">Отметьте согласие, иначе мы не сможем обработать заявку</p>
+          <p class="form-note"><span class="req" aria-hidden="true">*</span> Обязательные поля</p>
         </fieldset>
         <button class="btn btn--block" type="submit" id="b-submit">Отправить заявку <svg class="icon icon--go" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
         <p class="note" style="margin-top:12px">Нажимая кнопку, вы ничего не оплачиваете. Цена и наличие подтверждаются по телефону.</p>
@@ -133,11 +135,11 @@
         <p>Собственный парк из 22 автомобилей. С водителем и без, от трёх часов до нескольких месяцев.</p>
       </div>
       <div>
-        <h4>Автопарк</h4>
+        <h2 class="footer__title">Автопарк</h2>
         <ul><li><a href="fleet.html">Все автомобили</a></li><li><a href="fleet.html?cls=executive">Представительские</a></li><li><a href="fleet.html?cls=suv">Внедорожники</a></li><li><a href="fleet.html?cls=sport">Спорткары</a></li><li><a href="fleet.html?cls=open">Кабриолеты</a></li></ul>
       </div>
       <div>
-        <h4>Клиентам</h4>
+        <h2 class="footer__title">Клиентам</h2>
         <ul>
           <li><a href="terms.html">Условия аренды</a></li>
           <li><a href="fleet.html?driver=1">Аренда с водителем</a></li>
@@ -147,7 +149,7 @@
         </ul>
       </div>
       <div>
-        <h4>Контакты</h4>
+        <h2 class="footer__title">Контакты</h2>
         <ul>
           <li><a class="footer__phone" href="tel:+74951824719">+7 (495) 182-47-19</a></li>
           <li><a href="mailto:garage@karetny.ru">garage@karetny.ru</a></li>
@@ -168,8 +170,8 @@
   <a class="btn" href="booking.html" data-mbar-book>Забронировать</a>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="assets/js/icons.js?v=27"></script>
-<script src="assets/js/data.js?v=27"></script>
-<script src="assets/js/main.js?v=27"></script>
+<script src="assets/js/icons.js?v=34"></script>
+<script src="assets/js/data.js?v=34"></script>
+<script src="assets/js/main.js?v=34"></script>
 </body>
 </html>

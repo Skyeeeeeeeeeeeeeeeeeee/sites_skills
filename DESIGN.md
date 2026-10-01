@@ -83,6 +83,15 @@ Price per day drops with length: 1–2 days base, 3–6 −8%, 7–14 −15%, 15
 
 Hero photo settles from scale 1.06 (2.4s); sections fade up 16px with a 60ms stagger; card photos zoom 4% on hover; drawer, filter sheet and bottom bar slide. All travel is removed under reduced motion.
 
+## Accessibility and touch (ui-ux-pro-max audit)
+
+- Every pointer target is at least 44px on phones; small text links get a vertical hit area through `::before`.
+- Text contrast is at least 4.5:1 everywhere (checked by script); inputs use 16px text so iOS does not zoom.
+- Inline errors are tied to their controls with `aria-describedby` and `aria-invalid`, validated on blur; the booking form also shows a focusable error summary. Submit buttons show a short loading state.
+- The menu drawer and the mobile filter sheet trap focus, close on Escape and return focus to their opener.
+- The mobile bottom bar hides while the hero buttons, the lead form or the car page's booking button are on screen.
+- Images are WebP with `srcset` (800/1600w) and explicit width and height.
+
 ## Do's and Don'ts
 
 - Do keep all 22 cars in the catalogue and label self-drive-only cars.
